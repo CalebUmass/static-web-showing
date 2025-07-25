@@ -6,7 +6,7 @@ This static website serves as a central hub for showcasing digital projects crea
 
 ## 🧱 Purpose
 
-The site provides a clean and accessible platform for students, researchers, and visitors to explore archaeological reconstructions, trench book viewers, maps, 3D models, and other digital tools created during the excavation season.
+The site provides a clean and accessible platform for students, researchers, and visitors to explore archaeological reconstructions, trench books, maps, 3D models (soon), and other digital tools created during the excavation season.
 
 ---
 
@@ -14,6 +14,7 @@ The site provides a clean and accessible platform for students, researchers, and
 
 - 🗂️ Central landing page linking to all student and collaborative digital projects  
 - 📖 Trench Book Viewer to explore scanned notebooks  
+- 🧮 Coordinate Converter that transforms site grid coordinates into WGS84 and EPSG:32633  
 - 🧭 Interactive maps and models (planned or integrated)  
 - ⚡ Fast, static deployment using Apache  
 - 🔒 Optionally secured with HTTPS using Let’s Encrypt  
