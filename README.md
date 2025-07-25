@@ -73,7 +73,7 @@ MIT License (or specify another license if needed)
 
 ---
 
-## 📸 Screenshot (Optional)
+## 📸 Screenshot (soon)
 
 _Add a screenshot here if available:_
 
