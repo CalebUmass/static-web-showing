@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Coordinate Converter</title>
+    <link href="converterstyling.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300..700;1,300..700&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Back Arrow -->
+    <a href="../Projects-Landing-Page-main-copy/projects-page.html" class="back-arrow">
+        <span class="arrow-icon">&#8592;</span> Back
+    </a>
+    <!-- Input Form -->
+    <div class="container">
+        <!-- Input Section -->
+        <div class="pages" id="input" style="display: flex;">
+            <div id="bg-container">
+                <h2 id="heading1">Coordinates to Projected Coordinates</h2>
+            </div>
+            <div class="glass-card" id="inputbox">
+                <h3 class="input-subheading">Input coordinates to get projected coordinates.</h3>
+                <form id="inputform">
+                    <div class="input-field">
+                        <label for="xcoord">x-coordinate:</label>
+                        <input type="number" name="xcoord" id="xcoord" step="any" required>
+                    </div>
+                    <div class="input-field">
+                        <label for="ycoord">y-coordinate:</label>
+                        <input type="number" name="ycoord" id="ycoord" step="any" required>
+                    </div>
+                    <input type="submit" id="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+        <!-- Output Section -->
+        <div class="pages" id="output" style="display: none;">
+            <div id="bg-container">
+                <div class="output-columns">
+                    <div class="glass-card">
+                        <h3>Your Input:</h3>
+                        <div id="input-display"></div>
+                    </div>
+                    <div class="glass-card">
+                        <h3>WGS Coordinates:</h3>
+                        <div id="wgs-display"></div>
+                    </div>
+                    <div class="glass-card">
+                        <h3>EPSG Coordinates:</h3>
+                        <div id="espg-display"></div>
+                    </div>
+                </div>
+            </div>
+            <button id="newsearch" onclick="switchToInput()">New Search</button>
+        </div>
+    </div>
+    </div>
+    <div id="loader-overlay" class="loader-overlay" style="display: none;">
+        <div class="loader">
+            <div class="loader-inner"></div>
+        </div>
+    </div>
+
+    <script src="conversionsonefunction.js"></script>
+    <script>
+        document.getElementById("inputform").addEventListener("submit", convert);
+    </script>
+    <script>
+        function switchToInput() {
+            document.getElementById("output").style.display = "none";
+            document.getElementById("input").style.display = "flex";
+        }
+    </script>
+</body>
+
+</html>

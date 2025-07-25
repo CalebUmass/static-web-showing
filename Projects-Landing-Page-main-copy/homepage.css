@@ -1,0 +1,80 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+}
+
+/*HOME PAGE*/
+.container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #a2cde6;
+}
+
+#image {
+    height: 100%;
+    width: 55%;
+    position: absolute;
+    right: 0px;
+    background-image: url("media/patrick-schneider-Qackx5pq2ts-unsplash.jpg");
+    background-size: cover;
+}
+
+.container::before {
+    content: "Photo by Patrick Schneider";
+    position: absolute;
+    bottom: 10px;
+    left: 480px;
+    color: #b08863;
+    z-index: 1;
+}
+
+#heading {
+    height: 25%;
+    width: 40%;
+    position: absolute;
+    inset-inline-start: 90px;
+    inset-block-start: 220px;
+    font-size: 90px;
+    color: #b08863;
+    font-family: "Source Serif 4", serif;
+}
+
+#subheading {
+    height: 15%;
+    width: 20%;
+    position: absolute;
+    top: 210px;
+    left: 92px;
+    font-size: 35px;
+    font-family: "Outfit", sans-serif;
+    color: #fff;
+}
+
+#projbutton {
+    position: absolute;
+    top: 550px;
+    left: 95px;
+    z-index: 2;
+    width: 10%;
+    height: 8%;
+    border-radius: 30px;
+    text-align: center;
+    font-family: "Outfit", sans-serif;
+    font-weight: 900;
+    color: #a2cde6;
+    border: 0px;
+    background-color: #fff;
+}
+
+#projbutton:hover {
+    cursor: pointer;
+}

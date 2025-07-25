@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Projects</title>
+    <link rel="stylesheet" href="projectspage.css?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    </a>
+    <div class="container" id="projectspage">
+        <!--NAVBAR-->
+
+        <button id="openbutton" class="openbtn" onclick="openNav()">&#9776;</button>
+        <div id="mySidebar" class="sidebar">
+            <a href="../Projects-Landing-Page-main-copy/index.html">Home</a>
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="https://earth.google.com/web/@43.1581231,11.3908394,380a,2100d,35y,0h,45t,0r" target="_blank">Map</a>
+            <a href="../trench-book-reader/public/index.html">Trenchbook Reader</a>
+            <a href="../projected-coordinates-project-copy/jstesting.html">Coordinate
+                Converter</a>
+        </div>
+
+        <script>
+            /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+            function openNav() {
+                document.getElementById("mySidebar").style.width = "300px";
+                document.getElementById("openbutton").style.opacity = 0;
+            }
+
+            /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+            function closeNav() {
+                document.getElementById("mySidebar").style.width = "0";
+                document.getElementById("openbutton").style.opacity = 1;
+            }
+        </script>
+
+        <!--HEADER-->
+        <div class="headings">
+            <h2 id="projheading">Projects</h2>
+        </div>
+
+        <!--ROW 1-->
+        <div id="row1" class="projectspage">
+
+            <!--PROJECT 1: DO NOT MOVE OR CHANGE-->
+            <div id="project-1" class="project">
+                <div class="overlay">
+                    <div class="text">
+                        <h3>How to Use this Website</h3>
+                        Hover over boxes to see a description of the project <br><br> Click on boxes to go to the
+                        project <br><br> Click the three lines at the top to see a list view of all of the projects. <br><br>
+                    </div>
+                </div>
+            </div>
+
+            <!--PROJECT 2-->
+            <div id="project-2" class="project">
+                <a href="../projected-coordinates-project-copy/jstesting.html">
+                    <div class="overlay">
+                        <div class="text">
+                            <h3>Coordinates Converter</h3>
+                            <i>Created by Malie Geery</i><br><br><b></b>Convert coordinates into WSG and
+                            EPSG. <br><br>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!--PROJECT 3-->
+             <div id="project-3" class="project">
+                <a href="../trench-book-reader/public/index.html">
+                    <div class="overlay">
+                        <div class="text">
+                            <h3>Trench Book Reader</h3>
+                            <i>Created by Caleb Richards</i><br><br><b></b>Read and explore trench books. <br><br>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!--ROW 2-->
+        <div id="row2" class="projectspage">
+
+            <!--PROJECT 4-->
+            <a href="" id="project-4" class="project"></a>
+
+            <!--PROJECT 5-->
+            <a href="" id="project-4" class="project"></a>
+
+            <!--LAST PROJECT: DO NOT LET OTHER PROJECTS FOLLOW THIS ONE-->
+            <div id="project-last" class="project">
+                <a href="https://github.com/maliegeery/Projects-Landing-Page">
+                    <div class="overlay">
+                        <div class="text">
+                            <h3>GitHub</h3>
+                            View the raw code behind this website and all of the data science projects<br>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+</body>
+
+</html>

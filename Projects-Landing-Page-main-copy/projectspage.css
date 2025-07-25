@@ -1,0 +1,208 @@
+/*CHANGE COVER PHOTOS HERE!!!*/
+#project-1 {
+    background-image: url("media/gettingstarted.png");
+    background-size: cover;
+}
+
+#project-2 {
+    background-image: url("media/Covers.png");
+    background-size: cover;
+}
+
+#project-3 {
+    background-image: url("../trench-book-reader/public/images/cover.png");
+    background-size: cover;
+}
+
+#project-last {
+    background-image: url("/Projects-Landing-Page-main/media/GitHub.jpg");
+    background-size: cover;
+}
+
+/*DO NOT TOUCH*/
+html,
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    font-family: "Outfit", sans-serif;
+}
+
+.container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #a2cde6;
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+
+#projheading {
+    text-align: center;
+    width: 100%;
+    position: relative;
+    left: 0%;
+    width: 100%;
+    height: 0vh;
+    font-size: 80px;
+    color: #fff;
+    font-family: "Source Serif 4", serif;
+    padding-top: 0px;
+}
+
+.project {
+    border-radius: 30px;
+    padding: 80px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+    text-align: center;
+    position: relative;
+    margin-top: 135px;
+
+    font-family: "DM Serif Display", serif;
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #166b53;
+    flex-basis: calc(33.33% - 45px);
+    width: calc(33.33% - 20px);
+    box-sizing: border-box;
+    background-position: center;
+}
+
+.projectspage {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 30px;
+    width: 90%;
+    min-height: 78vh;
+}
+
+.overlay {
+    position: absolute;
+    border-radius: 30px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #fff;
+}
+
+.overlay:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.text {
+    color: #0079bf;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.gotoproject {
+    color: #0079bf;
+    font-size: 15px;
+    font-family: "Source Serif 4", serif;
+    border-radius: 30px;
+    width: 25%;
+    height: 15%;
+    background-color: #fff;
+    border-color: #0079bf;
+}
+
+/*Sidebar Stuff*/
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: rgba(162,205,230,0);
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    border-radius: 50%;
+    font-size: 30px;
+    opacity: 1;
+}
+
+.openbtn:hover {
+    background-color: #fff;
+    color: rgba(162,205,230,1)
+}
+
+.sidebar {
+    height: 80%;
+    width: 0;
+    position: fixed; /* Stay in place */
+    right: 20px;
+    border-radius: 30px;
+    z-index: 1; /* Stay on top */
+    top: 10;
+    background-color: #fff;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    overflow-y: scroll;
+    padding-top: 60px;
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+    opacity: .8;
+}
+
+/* The sidebar links */
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: rgba(162,205,230,1);
+    display: block;
+    font-family: "Outfit", sans-serif;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.sidebar a:hover {
+    color: rgba(162,205,230,0.3)
+}
+
+/* Position and style the close button (top right corner) */
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    font-size: 36px;
+}
+
+/* Style the back arrow */
+ .back-arrow {
+      text-decoration: none;
+      font-size: 24px;
+      color: black;
+      display: inline-flex;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .back-arrow:hover {
+      opacity: 0.7;
+    }
+
+    .arrow-icon {
+      margin-right: 8px;
+    }
