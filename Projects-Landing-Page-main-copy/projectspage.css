@@ -1,4 +1,4 @@
-/*CHANGE COVER PHOTOS HERE!!!*/
+/*CHANGE COVER PHOTOS HERE!!! All cover photos should have background-size:cover*/
 #project-1 {
     background-image: url("media/gettingstarted.png");
     background-size: cover;
@@ -20,6 +20,8 @@
 }
 
 /*DO NOT TOUCH*/
+
+/*Modifies the whole webpage*/
 html,
 body {
     margin: 0;
@@ -31,9 +33,10 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow-x: hidden;
+    overflow-x: hidden; /*This makes sure that the website grows downward instead of to the right*/
     font-family: "Outfit", sans-serif;
 }
+
 
 .container {
     min-height: 100vh;
