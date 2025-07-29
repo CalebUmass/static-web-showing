@@ -7,7 +7,7 @@
 // const apiBase = 'https://sweet-cobras-sit.loca.lt'; // Ngrok URL
 // const apiBase = 'https://192.168.0.54:3000'; // Portable IP
 // const apiBase = 'http://3.65.1.225:3000'; // ← my aws server
-const apiBase = 'https://poggiocivitate.net:3000'; // ← if your NestJS runs on 3000 // ← poggio-civitate-project aws server
+const apiBase = 'https://poggiocivitate.net/api'; // ← if your NestJS runs on 3000 // ← poggio-civitate-project aws server
 
 
 const select = document.getElementById('trenchBookSelect');
