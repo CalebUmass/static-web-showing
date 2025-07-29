@@ -7,7 +7,7 @@
 // const apiBase = 'https://sweet-cobras-sit.loca.lt'; // Ngrok URL
 // const apiBase = 'https://192.168.0.54:3000'; // Portable IP
 // const apiBase = 'http://3.65.1.225:3000'; // ← my aws server
-const apiBase = 'https://poggiocivitate.net/static-web-showing/trench-book-reader/public'; // ← poggio-civitate-project aws server
+const apiBase = 'https://poggiocivitate.net:3000'; // ← if your NestJS runs on 3000 // ← poggio-civitate-project aws server
 
 
 const select = document.getElementById('trenchBookSelect');
@@ -45,7 +45,7 @@ function clearImageCache() {
   console.log('🧹 Image cache cleared');
 }
 
-loadAndCacheImage("/images/imageNotFound.jpg");
+loadAndCacheImage(`${apiBase}/images/imageNotFound.jpg`);
 
 async function loadAndCacheImage(url) {
   if (cache.has(url)) return cache.get(url);
@@ -53,7 +53,7 @@ async function loadAndCacheImage(url) {
   try {
     const res = await fetch(url);
     if (!res.ok)
-      return cache.get("/images/imageNotFound.jpg"); // Fallback to default image if fetch fails
+      return cache.get(`${apiBase}/images/imageNotFound.jpg`);  // Fallback to default image if fetch fails
 
     const blob = await res.blob();
     const objectURL = URL.createObjectURL(blob);
