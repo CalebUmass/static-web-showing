@@ -1,3 +1,4 @@
+/*WHOLE WEBPAGE FORMATTING*/
 html,
 body {
     margin: 0;
@@ -9,7 +10,9 @@ body {
     width: 100vw;
 }
 
-/*HOME PAGE*/
+/*PAGE BODY*/
+
+/*contains all page content*/
 .container {
     height: 100vh;
     width: 100%;
@@ -19,15 +22,17 @@ body {
     background-color: #a2cde6;
 }
 
+/*formatting for background image*/
 #image {
     height: 100%;
     width: 55%;
     position: absolute;
     right: 0px;
-    background-image: url("media/patrick-schneider-Qackx5pq2ts-unsplash.jpg");
+    background-image: url("media/patrick-schneider-Qackx5pq2ts-unsplash.jpg"); /*change background image here*/
     background-size: cover;
 }
 
+/*Adds source to the bottom of the page*/
 .container::before {
     content: "Photo by Patrick Schneider";
     position: absolute;
@@ -37,6 +42,7 @@ body {
     z-index: 1;
 }
 
+/*Formatting for the heading text*/
 #heading {
     height: 25%;
     width: 40%;
@@ -48,6 +54,7 @@ body {
     font-family: "Source Serif 4", serif;
 }
 
+/*Formatting for the subheading text*/
 #subheading {
     height: 15%;
     width: 20%;
@@ -59,6 +66,7 @@ body {
     color: #fff;
 }
 
+/*Formatting for the "explore" button*/
 #projbutton {
     position: absolute;
     top: 550px;
@@ -74,7 +82,7 @@ body {
     border: 0px;
     background-color: #fff;
 }
-
+ /*Explore button when hovered over*/
 #projbutton:hover {
     cursor: pointer;
 }
