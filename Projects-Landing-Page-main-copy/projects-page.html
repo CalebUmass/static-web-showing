@@ -14,26 +14,28 @@
 <body>
     </a>
     <div class="container" id="projectspage">
-        <!--NAVBAR-->
-
-        <button id="openbutton" class="openbtn" onclick="openNav()">&#9776;</button>
-        <div id="mySidebar" class="sidebar">
-            <a href="../Projects-Landing-Page-main-copy/index.html">Home</a>
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        
+    <!--NAVBAR-->
+        <button id="openbutton" class="openbtn" onclick="openNav()">&#9776;</button> <!--This button opens the navbar-->
+        <div id="mySidebar" class="sidebar"> <!--This holds the navbar contents-->
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> <!--This is the close button for the sidebar-->
+            <a href="../Projects-Landing-Page-main-copy/index.html">Home</a> <!--Each one of the <a> tags is the link to one project-->
             <a href="https://earth.google.com/web/@43.1581231,11.3908394,380a,2100d,35y,0h,45t,0r" target="_blank">Map</a>
             <a href="../trench-book-reader/public/index.html">Trenchbook Reader</a>
-            <a href="../projected-coordinates-project-copy/jstesting.html">Coordinate
-                Converter</a>
+            <a href="../projected-coordinates-project-copy/jstesting.html">Coordinate Converter</a>
+            <!--ADD NEW PROJECTS ABOVE THIS COMMENT-->
         </div>
 
-        <script>
-            /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+        <script>//sidebar open and close script
+            //function for opening sidebar
+            //Set the width of the sidebar to 250px and the left margin of the page content to 250px when the sidebar is opened
             function openNav() {
                 document.getElementById("mySidebar").style.width = "300px";
                 document.getElementById("openbutton").style.opacity = 0;
             }
-
-            /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+            
+            //function for closing sidebar
+            //Set the width of the sidebar to 0 and the left margin of the page content to 0 when the sidebar is closed
             function closeNav() {
                 document.getElementById("mySidebar").style.width = "0";
                 document.getElementById("openbutton").style.opacity = 1;
@@ -45,13 +47,16 @@
             <h2 id="projheading">Projects</h2>
         </div>
 
+        <!--IMPORTANT FORMATTING NOTE--> 
+        <!--This code organize the projects in rows, each with only three projects per row. It is important that you read the how to add projects PDF so that you correctly add rows and projects. -->
+        
         <!--ROW 1-->
-        <div id="row1" class="projectspage">
+        <div id="row1" class="projectspage"><!--All rows have class projectspage-->
 
             <!--PROJECT 1: DO NOT MOVE OR CHANGE-->
-            <div id="project-1" class="project">
-                <div class="overlay">
-                    <div class="text">
+            <div id="project-1" class="project"><!--All projects have class project-->
+                <div class="overlay"><!--This div controls what is shown on hover-->
+                    <div class="text"><!--This is the text shown on hover-->
                         <h3>How to Use this Website</h3>
                         Hover over boxes to see a description of the project <br><br> Click on boxes to go to the
                         project <br><br> Click the three lines at the top to see a list view of all of the projects. <br><br>
@@ -85,16 +90,16 @@
             </div>
         </div>
 
-        <!--ROW 2-->
-        <div id="row2" class="projectspage">
+        <!--ROW 2--> <!--Initiating a new row here because there are three projects in the row above-->
+        <div id="row2" class="projectspage"> 
 
             <!--PROJECT 4-->
-            <a href="" id="project-4" class="project"></a>
+            <a href="" id="project-4" class="project"></a> <!--Empty projects as placeholders-->
 
             <!--PROJECT 5-->
             <a href="" id="project-4" class="project"></a>
 
-            <!--LAST PROJECT: DO NOT LET OTHER PROJECTS FOLLOW THIS ONE-->
+            <!--LAST PROJECT: DO NOT LET OTHER PROJECTS FOLLOW THIS ONE--> <!--This links to the main GitHub page and should always be last-->
             <div id="project-last" class="project">
                 <a href="https://github.com/CalebUmass/static-web-showing" target="_blank">
                     <div class="overlay">
