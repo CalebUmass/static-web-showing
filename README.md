@@ -165,17 +165,17 @@ To work with this project, ensure you have the following installed:
 
 ### Deploying to AWS Lightsail Apache Server
 
-7. **SSH into your Lightsail server**
+1. **SSH into your Lightsail server**
    ```sh
    ssh -i ~/path/to/LightsailDefaultKey.pem bitnami@<YOUR_PUBLIC_IP>
    ```
 
-8. **Navigate to the Apache server directory**
+2. **Navigate to the Apache server directory**
    ```sh
    cd /opt/bitnami/apache2/htdocs/static-web-showing
    ```
 
-9. **Pull the latest changes from GitHub**
+3. **Pull the latest changes from GitHub**
    If you’ve already cloned the repo on the server:
    ```sh
    git pull origin main
@@ -186,7 +186,7 @@ To work with this project, ensure you have the following installed:
    git clone https://github.com/CalebUmass/static-web-showing.git
    ```
 
-10. **(Optional) Restart Apache (if needed)**
+4. **(Optional) Restart Apache (if needed)**
    ```sh
    sudo /opt/bitnami/ctlscript.sh restart apache
    ```
