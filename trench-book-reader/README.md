@@ -8,14 +8,14 @@
 
 **Key Features:**
 
-* 📚 A NestJS backend for serving book and image metadata
-* ⚙️ Modern JavaScript frontend with gesture support and interactive navigation
-* 📱 Mobile and desktop viewing compatibility
-* 🚀 Easy configuration and deployment
+* A NestJS backend for serving book and image metadata
+* JavaScript frontend with gesture support and interactive navigation
+* Mobile and desktop viewing compatibility
+* Easy configuration and deployment
 
 ---
 
-## Getting Started
+## Getting Started (local testing - to use on poggiocivitate.net see broad README.md)
 
 ### 1. Install Dependencies
 
@@ -61,7 +61,7 @@ The frontend is served from the `public/` directory.
 
 * Place your trench book images inside the appropriate folder in `public/`
 * Update `OCdata.json` to include metadata for the new books/images
-* Supported formats: JPG, PNG, or TIFF (standardized sizes recommended)
+* Supported formats: JPG, or PNG, (testing was done all using standardized JPG)
 * 
 * You may also use crawl.js to crawl through 'Poggio Civitate' Trench Books on 'opencontext.org'
 * To use, open full project in editor and naviaget to crawl.js, input <url>.json at bottom (should be example already). 
@@ -71,27 +71,27 @@ The frontend is served from the `public/` directory.
 
 ## Features
 
-### 📖 Digital Trench Book Access
+### Digital Trench Book Access
 
 * Browse high-resolution scans of handwritten field notes
 * Flip pages and zoom in on fine details
 
-### 🧠 Metadata Support
+### Metadata Support
 
 * Display structured data for each trench book
 * Compatible with linked open data sources like OpenContext
 
-### 📱 Mobile-Friendly
+### Mobile-Friendly(ish)
 
 * Swipe gestures for mobile navigation
 * Responsive layout for small screens
 
-### 🗺️ Google Maps API usage
+### Google Maps API usage
 
 * Uses the Google maps API to plot each coordinate point tied to Trench Books
 * Enables users to visually see where everything is located
 
-### 🔍 Powerful Filtering
+### Filtering
 
 * Filter books by trench, year, site, or Author
 
@@ -109,7 +109,7 @@ The frontend is served from the `public/` directory.
 * **API not responding**
 
   * Ensure backend is running on the correct port
-  * Make sure no firewall is blocking local access
+  * Make sure no firewall is blocking local access (MACOS sometimes makes it very difficult for devices to communicate with eachother)
 
 ---
 
@@ -142,7 +142,7 @@ To deploy on a live server or classroom network:
 
 ## Contributing
 
-We welcome pull requests, feedback, and feature requests!
+Any pull requests, feedback, and feature requests are much appreciated and wanted!
 
 ### To contribute:
 
@@ -152,12 +152,17 @@ We welcome pull requests, feedback, and feature requests!
 
 ---
 
+## Special Thanks
+
+I want to firstly thank professor Cole Reilly for supporting and helping me through this whole process, they have been such an
+amazing mentor, and I have learning an incredible amount from them in such a short amount of time. I would also like to thank professor Anthony Tuck for helping generate much of the ideas for the features you now see in this e-book reader. His suggestions and feedback were fundumental in shaping the (soon)final product. I lastley would like to thank all the people in the Poggio Civitate program that inspired me to put in the time and effort to make this project actually happen. Thank you everyone!
+
 ## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for details.
 
 ---
 
-**Enjoy exploring the trench books!**
+##Agnol
 
-🗺️🏛️📚
+**Enjoy exploring the trench books!**
