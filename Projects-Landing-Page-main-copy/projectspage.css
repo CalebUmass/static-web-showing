@@ -37,7 +37,7 @@ body {
     font-family: "Outfit", sans-serif;
 }
 
-
+/*Contains the page's content*/
 .container {
     min-height: 100vh;
     width: 100%;
@@ -49,6 +49,7 @@ body {
     padding-bottom: 40px;
 }
 
+/*Heading of the page*/
 #projheading {
     text-align: center;
     width: 100%;
@@ -62,6 +63,7 @@ body {
     padding-top: 0px;
 }
 
+/*This is the formatting that applies to each project*/
 .project {
     border-radius: 30px;
     padding: 80px;
@@ -81,6 +83,7 @@ body {
     background-position: center;
 }
 
+/*This controls the layout of the entire page of projects*/
 .projectspage {
     display: flex;
     flex-wrap: wrap;
@@ -90,6 +93,7 @@ body {
     min-height: 78vh;
 }
 
+/*This controls the appearance of the overlays*/
 .overlay {
     position: absolute;
     border-radius: 30px;
@@ -99,41 +103,33 @@ body {
     right: 0;
     height: 100%;
     width: 100%;
-    opacity: 0;
+    opacity: 0; /*This makes sure that the overlays do not appear when they are not hovered over*/
     transition: .5s ease;
     background-color: #fff;
 }
 
+/*This makes sure that the overlays only appear when hovered over*/
 .overlay:hover {
     opacity: 1;
     cursor: pointer;
 }
 
+/*Controls the appearance of the text within the overlay*/
 .text {
     color: #0079bf;
     font-size: 20px;
     position: absolute;
     top: 50%;
     left: 50%;
+    /*Makes sure the appearance is the same across different platforms*/
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-align: center;
 }
 
-.gotoproject {
-    color: #0079bf;
-    font-size: 15px;
-    font-family: "Source Serif 4", serif;
-    border-radius: 30px;
-    width: 25%;
-    height: 15%;
-    background-color: #fff;
-    border-color: #0079bf;
-}
-
 /*Sidebar Stuff*/
-.openbtn {
+.openbtn { /*controls the appearance of the three lines to open the sidebar*/
     font-size: 20px;
     cursor: pointer;
     background-color: rgba(162,205,230,0);
@@ -148,12 +144,12 @@ body {
     opacity: 1;
 }
 
-.openbtn:hover {
+.openbtn:hover { /*controls the appearance of the three lines when hovered over*/
     background-color: #fff;
     color: rgba(162,205,230,1)
 }
 
-.sidebar {
+.sidebar { /*controls the appearance of the sidebar itself*/
     height: 80%;
     width: 0;
     position: fixed; /* Stay in place */
@@ -175,17 +171,18 @@ body {
     text-decoration: none;
     font-size: 25px;
     color: rgba(162,205,230,1);
-    display: block;
+    display: block; /*Makes sure they take up an entire row*/
     font-family: "Outfit", sans-serif;
     transition: 0.3s;
     text-align: center;
 }
 
+/*Sidebar links on hover*/
 .sidebar a:hover {
     color: rgba(162,205,230,0.3)
 }
 
-/* Position and style the close button (top right corner) */
+/* Position and style the close button (top right corner of sidebar) */
 .sidebar .closebtn {
     position: absolute;
     top: 0;
