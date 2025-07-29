@@ -160,6 +160,7 @@ amazing mentor, and I have learning an incredible amount from them in such a sho
 ## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for details.
+You can check out the starting code for this at: https://github.com/CalebUmass/prototype1
 
 ---
 
