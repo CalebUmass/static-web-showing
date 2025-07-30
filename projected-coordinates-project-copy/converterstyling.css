@@ -71,7 +71,7 @@ html {
     z-index: 1;
 }
 
-//Heading outside of the glass cards
+/*Heading outside of the glass cards*/
 #heading1 {
     position: absolute;
     top: 60px;
