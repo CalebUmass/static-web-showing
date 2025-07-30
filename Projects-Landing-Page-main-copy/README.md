@@ -1,18 +1,8 @@
-## Start Here
-*Last Updated: 07/17/2025 by Malie Geery*
+##READ ME
+* *Last updated by Malie Geery* *
 
-Welcome! This Github repository is used to store and update all of the data science projects done by students at Poggio Civitate. If you want to look through code, please read through the **Navigating** section first. If you are trying to add your own code, please read the **Editing** section before getting started.
+###Navigating this project!
 
-### Navigating
-The organization of this repository is simple to navigate through. The index file is the home page, the other HTML file holds all the data science projects.
+This project consists of all the folders within the repository, but this folder in particular holds the main landing page and the page with all the links to projects. The **index.html** file holds the code for the main webpage, and the **homepage.css** file holds all the design for that page. The homepage links to the projects page, whose code is contained within the **projects-page.html** file and the **projectspage.css** file. The **Adding New Pages to the Website** file includes all relevant information on how to add your own data science projects to the website.
 
-The other folders each hold the code for one of the data science projects.
-
-### Editing -- Data Science Students ONLY
-Before adding your own projects to this repository, it is important to understand the conventions of the repository so that it remains organized and easy to navigate. Find the conventions of this repository listed below:
-
-**Adding Your Project to the Repository**
-To add a project to this Github repository, please upload all of the files (including images, etc.) into a new folder that is named after your project or describes it in some way. Please ensure that all external media is properly cited somewhere in your project.
-
-**Adding Your Project to the Website**
-To add a project to the website itself, please follow the formatting used for the other projects, and place your code below the last numbered project, but before the project called "last project". Follow the conventions used in the CSS file to add a background image to your file as well. Make sure to add your code both to the index.html code as well as the projects-page.html code.
+###About this project
