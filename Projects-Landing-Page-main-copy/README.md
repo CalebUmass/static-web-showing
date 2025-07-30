@@ -1,5 +1,5 @@
 ## READ ME
-* *Last updated by Malie Geery* *
+*Last updated by Malie Geery*
 
 ### Navigating this project!
 
