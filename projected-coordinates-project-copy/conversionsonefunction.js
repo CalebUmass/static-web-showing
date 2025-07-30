@@ -25,27 +25,36 @@ async function convert(event) { //this is an async function so that the output s
         const response = await fetch(url); //awaits the information from the website -- does not run until it receives it
         const data = await response.json(); //after the previous code is run, we convert the information to JSON
         const dataArray = data['coordinates']; //accessing the coordinates returned by fetching them by key ('coordinates')
-        const longitude = dataArray[0];
+        //get longitude and latitude by index
+        const longitude = dataArray[0]; 
         const latitude = dataArray[1];
 
+        //display the inputted values in the input-display section
         document.getElementById("input-display").innerHTML = `
     <strong>X</strong>: ${x}<br>
     <strong>Y</strong>: ${y}`;
 
+        //display the WGS coordinates in the wgs-display section
         document.getElementById("wgs-display").innerHTML = `
     <strong>Longitude</strong>: ${longitude}<br>
     <strong>Latitude</strong>: ${latitude}`;
 
+        //display the ESPG coordinates in the espg-display section
         document.getElementById("espg-display").innerHTML = `
     <strong>X</strong>: ${espgx}<br>
     <strong>Y</strong>: ${espgy}`;
 
+        //clear the input fields (in case the user wants to make additional searches)
         document.getElementById("xcoord").value = "";
         document.getElementById("ycoord").value = "";
+
+        //This runs if the code fails to retrieve information from OpenContext
     } catch (error) {
+        //still displays the inputted coordinates
         document.getElementById("input-display").innerHTML =
             `X: ${x}<br>
             Y: ${y}`;
+        //does not display any outputs
         document.getElementById("wgs-display").innerHTML = "Could not load results"
         document.getElementById("espg-display").innerHTML = "Could not load results"
         console.error(error);
@@ -58,6 +67,7 @@ async function convert(event) { //this is an async function so that the output s
         if (loaderOverlay != null) {
             loaderOverlay.style.display = "none";
         }
+        //display the output page and hide the input page
         document.getElementById("input").style.display = "none";
         document.getElementById("output").style.display = "flex";
     }
