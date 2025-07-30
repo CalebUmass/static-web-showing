@@ -15,10 +15,11 @@
 
 <body>
 
-    <!-- Back Arrow -->
+    <!-- Back to homepage (back arrow)-->
     <a href="../Projects-Landing-Page-main-copy/projects-page.html" class="back-arrow">
         <span class="arrow-icon">&#8592;</span> Back
     </a>
+    
     <!-- Input Form -->
     <div class="container">
         <!-- Input Section -->
@@ -26,25 +27,26 @@
             <div id="bg-container">
                 <h2 id="heading1">Coordinates to Projected Coordinates</h2>
             </div>
-            <div class="glass-card" id="inputbox">
-                <h3 class="input-subheading">Input coordinates to get projected coordinates.</h3>
-                <form id="inputform">
+            <div class="glass-card" id="inputbox"> <!--Class glass-card is used to stylize all "glass card" objects (the translucent containers)-->
+                <h3 class="input-subheading">Input coordinates to get projected coordinates.</h3> <!--Heading within glass card-->
+                <form id="inputform"> <!--This form accepts all the coordinates to convert-->
                     <div class="input-field">
                         <label for="xcoord">x-coordinate:</label>
-                        <input type="number" name="xcoord" id="xcoord" step="any" required>
+                        <input type="number" name="xcoord" id="xcoord" step="any" required> <!--Input type is number so that users can only enter valid coordinates. Has required so that both boxes need to be filled in order for form to submit (makes it harder to break the code)-->
                     </div>
                     <div class="input-field">
                         <label for="ycoord">y-coordinate:</label>
                         <input type="number" name="ycoord" id="ycoord" step="any" required>
                     </div>
-                    <input type="submit" id="submit" value="Submit">
+                    <input type="submit" id="submit" value="Submit"> <!--The submit button. This triggers the code in conversionsonefunction.js, so do not change any info about it unless you also update it in the JS-->
                 </form>
             </div>
         </div>
-        <!-- Output Section -->
-        <div class="pages" id="output" style="display: none;">
-            <div id="bg-container">
-                <div class="output-columns">
+        
+        <!-- Output Section --> <!--This appears after the JS code has run.-->
+        <div class="pages" id="output" style="display: none;"> <!--Display is none to keep it hidden until the JS runs-->
+            <div id="bg-container"> <!--This container holds all the output, but its main function is to contain the background image-->
+                <div class="output-columns"> <!--This holds all three columns, each which include a set of coordinates-->
                     <div class="glass-card">
                         <h3>Your Input:</h3>
                         <div id="input-display"></div>
@@ -59,11 +61,13 @@
                     </div>
                 </div>
             </div>
-            <button id="newsearch" onclick="switchToInput()">New Search</button>
+            <button id="newsearch" onclick="switchToInput()">New Search</button> <!--This button allows the user to input new coordinates. The switchtoInput function will take them back to the input screen.-->
         </div>
     </div>
     </div>
-    <div id="loader-overlay" class="loader-overlay" style="display: none;">
+    
+    <!--LOADER-->
+    <div id="loader-overlay" class="loader-overlay" style="display: none;"> <!--Display is none so that the loader is hidden until needed-->
         <div class="loader">
             <div class="loader-inner"></div>
         </div>
@@ -71,12 +75,13 @@
 
     <script src="conversionsonefunction.js"></script>
     <script>
-        document.getElementById("inputform").addEventListener("submit", convert);
+        document.getElementById("inputform").addEventListener("submit", convert); //this calls the convert function (in the conversionsonefunction.js script
     </script>
     <script>
+        //this function switches the user back to the input screen
         function switchToInput() {
-            document.getElementById("output").style.display = "none";
-            document.getElementById("input").style.display = "flex";
+            document.getElementById("output").style.display = "none"; //it hides the output screen
+            document.getElementById("input").style.display = "flex"; //it displays the input screen again
         }
     </script>
 </body>
