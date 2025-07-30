@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Photo Gallery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"> <!--LINKS BOOTSTRAP-->
+    <link href="style.css" rel="stylesheet"> <!--LINKS STYLE.CSS-->
+</head>
+
+<body>
+    <main class="container-fluid">
+
+        <!--NAVBAR-->
+        <nav class="navbar navbar-light" id="navigationBar">
+
+            <div class="container-fluid" id="navigation">
+
+                <!--HOME BUTTON-->
+
+                <a href="#" id="homeButton"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="26"
+                        fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                    </svg>Back to All Projects</a>
+
+                <!--EXPLANATION BUTTON-->
+                <!-- Button trigger modal -->
+                <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="helpButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-question-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                        <path
+                            d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94" />
+                    </svg>
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Using this Website</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                To navigate this website, there are a few tools you can utilize to find images
+                                quicker!</br>
+                                You can use <b><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
+                                    </svg></b> to sort the images in order of year or alphabetical order. <br>
+                                You can use the <b>search bar</b> to look up images or find images that match any text
+                                entry.<br>
+                                For a more guided search, you can click <b>&#9776;</b> and use any of the <b>filters</b>
+                                to search by pre-existing tags. <br>
+                                You can also use the <b>filter by range</b> function in the sidebar to filter by images
+                                from certain year ranges. <br><br>
+                                Please note that not all features are compatible with each other. The filter year by
+                                range sliders will ignore any of the other filters you select in the sidebar, as well as
+                                any searches you have made. Using the search bar will also override any filters you have
+                                selected. Filters, similarly, override the searchbar. The sort feature is compatible
+                                with search and filter. <br>
+                                If you want to apply filters but have already adjusted the range slider, you should click restore defaults prior to applying any filters. <br>
+                                If you want to restore all defaults and show all images, you can do so by clicking the
+                                <i><b>Restore Defaults</b></i> button. <br>
+                                To apply filters, you must click the <b>submit</b> button.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" data-bs-dismiss="modal" id="closeHelp">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--SORT FUNCTION BAR-->
+                <div class="sort ms-auto">
+                    <div class="nav-item dropdown px-2" id="sortBar">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                class="bi bi-arrow-down-up" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
+                            </svg>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-center" id="sortSelect">
+                            <button value="default" class="dropdownOption"
+                                onclick="window.location.reload()">Default</button>
+                            <hr class="dropdown-divider">
+                            <button value="alphabetical" class="dropdownOption"
+                                onclick="sortImages('alphabetical')">A-Z</button>
+                            <hr class="dropdown-divider">
+                            <button value="revalphabetical" class="dropdownOption"
+                                onclick="sortImages('revalphabetical')">Z-A</button>
+                            <hr class="dropdown-divider">
+                            <button value="yearasc" class="dropdownOption" onclick="sortImages('yearasc')">Year
+                                (Ascending)</button>
+                            <hr class="dropdown-divider">
+                            <button value="yeardesc" class="dropdownOption" onclick="sortImages('yeardesc')">Year
+                                (Descending)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--SEARCH BAR-->
+                <form class="d-flex" id="searchBar">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                        id="searchInput">
+                </form>
+
+                <!--SIDE BAR-->
+                <button id="openbutton" class="openbtn" onclick="openNav()">&#9776;</button>
+                <div id="mySidebar" class="sidebar">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                    <!--Filters-->
+                    <form id="filterForm">
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item filter" id="Year" index="-1">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        Filter by Year
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body" id="accordion-body-2">
+                                        <form>
+                                            <input class="form-control me-2 searchPills" type="search"
+                                                placeholder="Search" aria-label="Search" id="searchSearchbyYear">
+                                        </form>
+                                        <button class="pill pillYear" type="button" id="Unknown">Unknown</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item filter" id="Trench" index="0">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Filter by Keyword
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body" id="accordion-body-1">
+                                        <input class="form-control me-2 searchPills" type="search" placeholder="Search"
+                                            aria-label="Search" id="searchSearchbyTrench">
+                                        <!--<button class="pill pillTrench" type="button" id="ETAP">ETAP</button>
+                                        <button class="pill pillTrench" type="button" id="WTAP">WTAP</button>
+                                        <button class="pill pillTrench" type="button" id="NTAP">NTAP</button>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item slider" id="yearSlider">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseThree" aria-expanded="true"
+                                        aria-controls="collapseThree">
+                                        Filter Year By Range
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse show"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body" id="slider-body">
+                                        <div class="wrapper">
+                                            <div class="values">
+                                                <span id="range1">
+                                                    0
+                                                </span>
+                                                <span> &dash; </span>
+                                                <span id="range2">
+                                                    100
+                                                </span>
+                                            </div>
+                                            <div class="contain" id="containSlider">
+                                                <div class="slider-track"></div>
+                                                <input type="range" min="1950" max="2050" value="1975" id="slider-1"
+                                                    oninput="slideOne()">
+                                                <input type="range" min="1950" max="2050" value="2025" id="slider-2"
+                                                    oninput="slideTwo()">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="submitFilters" type="submit" id="submitFilters">Submit</button>
+                        </div>
+                    </form>
+                    <button id="restoreDefaults">Restore Defaults</button>
+                </div>
+
+                <!-------------------------------------------------------------------------------------------------------------------------->
+
+                <script> //CONTROLS SIDEBAR MOVEMENT
+                    /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+                    const search = document.getElementById("searchBar");
+
+                    function openNav() {
+                        document.getElementById("mySidebar").style.width = "300px";
+                        document.getElementById("openbutton").style.opacity = 0;
+                        search.style.opacity = 0;
+                        search.classList.add('disabled');
+                    }
+
+                    /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+                    function closeNav() {
+                        document.getElementById("mySidebar").style.width = "0";
+                        document.getElementById("openbutton").style.opacity = 1;
+                        search.style.opacity = 1;
+                        search.classList.remove('disabled');
+                    }
+                </script>
+
+            </div>
+        </nav>
+
+        <!-------------------------------------------------------------------------------------------------------------------------->
+
+        <!--PAGE BODY-->
+        <div class="container py-5 text-center">
+            <!--HEADING-->
+            <h2 class="display-6 fw-bold py-5" id="heading">Gallery</h2>
+            <!--GALLERY-->
+            <div class="row mb-5 flex-wrap justify-content-center" id="galleryRow">
+                <a class="col gx-4 image-item" id="img1" href="media/2022/MM-22-10-1.png" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Alphabet, 2022</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img2" href="media/2022/MM-22-9-1.png" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Misc Drawing, 2022</p>
+                </a>
+
+
+                <a class="col gx-4 image-item" id="img3"
+                    href="media/2022/Floreak Cheese Making Illustration-1.png" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Cheese Making Illustration, 2022</p>
+                </a>
+                <a class="col gx-4 image-item" id="img4" href="media/2022/alphabet rough sketch-1.png"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Alphabet Rough Sketch, 2022</p>
+                </a>
+
+
+                <a class="col gx-4 image-item" id="img5" href="media/2018/Roof Reconstruction C.JPG"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Roof Reconstruction, 2018</p>
+                </a>
+
+
+                <a class="col gx-4 image-item" id="img6" href="media/2018/Pathway Illustration.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Pathway, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img7" href="media/2018/MM2018 llustration Weaving.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Weaving, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img8" href="media/2018/MM2018 Illustration Women.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Women, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img9" href="media/2018/MM2018 Illustration Loom.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Loom, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img10" href="media/2018/MM2018 Illustration Kilns.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Kilns, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img11"
+                    href="media/2018/MM2018 Illustration Infill of Well.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Infill of Well, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img12" href="media/2018/MM2018 Illustration EPOC 4 2.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>EPOC 4, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img13" href="media/2018/MM2018 Illustration EPOC 4.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>EPOC 4, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img14"
+                    href="media/2018/MM2018 Illustration Domestic Architecture.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Domestic Architecture, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img15" href="media/2018/Kiln Reconstruction.JPG"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Kilns, 2018</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img16" href="media/2015/Wolf Drawing.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Wolf, 2015</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img17"
+                    href="media/1995/Section - Orientalizing and Archaic Phases, 1995.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Orientalizing and Archaic Phases, 1995</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img18"
+                    href="media/1995/Reconstruction Upper Building, 1995.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Upper Building, 1995</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img19" href="media/1994/MM 94-06.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Structure, 1994</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img20" href="media/1994/MM 94-04.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Structure Roof, 1994</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img21" href="media/1994/MM 94-02.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Antefix, 1994</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img22" href="media/1994/MM 94-01.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Antefix, 1994</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img23"
+                    href="media/1989/Reconstructed Section 1 S.E. Building, 1989.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Southeast Building, 1989</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img24"
+                    href="media/1989/Reconstructed Roof Elements S.E. Building, Version 2 - 1989.jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Southeast Building Roof, 1989</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img25"
+                    href="media/1989/Reconstructed Roof Elements S.E. Building, Version 2 - 1989 (2).jpg"
+                    data-toggle="lightbox" data-gallery="photo_gallery">
+                    <p>Southeast Building Roof, 1989</p>
+                </a>
+
+                <a class="col gx-4 image-item" id="img26"
+                    href="media/1989/Reconstructed Elevation S.E. Building, 1989.jpg" data-toggle="lightbox"
+                    data-gallery="photo_gallery">
+                    <p>Southeast Building, 1989</p>
+                </a>
+            </div>
+
+            <p id="noResultsMessage">
+                No results found.
+            </p>
+
+            <!-------------------------------------------------------------------------------------------------------------------------->
+
+            <script> //FUNCTION FOR SEARCHING FOR PILLS IN SIDE BAR
+                const searchTags = document.getElementsByClassName('searchPills');
+                const pills = document.getElementsByClassName('pill');
+                const searchByYear = document.getElementById('searchSearchbyYear');
+                const searchByTrench = document.getElementById('searchSearchbyTrench');
+
+                function filterPills(event) {
+                    const searchTerm = event.target.value.trim().toLowerCase();
+                    let matchCount = 0;
+
+                    Array.from(pills).forEach(item => {
+                        const pillsValue = item.textContent.toLowerCase();
+                        if (searchTerm.length > 0 && pillsValue.includes(searchTerm)) {
+                            item.classList.add('pill--shown');
+                            matchCount++;
+                        } else {
+                            item.classList.remove('pill--shown');
+                        }
+                    });
+                }
+
+                searchByYear.addEventListener('input', filterPills);
+                searchByTrench.addEventListener('input', filterPills);
+            </script>
+
+            <!-------------------------------------------------------------------------------------------------------------------------->
+            <script> //SCRIPT FOR SORTING
+                const sortSelect = document.getElementById('sortSelect');
+                const rows = document.querySelectorAll('.row');
+
+                const allImageItems = Array.from(document.querySelectorAll('.image-item'));
+
+                function extractYear(text) {
+                    const match = text.match(/\b(19|20)\d{2}\b/);
+                    return match ? parseInt(match[0]) : 0;
+                }
+
+                function sortImages(method) {
+                    const sorted = [...allImageItems];
+
+                    if (method === 'alphabetical') {
+                        sorted.sort((a, b) => {
+                            const aText = a.querySelector('p').textContent.trim().toLowerCase();
+                            const bText = b.querySelector('p').textContent.trim().toLowerCase();
+                            return aText.localeCompare(bText);
+                        });
+                    } else if (method === 'yearasc') {
+                        sorted.sort((a, b) => {
+                            const aYear = extractYear(a.querySelector('p').textContent);
+                            const bYear = extractYear(b.querySelector('p').textContent);
+                            return aYear - bYear;
+                        });
+                    } else if (method === 'yeardesc') {
+                        sorted.sort((a, b) => {
+                            const aYear = extractYear(a.querySelector('p').textContent);
+                            const bYear = extractYear(b.querySelector('p').textContent);
+                            return bYear - aYear;
+                        });
+                    } else if (method === 'revalphabetical') {
+                        sorted.sort((a, b) => {
+                            const aText = a.querySelector('p').textContent.trim().toLowerCase();
+                            const bText = b.querySelector('p').textContent.trim().toLowerCase();
+                            return bText.localeCompare(aText);
+                        })
+                    }
+
+                    const parent = rows[0].parentNode;
+                    rows.forEach(row => row.innerHTML = '');
+
+                    for (let i = 0; i < sorted.length; i++) {
+                        const rowIndex = Math.floor(i / 3);
+                        if (!rows[rowIndex]) continue;
+                        rows[rowIndex].appendChild(sorted[i]);
+                    }
+
+                    const galleryRow = document.getElementById('galleryRow');
+                    galleryRow.innerHTML = '';
+                    sorted.forEach(item => galleryRow.appendChild(item));
+                }
+
+                sortSelect.addEventListener('change', () => {
+                    const method = sortSelect.value;
+                    if (method === 'default') {
+                        // Restore default order of images without reloading
+                        const galleryRow = document.getElementById('galleryRow');
+                        galleryRow.innerHTML = '';
+                        allImageItems.forEach(item => galleryRow.appendChild(item));
+                    } else {
+                        sortImages(method);
+                    }
+                });
+            </script>
+
+            <!-------------------------------------------------------------------------------------------------------------------------->
+            <script>
+                //SCRIPT TO AUTOGENERATE PILLS
+                function makingTags() {
+                    const filterAccordions = document.getElementsByClassName('accordion-item filter');
+                    const imageItems = document.getElementsByClassName("image-item");
+
+                    Array.from(filterAccordions).forEach(filter => {
+                        let tagsSet = new Set();
+
+                        Array.from(imageItems).forEach(item => {
+                            const textArray = item.querySelector('p').textContent.split(',').map(tag => tag.trim());
+                            console.log(textArray);
+                            const theIndex = filter.getAttribute("index");
+                            const theIndexNum = parseInt(theIndex)
+                            const unformattedTag = textArray.at(theIndexNum);
+                            const tag = unformattedTag;
+                            tagsSet.add(tag);
+                        })
+
+                        tagsSet.forEach(tag => {
+                            const newTag = document.createElement("button");
+
+                            if (filter.id === "Year") {
+                                try {
+                                    let testingifYear = parseInt.tag();
+                                    newTag.id = `${tag}`;
+                                    newTag.textContent = tag;
+                                } catch {
+                                    newTag.id = "Unknown";
+                                    newTag.textContent = "Unkown";
+                                } finally {
+                                    newTag.classList.add("pill");
+                                    newTag.classList.add(`pill${filter.id}`);
+                                    newTag.setAttribute("type", "button");
+                                    newTag.id = `${tag}`;
+                                    newTag.textContent = tag;
+                                    const currentAccordion = filter;
+                                    const accordionBody = currentAccordion.querySelector('.accordion-body');
+                                    if (accordionBody) {
+                                        accordionBody.appendChild(newTag);
+                                    }
+                                }
+                            } else {
+                                newTag.classList.add("pill");
+                                newTag.classList.add(`pill${filter.id}`);
+                                newTag.setAttribute("type", "button");
+                                newTag.id = `${tag}`;
+                                newTag.textContent = tag;
+                                const currentAccordion = filter;
+                                const accordionBody = currentAccordion.querySelector('.accordion-body');
+                                if (accordionBody) {
+                                    accordionBody.appendChild(newTag);
+                                }
+                            }
+                        })
+                    })
+                }
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    makingTags();
+                    document.querySelectorAll(".pill").forEach(pill => {
+                        pill.addEventListener("click", () => {
+                            pill.classList.toggle("pill--active");
+                            const accordion = pill.closest('.accordion-item');
+                            const hasActivePill = accordion && accordion.querySelector('.pill.pill--active') !== null;
+                            if (accordion) {
+                                if (hasActivePill) {
+                                    accordion.classList.add('hasActive');
+                                } else {
+                                    accordion.classList.remove('hasActive');
+                                }
+                            }
+                        });
+                    });
+                });
+            </script>
+
+            <!-------------------------------------------------------------------------------------------------------------------------->
+
+            <script>
+                //ALL CONSTANTS
+                let sliderOne = document.getElementById("slider-1");
+                let sliderTwo = document.getElementById("slider-2");
+                let sliderOneDefault = sliderOne.getAttribute("value");
+                let sliderTwoDefault = sliderTwo.getAttribute("value");
+                let displayValOne = document.getElementById("range1");
+                let displayValTwo = document.getElementById("range2");
+                let minGap = 0;
+                let sliderTrack = document.querySelector(".slider-track");
+                let sliderMaxValue = document.getElementById("slider-1").max;
+                const accordions = document.getElementsByClassName("accordion-item");
+                const formWatch = document.getElementById('filterForm');
+                const imagestoFilter = document.getElementsByClassName('image-item');
+                const accordionstoFilter = document.getElementsByClassName('accordion-item');
+                const intOneDef = parseInt(sliderOneDefault);
+                const compareMin = parseInt(sliderOne.value);
+                const intTwoDef = parseInt(sliderTwoDefault);
+                const compareMax = parseInt(sliderTwo.value);
+                const sliderContainer = document.getElementById("containSlider");
+                const allthePills = document.getElementsByClassName("pill");
+                const yearSearch = document.getElementById("searchSearchbyYear");
+                const trenchSearch = document.getElementById("searchSearchbyTrench");
+                const restoreDef = document.getElementById("restoreDefaults")
+
+                //SCRIPT FOR SEARCHING WHOLE WEBPAGE
+                const searchForm = document.getElementById('searchBar');
+                const searchInput = document.getElementById('searchInput');
+                const imageItems = document.getElementsByClassName("image-item");
+                const noResultsMessage = document.getElementById('noResultsMessage');
+
+                function searchImages() {
+                    const searchTerm = searchInput.value.trim().toLowerCase();
+                    let matchCount = 0;
+
+                    Array.from(imageItems).forEach(item => {
+                        const imageName = item.querySelector('p').textContent.toLowerCase();
+                        if (imageName.includes(searchTerm)) {
+                            item.setAttribute('data-toggle', 'lightbox');
+                            item.setAttribute('data-gallery', 'photo_gallery');
+                            item.classList.remove('hidden');
+                            matchCount++;
+                        } else {
+                            item.removeAttribute('data-toggle');
+                            item.removeAttribute('data-gallery');
+                            item.classList.add('hidden');;
+                        }
+                    });
+
+                    noResultsMessage.style.display = matchCount === 0 ? 'block' : 'none';
+                }
+
+
+                searchInput.addEventListener('input', function () {
+                    Array.from(allthePills).forEach(pill => {
+                        pill.classList.remove('pill--active');
+                        pill.classList.remove('pill--shown');
+                        yearSearch.value = '';
+                        trenchSearch.value = '';
+                    });
+                    sliderOne.value = sliderOneDefault;
+                    sliderTwo.value = sliderTwoDefault;
+                    displayValOne.textContent = sliderOneDefault;
+                    displayValTwo.textContent = sliderTwoDefault;
+                    fillColor();
+                    sliderContainer.classList.remove("slider--active");
+
+                    closeNav();
+                    searchImages();
+                });
+
+                searchForm.addEventListener('submit', function (event) {
+                    event.preventDefault(); // Stop the form from reloading the page
+                }
+                );
+
+                //BASIC SLIDER CODE
+                window.onload = function () {
+                    slideOne();
+                    slideTwo();
+                };
+
+                function slideOne() {
+                    if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+                        sliderOne.value = parseInt(sliderTwo.value) - minGap;
+                    }
+                    displayValOne.textContent = sliderOne.value;
+                    fillColor();
+                }
+                function slideTwo() {
+                    if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+                        sliderTwo.value = parseInt(sliderOne.value) + minGap;
+                    }
+                    displayValTwo.textContent = sliderTwo.value;
+                    fillColor();
+                }
+                function fillColor() {
+                    const min = parseInt(sliderOne.min); // 1950
+                    const max = parseInt(sliderOne.max); // 2050
+
+                    const percent1 = (((parseInt(sliderOne.value) - min) / (max - min)) * 100) - 5;
+                    const percent2 = (((parseInt(sliderTwo.value) - min) / (max - min)) * 100) + 5;
+
+                    sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}%, #9a6f55 ${percent1}%, #9a6f55 ${percent2}%, #dadae5 ${percent2}%)`;
+                }
+                //CODE FOR GIVING ACCORDIONS THE TAG IS ACTIVE
+                function addClasstoAccordions() {
+                    Array.from(accordions).forEach(acc => {
+                        const pills = acc.querySelectorAll('.pill');
+                        const hasActive = Array.from(pills).some(pill => pill.classList.contains('pill--active'));
+                        if (hasActive) {
+                            acc.classList.add('isActive');
+                        } else {
+                            acc.classList.remove('isActive');
+                        }
+                    });
+                }
+
+                //SLIDER SCRIPTS
+                //TOGGLE SLIDER ACTIVE
+                function sliderClassToggle() {
+                    const min = parseInt(sliderOne.value);
+                    const max = parseInt(sliderTwo.value);
+                    if (min !== intOneDef || max !== intTwoDef) {
+                        sliderContainer.classList.add("slider--active");
+                    } else {
+                        sliderContainer.classList.remove("slider--active");
+                    }
+                }
+
+                sliderOne.addEventListener('input', sliderClassToggle);
+                sliderTwo.addEventListener('input', sliderClassToggle);
+
+
+                //HOW THE SLIDER WORKS
+                function filterYearwithSlider() {
+                    yearSearch.value = '';
+                    trenchSearch.value = '';
+
+                    Array.from(allthePills).forEach(pill => {
+                        pill.classList.remove('pill--active');
+                        pill.classList.remove('pill--shown');
+                    });
+
+                    searchInput.value = '';
+
+                    const min = parseInt(sliderOne.value);
+                    const max = parseInt(sliderTwo.value);
+                    Array.from(imagestoFilter).forEach(image => {
+                        const imageDescription = image.querySelector('p').textContent;
+                        const splitDescription = imageDescription.split(",");
+                        const textYear = splitDescription[1] && splitDescription[1].trim();
+                        const imageYear = parseInt(textYear);
+
+                        if (!isNaN(imageYear) && imageYear >= min && imageYear <= max) {
+                            image.classList.remove('hidden');
+                            image.setAttribute('data-toggle', 'lightbox');
+                            image.setAttribute('data-gallery', 'photo_gallery');
+                        } else {
+                            image.classList.add('hidden');
+                            image.removeAttribute('data-toggle');
+                            image.removeAttribute('data-gallery');
+                        }
+                    });
+                }
+
+
+                //CODE FOR LOGGING ACTIVE FILTERS
+                function getCount() {
+                    addClasstoAccordions();
+                    const totalAccordions = document.getElementsByClassName("accordion-item");
+                    const usedVals = new Set()
+                    let i = 0;
+
+                    Array.from(totalAccordions).forEach(accordi => {
+                        if (accordi.classList.contains('isActive')) {
+                            i += 1;
+                            const toAdd = accordi.id;
+                            usedVals.add(toAdd)
+                        };
+
+                    })
+                    return usedVals;
+                }
+
+
+
+                //SCRIPT FOR USING PILL FILTERS TO SEARCH IN GENERAL
+
+                function filteringImages() {
+
+                    const imageidmap = new Map(); //initialize a map to hold image id, value pairs.
+
+                    //a for loop that adds all image-items to imageidmap with a starting value of 0.
+                    Array.from(imagestoFilter).forEach(block => {
+                        if (block.id) {
+                            imageidmap.set(block.id, 0);
+                        }
+                    });
+
+                    //call the getCount function to find out which accordions are active
+
+                    const setofActiveAccordions = getCount();
+
+                    //if/else based on length of "setofActiveAccordions"
+
+                    if (sliderContainer.classList.contains('slider--active')) { //if the slider is active, use the slider to filter and ignore the pills
+                        filterYearwithSlider(); //call the filterYearwithSlider function to show only the images in the filtered year
+                    } else if (setofActiveAccordions.size === 0) {
+                        Array.from(imagestoFilter).forEach(varb => {
+                            //if the length of setofActiveAccordions is 0 (no active filters), all image-items on the page are shown.
+                            varb.classList.remove('hidden');
+                            varb.setAttribute('data-toggle', 'lightbox');
+                            varb.setAttribute('data-gallery', 'photo_gallery');
+                        })
+                    } else {
+                        Array.from(accordionstoFilter).forEach(filter => { //iterate through each accordion-item
+                            const accordid = filter.id; //the id of each accordion-item
+                            const pills = filter.querySelectorAll('.pill'); //getting all of the child pills of each accordion-item 
+                            const pillsset = new Set(); //set of pill ids
+                            Array.from(pills).forEach(pill => {//iterate through each pill
+                                if (pill.classList.contains("pill--active")) { //if the pill has the pill--active class:
+                                    const pillid = pill.id;
+                                    pillsset.add(pillid); //add the pill id to pillsset
+                                }
+                            });
+                            Array.from(imagestoFilter).forEach(imageitem => { //iterate through each image item
+                                let matchescount = 0; //initialize matchescount at 0 for each pill
+                                pillsset.forEach(identifier => { //iterate through each pill's id
+                                    const text = imageitem.querySelector('p').textContent; //a constant for the <p> text of each image item
+                                    if (text.includes(identifier)) { //if text includes the pill's id:
+                                        matchescount += 1; //increase matchescount by 1
+                                    }
+                                });
+                                if (matchescount > 0) { //at the end of each loop, if matchescount is greater than 0:
+                                    imageidmap.set(imageitem.id, imageidmap.get(imageitem.id) + 1); //increment the value of the image-item id in the imageidmap by 1
+                                }
+                            });
+                        });
+                        const lengthofsetofAccordions = setofActiveAccordions.size;
+                        imageidmap.forEach((itemvalue, item) => {
+                            // item is the image id, itemvalue is the count
+                            if (parseInt(itemvalue) === parseInt(lengthofsetofAccordions)) { //if the value of the item in the imageidmap is equal to the length of the setofActiveAccordions:
+                                const tochange = document.getElementById(item); //get the image-item with the id of the item
+                                tochange.classList.remove('hidden'); //remove the hidden class
+                                tochange.setAttribute('data-toggle', 'lightbox'); //add the data-toggle attribute
+                                tochange.setAttribute('data-gallery', 'photo_gallery'); //add the data-gallery attribute
+                            } else { //if the value of the item in the imageidmap is not equal to the length of the setofActiveAccordions:
+                                const tochange = document.getElementById(item); //get the image-item with the id of the item
+                                tochange.classList.add('hidden'); //add the hidden class
+                                tochange.removeAttribute('data-toggle'); //remove the data-toggle attribute
+                                tochange.removeAttribute('data-gallery'); //remove the data-gallery attribute
+                            }
+                        })
+                    }
+                }
+
+                formWatch.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    searchInput.value = '';
+                    filteringImages();
+                });
+
+                function restoreDefaults() {
+                    // Reset pills
+                    Array.from(allthePills).forEach(pill => {
+                        pill.classList.remove('pill--active');
+                        pill.classList.remove('pill--shown');
+                    });
+
+                    // Reset slider
+                    sliderOne.value = sliderOneDefault;
+                    sliderTwo.value = sliderTwoDefault;
+                    displayValOne.textContent = sliderOneDefault;
+                    displayValTwo.textContent = sliderTwoDefault;
+                    fillColor();
+                    sliderContainer.classList.remove("slider--active");
+
+                    // Reset search fields
+                    yearSearch.value = '';
+                    trenchSearch.value = '';
+                    searchInput.value = '';
+
+                    // Show all images
+                    Array.from(imagestoFilter).forEach(image => {
+                        image.classList.remove('hidden');
+                        image.setAttribute('data-toggle', 'lightbox');
+                        image.setAttribute('data-gallery', 'photo_gallery');
+                    });
+
+                    // Hide "no results" message
+                    noResultsMessage.style.display = 'none';
+                }
+
+                restoreDef.addEventListener("click", restoreDefaults);
+
+            </script>
+            <!-------------------------------------------------------------------------------------------------------------------------->
+        </div>
+
+    </main>
+    <!--SCRIPT TAGS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.5/dist/index.bundle.min.js"></script>
+
+</body>
+
+</html>
