@@ -11,7 +11,7 @@ body,
 html {
     height: 100%;
     font-family: "Cormorant Infant", serif;
-    overflow: hidden;
+    overflow: hidden; /*Ensures that only the input or output screen is shown, but not both*/
 }
 
 .container {
