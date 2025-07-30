@@ -14,46 +14,44 @@
     <main class="container-fluid"> <!--sets width to 100%-->
 
         <!--NAVBAR CODE (top of the screen)-->
+       <!--NAVBAR-->
         <nav class="navbar navbar-light" id="navigationBar">
 
             <div class="container-fluid" id="navigation">
 
-                <!--HOME BUTTON: Links back to the main webpage-->
+                <!--HOME BUTTON-->
 
-                <a href="../Projects-Landing-Page-main-copy/projects-page.html" id="homeButton"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                        fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                <a href="#" id="homeButton"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                        fill="currentColor" class="bi bi-house-fill" viewBox="0 0 20 20">
                         <path
                             d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z" />
                         <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z" />
                     </svg>
                 </a>
-            <!-------------------------------------------------------------------------------------------------------------------------->
 
-                <div id="navbarButtons" class="ms-auto"> <!--Class ms-auto aligns everything in the navbar (except for the home button) to the right side of the navbar-->
-            <!-------------------------------------------------------------------------------------------------------------------------->
-       
-                    <!--EXPLANATION BUTTON--><!--This section holds the button + the explanation for how to use the website-->
-                    <!-- Button trigger modal --> <!--This contains the button that triggers the bootstrap modal to appear on click-->
+                <!--EXPLANATION BUTTON-->
+                <!-- Button trigger modal -->
+                <!--CHANGE-->
+                <div id="navbarButtons" class="ms-auto">
                     <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="helpButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" fill="currentColor"
-                            class="bi bi-question-circle" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                            <path
-                                d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            class="bi bi-question-lg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M4.475 5.458c-.284 0-.514-.237-.47-.517C4.28 3.24 5.576 2 7.825 2c2.25 0 3.767 1.36 3.767 3.215 0 1.344-.665 2.288-1.79 2.973-1.1.659-1.414 1.118-1.414 2.01v.03a.5.5 0 0 1-.5.5h-.77a.5.5 0 0 1-.5-.495l-.003-.2c-.043-1.221.477-2.001 1.645-2.712 1.03-.632 1.397-1.135 1.397-2.028 0-.979-.758-1.698-1.926-1.698-1.009 0-1.71.529-1.938 1.402-.066.254-.278.461-.54.461h-.777ZM7.496 14c.622 0 1.095-.474 1.095-1.09 0-.618-.473-1.092-1.095-1.092-.606 0-1.087.474-1.087 1.091S6.89 14 7.496 14" />
                         </svg>
                     </button>
 
-                    <!-- Modal --> <!--This is what appears when the button is clicked-->
+                    <!-- Modal -->
                     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> <!--all tags are bootstrap formatting-->
-                        <div class="modal-dialog"> <!--bootstrap formatting-->
-                            <div class="modal-content"> <!--bootstrap formatting-->
-                                <div class="modal-header"> <!--bootstrap formatting: this is the header of the modal-->
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Using this Website</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button> <!--bs-dismiss, btn-close, and Close all control the X button to make it hide the modal on click-->
+                                        aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body"> <!--Body text of the modal-->
+                                <div class="modal-body">
                                     To navigate this website, there are a few tools you can utilize to find images
                                     quicker!</br>
                                     You can use <b><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -90,13 +88,13 @@
                             </div>
                         </div>
                     </div>
-                <!-------------------------------------------------------------------------------------------------------------------------->
+
                     <!--SORT FUNCTION BAR-->
                     <div class="sort">
-                        <div class="nav-item dropdown px-2" id="sortBar"> <!--The class tags are all Bootstrap formatting-->
+                        <div class="nav-item dropdown px-2" id="sortBar">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" fill="currentColor"
                                     class="bi bi-arrow-down-up" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
@@ -152,7 +150,7 @@
                                         <div class="accordion-body" id="accordion-body-2">
                                             <form>
                                                 <input class="form-control me-2 searchPills" type="search"
-                                                    placeholder="Search Filters" aria-label="Search" id="searchSearchbyYear">
+                                                    placeholder="Search" aria-label="Search" id="searchSearchbyYear">
                                             </form>
                                             <button class="pill pillYear" type="button" id="Unknown">Unknown</button>
                                         </div>
@@ -170,7 +168,10 @@
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body" id="accordion-body-1">
                                             <input class="form-control me-2 searchPills" type="search"
-                                                placeholder="Search Filters" aria-label="Search" id="searchSearchbyTrench">
+                                                placeholder="Search" aria-label="Search" id="searchSearchbyTrench">
+                                            <!--<button class="pill pillTrench" type="button" id="ETAP">ETAP</button>
+                                        <button class="pill pillTrench" type="button" id="WTAP">WTAP</button>
+                                        <button class="pill pillTrench" type="button" id="NTAP">NTAP</button>-->
                                         </div>
                                     </div>
                                 </div>
@@ -212,6 +213,7 @@
                         <button id="restoreDefaults">Restore Defaults</button>
                     </div>
                 </div>
+                <!--End CHANGE-->
 
                 <!-------------------------------------------------------------------------------------------------------------------------->
 
