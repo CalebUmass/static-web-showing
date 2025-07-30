@@ -54,16 +54,16 @@ html {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100%; /*Make the background take up the entire screen*/
     height: 100vh;
-    background-image: url('engjell-gjepali-M0OIyN5u8ZM-unsplash.jpg');
+    background-image: url('engjell-gjepali-M0OIyN5u8ZM-unsplash.jpg'); /*By setting the background image here, it is easy to overlay the glass cards on top*/
     background-size: cover;
     background-position: center;
-    z-index: -1;
+    z-index: -1; /*Send the background image further back so that we can overlay glass cards*/
 }
 
-#bg-container::before {
-    content: "Photo by Engjell Gjepali";
+#bg-container::before { /*This just adds an overlay with the image source, and positions it*/
+    content: "Photo by Engjell Gjepali"; 
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -71,6 +71,7 @@ html {
     z-index: 1;
 }
 
+<!--Heading outside of the glass cards-->
 #heading1 {
     position: absolute;
     top: 60px;
@@ -81,41 +82,41 @@ html {
 }
 
 /* Glass Card */
-.glass-card {
+.glass-card { /*This is the styling for all the glass-cards*/
     background: rgba(213, 216, 203, 0.6);
-    border-radius: 30px;
+    border-radius: 30px; <!--Adds rounded edges*/
     padding: 40px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Input Box */
+/* Input Box */ /*Design for the glass card on the INPUT page*/
 #inputbox {
     width: 400px;
     text-align: center;
 }
 
-.input-subheading {
+.input-subheading { /*Styling for the heading of the glass card on the input page*/
     font-size: 20px;
     color: #166b53;
     font-family: "DM Serif Display", serif;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /*Adding space between the subheading and the input boxes*/
 }
 
-/* Input Fields */
+/* Input Fields */ /*Design for each individual input section (x & y) (where users type in coords)*/
 .input-field {
     margin: 20px 0;
 }
 
-.input-field label {
+.input-field label { /*Styling the labels for each input field*/
     font-size: 20px;
     display: block;
     margin-bottom: 5px;
     color: #166b53;
 }
 
-.input-field input {
+.input-field input { /*Styling for the user input and the input field as well (specifically the input boxes)*/
     width: 100%;
     height: 40px;
     padding: 10px;
@@ -145,7 +146,7 @@ html {
 
 /* Output Columns */
 
-.output-columns {
+.output-columns { /*This designs the output column container (which holds all three glass-cards). I used flex-start alignment and display: flex so that the glass columns fit nicely within the page.*/
     display: flex;
     gap: 40px;
     justify-content: center;
@@ -154,7 +155,7 @@ html {
     width: 100%;
 }
 
-.output-columns .glass-card {
+.output-columns .glass-card { /*This specifically adds design to the output column glass cards. I did this because the output column glass cards need to be different widths than the input one, and have a different relationship with their container*/
     width: 300px;
     height: 400px;
     text-align: center;
@@ -162,7 +163,7 @@ html {
     margin-top: 135px;
 }
 
-.output-columns h3 {
+.output-columns h3 { /*Design for the headings of each output glass card*/
     font-family: "DM Serif Display", serif;
     font-size: 28px;
     margin-bottom: 10px;
@@ -172,15 +173,15 @@ html {
 /* Output Values */
 #input-display,
 #wgs-display,
-#espg-display {
+#espg-display { /*Design for the outputted text (from the JS file)*/
     margin-top: 10px;
     color: #333;
     font-size: 16px;
     line-height: 1.5;
 }
 
-/* New Search Button */
-#newsearch {
+/* New Search Button */ 
+#newsearch { /*Design for the button to start a new search, and its positioning*/
     margin-top: 405px;
     padding: 10px 20px;
     border-radius: 30px;
@@ -192,27 +193,27 @@ html {
     cursor: pointer;
 }
 
-#newsearch:hover {
+#newsearch:hover { /*Change the color of the button on hover*/
     background-color: #88a2a0;
 }
 
 /* Loader*/
-.loader-overlay {
+.loader-overlay { /*This controls the background of the screen while the loader is running.*/
     position: fixed;
     top: 0;
     left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 9999; /*Makes sure it covers the output screen while it is running*/
     width: 100%;
     height: 100vh;
-    background-image: url('media/engjell-gjepali-M0OIyN5u8ZM-unsplash.jpg');
+    background-image: url('media/engjell-gjepali-M0OIyN5u8ZM-unsplash.jpg'); /*Has the same background as the input and output pages so it looks more seamless*/
     background-size: cover;
     background-position: center center;
 }
 
-.loader {
+.loader { /*Designs the loader itself*/
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -226,7 +227,7 @@ html {
 }
 
 
-.loader-inner {
+.loader-inner { /*Design for the inner part of the loader*/
     vertical-align: top;
     display: inline-block;
     width: 100%;
@@ -234,7 +235,7 @@ html {
     animation: loader-inner 2s infinite ease-in;
 }
 
-@keyframes loader {
+@keyframes loader { /*Controls the animation of the loader-- look in the references of the ReadMe to see the source code*/
 
     0% {
         transform: rotate(0deg);
@@ -257,7 +258,7 @@ html {
     }
 }
 
-@keyframes loader-inner {
+@keyframes loader-inner { /*Controls the animation of the inner loader-- look in the references of the ReadMe to see the source code*/
 
     0% {
         height: 0%;
