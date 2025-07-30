@@ -11,7 +11,7 @@ This project consists of two main files, along with multiple files within media.
 The **style.css** file controls the display of the website.
 
 ### About this project
-This project was created by Malie Geery in 2025 as a part of the Poggio Civitate Data Science program. The goal of this project was to 
+This project was created by Malie Geery in 2025 as a part of the Poggio Civitate Data Science program. The goal of this project was to make drawings done by students in the past that aren't associated with a specific find or trench viewable and searchable. I hope that with this project 
 
 ### Acknowledgements
 I want to extend my gratitude to Cole Reilly, Anthony Tuck, and the rest of the staff at Poggio Civitate for their support on this project and for the opportunity to work with the team this summer. I also want to thank my fellow data science students for all their help on this project and other projects over the summer.
