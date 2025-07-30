@@ -71,7 +71,7 @@ html {
     z-index: 1;
 }
 
-<!--Heading outside of the glass cards-->
+//Heading outside of the glass cards
 #heading1 {
     position: absolute;
     top: 60px;
@@ -84,7 +84,7 @@ html {
 /* Glass Card */
 .glass-card { /*This is the styling for all the glass-cards*/
     background: rgba(213, 216, 203, 0.6);
-    border-radius: 30px; <!--Adds rounded edges*/
+    border-radius: 30px; /*Adds rounded edges*/
     padding: 40px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
