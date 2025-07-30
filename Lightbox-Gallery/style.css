@@ -583,3 +583,9 @@ input[type="range"]:active::-webkit-slider-thumb {
     background-image: url("/static-web-showing/Lightbox-Gallery/media/1989/ReconstructedElevationS.E.Building,1989.jpg");
     background-size: cover;
 }
+
+/*TEMPLATE FOR ADDING IMAGES
+#imgXX {
+    background-image: url("/static-web-showing/Lightbox-Gallery/media/the name of the file’s folder/your file name")
+    background-size: cover;
+}*/
