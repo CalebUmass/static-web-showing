@@ -1,1 +1,97 @@
+This is a walkthrough on how to update the web URL + process of creating poggiocivitate.net
+
+Creation:
+This server is streamed on apache2 making it fast, reliable, and easy to work with. Another plus is that Apache makes it very simple and easy to convert the routing from HTTP to HTTPS as long as you own a real domain name somewhere on the internet.
+
+
+Part 1: Set Up the Apache Web Server
+
+Steps:
+
+1. SSH into your server
+   Open your terminal and run (replace your-key.pem and your-server-ip):
+
+   ssh -i ~/Downloads/your-key.pem bitnami@your-server-ip
+
+2. Go to the website directory:
+
+   cd /opt/bitnami/apache2/htdocs
+
+3. Update your site from GitHub (if using Git which is byfar the easiest option):
+
+   git pull
+
+---
+
+Part 2: Point Your Domain to the Server
+
+1. Buy a domain (e.g., poggiocivitate.net) from a registrar like Namecheap or Google Domains.
+
+2. Go to your registrar’s DNS settings and add an A Record:
+
+   Type: A  
+   Name: @  
+   Value: your server's public IP  
+   TTL: 3600 or Automatic
+
+3. Wait 15–60 minutes for DNS to update.
+
+---
+
+Part 3: Run the HTTPS + Domain Configuration Tool
+
+1. On your server, run the Bitnami bncert-tool:
+
+    sudo /opt/bitnami/bncert-tool
+
+2. Answer the prompts:
+
+  - Domain name: poggiocivitate.net
+  - Redirect HTTP to HTTPS: Y
+  - Redirect www to non-www: N
+  - Agree to terms of service: Y
+
+  This will:
+    - Generate and install an SSL certificate from Let's Encrypt
+    - Set up automatic renewal
+    - Configure HTTP → HTTPS redirection
+
+---
+
+Part 4: redirect from
+https://poggiocivitate.net/static-web-showing/Projects-Landing-Page-main-copy/index.html to https://poggiocivitate.net
+
+1. Open this file
+
+    sudo nano /opt/bitnami/apache2/htdocs/static-web-showing/Projects-Landing-Page-main-copy/.htaccess
+
+2. Add this line
+
+    Redirect 301 /static-web-showing/Projects-Landing-Page-main-copy/index.html https://poggiocivitate.net
+
+3.	Save & exit (Ctrl+O, Enter, then Ctrl+X)
+
+4. Make sure Apache allows .htaccess overrides. If not enabled, edit this file:
+
+    sudo nano /opt/bitnami/apache2/conf/httpd.conf
+
+- Find this line:
+    AllowOverride None
+- And change it to:
+    AllowOverride All
+
+5. Restart Apache
+
+    sudo /opt/bitnami/ctlscript.sh restart apache
+
+
+
+Key Files & Commands
+
+Path / Command                                      | Description                        
+----------------------------------------------------|------------------------------------
+/opt/bitnami/apache2/htdocs/                        | Location of website files          
+/opt/bitnami/apache2/conf/bitnami/bitnami.conf      | Apache config file (edit domain)   
+sudo /opt/bitnami/ctlscript.sh restart apache       | Restart Apache                     
+sudo /opt/bitnami/bncert-tool                       | Setup HTTPS/SSL                    
 
