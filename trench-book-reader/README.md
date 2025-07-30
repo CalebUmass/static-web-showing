@@ -4,7 +4,7 @@
 
 ## Overview
 
-**Trench Book Viewer** is a full-stack web application built by Caleb Richards using **NestJS** to support the digital preservation and exploration of archaeological trench books. It offers a streamlined way to browse scanned trench book pages and metadata in a clean, user-friendly interface.
+**Trench Book Viewer** is a full-stack web application built by Caleb Richards using **NestJS** to support the digital preservation and exploration of archaeological trench books. It offers a way to browse scanned trench book pages and metadata in a clean, user-friendly interface.
 
 **Key Features:**
 
@@ -33,7 +33,8 @@ npm run start
 npm run start:dev
 ```
 
-By default, the server runs on: `http://localhost:3000`
+By default, the server runs on: `https://poggiocivitate.net/api` but can be 
+configured to run on by changing `local host` to you public ip adress -> `http://<YOUR_IP_ADDRESS>:3000`
 
 ### 3. Set API Endpoint in Frontend
 
@@ -135,8 +136,7 @@ npm run test:cov
 To deploy on a live server or classroom network:
 
 1. Change the IP and port to match your public host
-2. Serve via Nginx or Apache (recommended for static file caching)
-3. Consider Dockerizing the application for consistency
+2. Serve via Nginx or Apache (recommended for static file caching, but will still work well using either of those options)
 
 ---
 
