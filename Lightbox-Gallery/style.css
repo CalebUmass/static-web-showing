@@ -455,7 +455,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 /*Adding Image Overlays*/
 #img1 {
-    background-image: url("/Lightbox-Gallery/media/2022/MM-22-10-1.png");
+    background-image: url("static-web-showing/Lightbox-Gallery/media/2022/MM-22-10-1.png");
     background-size: cover;
 }
 
