@@ -8,7 +8,7 @@ This project consists of two main files, along with multiple files within media.
 - Sorting functionality
 - A script to autogenerate pills
 - A script that controls all filters in the sidebar-- both the range slider and the pill filters
-The **style.css** file controls the display of the website.
+The **style.css** file controls the display of the website. To add your own images to the site, look at the **Adding Images to Gallery.pdf** file.
 
 ### About this project
 This project was created by Malie Geery in 2025 as a part of the Poggio Civitate Data Science program. The goal of this project was to make drawings done by students in the past that aren't associated with a specific find or trench viewable and searchable. I also hope that with this project, it is easier to find any relevant images. The search, sort, filter by pill, and filter by range functions all serve as ways for users to be able to use the website as seamlessly as possible. 
