@@ -1,13 +1,4 @@
-// Will need to change this as I move to differant networks
-
-// const apiBase = 'http://192.168.0.133:3000'; // Mag IP
-// const apiBase = 'http://172.20.10.11:3000'; // Hotspot IP
-// const apiBase = 'http://192.168.1.153:3000'; // Hotel IP
-// const apiBase = 'http://192.168.178.107:3000'; // Hotel2 IP
-// const apiBase = 'https://sweet-cobras-sit.loca.lt'; // Ngrok URL
-// const apiBase = 'https://192.168.0.54:3000'; // Portable IP
-// const apiBase = 'http://3.65.1.225:3000'; // ← my aws server
-const apiBase = 'https://poggiocivitate.net/api'; // ← if your NestJS runs on 3000 // ← poggio-civitate-project aws server
+const apiBase = 'https://poggiocivitate.net/api'; // ← poggio-civitate-project aws server
 
 
 const select = document.getElementById('trenchBookSelect');
@@ -128,14 +119,17 @@ async function showImage(index) {
   isLoadingImage = false; // ✅ unlock
 }
 
+// Traversing the images
 prevBtn.addEventListener('click', () => {
   showImage(currentIndex - 1);
 });
 
+// Traversing the images
 nextBtn.addEventListener('click', () => {
   showImage(currentIndex + 1);
 });
 
+// This deals with everything thats happening whenever you change trench books
 select.addEventListener('change', async (e) => {
   const selected = e.target.value;
   clearImageCache(); // ← Clear the previous book's images from memory
@@ -262,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Google Maps integration ---
 // Function to plot the trench location on a Google Map
-
 function plotMap(coords) {
   if (!coords || coords.length !== 2) return;
   const mapDiv = document.getElementById('map');
@@ -305,11 +298,11 @@ currentImage.addEventListener('touchend', (e) => {
 
 function handleGesture() {
   if (touchEndX < touchStartX - 30) {
-    // Swipe left → next image
+    // Swipe left -  next image
     showImage(currentIndex + 1);
   }
   if (touchEndX > touchStartX + 30) {
-    // Swipe right → previous image
+    // Swipe right -  previous image
     showImage(currentIndex - 1);
   }
 }
@@ -364,3 +357,33 @@ document.getElementById('clearFilters').addEventListener('click', () => {
   document.getElementById('trenchNameFilter').value = '';
   renderFilteredBooks();
 });
+
+
+
+/* === Variable Reference ===
+
+apiBase         - Base URL for API requests to Poggio Civitate server
+select          -  <select> dropdown for choosing trench books
+imagesContainer -  Container that holds image elements
+currentImage    -  <img> element displaying the current trench book page
+
+prevBtn         -  Button for navigating to the previous image
+nextBtn         -  Button for navigating to the next image
+pageSlider      -  Slider UI element to jump to a specific image page
+
+images          -  Array of image filenames for the selected trench book
+currentIndex    -  Index of the currently displayed image
+isLoadingImage  -  Boolean flag to prevent double-loading images
+
+cache           -  Map object used to store and reuse fetched image URLs
+
+infoTitle       -  <td> or span for displaying the trench book's name
+infoAuthor      -  <td> or span for displaying the author's name
+infoDate        -  <td> or span for displaying the excavation date
+infoCoords      -  <td> or span for displaying trench coordinates
+
+touchStartX     -  Horizontal start position for touch swipe gesture
+touchEndX       -  Horizontal end position for touch swipe gesture
+
+allBooks        -  Object containing all trench books parsed from OCdata.json
+*/
