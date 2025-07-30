@@ -210,8 +210,8 @@ async function downloadTrenchBooks(startUrl, baseDir = '.') {
 HEADERS        - HTTP headers used in all fetch requests
 
 label          - Cleaned and simplified version of the original label
-cleaned        - Intermediate cleaned version of label text
-match          - Match result from regex operations
+cleaned        - Cleaned version of label text
+match          - Match result from operations
 
 ctxs           - Linked contexts array from OpenContext data
 raw            - Raw slug string to extract year
