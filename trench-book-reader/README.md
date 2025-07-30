@@ -4,7 +4,7 @@
 
 ## Overview
 
-**Trench Book Viewer** is a full-stack web application built using **NestJS** to support the digital preservation and exploration of archaeological trench books. It offers a streamlined way to browse scanned trench book pages and metadata in a clean, user-friendly interface.
+**Trench Book Viewer** is a full-stack web application built by Caleb Richards using **NestJS** to support the digital preservation and exploration of archaeological trench books. It offers a streamlined way to browse scanned trench book pages and metadata in a clean, user-friendly interface.
 
 **Key Features:**
 
