@@ -1,4 +1,4 @@
-# Project Title
+# 3D Viewer
 
 ![Banner or Logo Image](imgs/readmecover.jpg) <!-- optional -->
 
