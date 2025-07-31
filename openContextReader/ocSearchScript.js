@@ -14,11 +14,14 @@
         document.getElementById(`${x}`).style.visibility = "visible"
 
         /*General sub-filters that apply to every category, makes them visible*/
-        document.getElementById("fragmentSelect").style.visibility = "visible"
-        document.getElementById("conservation-material").style.visibility = "visible"
-        document.getElementById("conservation-action").style.visibility = "visible"
-        document.getElementById('searchButton').style.visibility = "visible"
 
+        if (x == "pcnum") {
+            document.getElementById("fragmentSelect").style.visibility = "visible"
+            document.getElementById("conservation-material").style.visibility = "visible"
+            document.getElementById("conservation-action").style.visibility = "visible"
+            document.getElementById('searchButton').style.visibility = "visible"
+        }
+        
         /*Sub-filters that apply only to biologicalFilters*/
         var biologicalFilters = ['taxon', 'element', 'common-name']
         if(biologicalFilters.includes(document.getElementById("searchSelect").value)) {
