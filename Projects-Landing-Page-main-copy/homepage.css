@@ -1,88 +1,99 @@
-/*WHOLE WEBPAGE FORMATTING*/
-html,
-body {
-    margin: 0;
-    padding: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
-body {
-    height: 100vh;
-    width: 100vw;
-}
-
-/*PAGE BODY*/
-
-/*contains all page content*/
-.container {
-    height: 100vh;
-    width: 100%;
+#background {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 100vh;
     background-color: #a2cde6;
+    padding-left: 0;
+    padding-right: 0;
 }
 
-/*formatting for background image*/
-#image {
-    height: 100%;
+.forImage {
     width: 55%;
-    position: absolute;
-    right: 0px;
-    background-image: url("media/patrick-schneider-Qackx5pq2ts-unsplash.jpg"); /*change background image here*/
+    height: 100vh;
+    background-image: url("media/patrick-schneider-Qackx5pq2ts-unsplash.jpg");
     background-size: cover;
+    margin-left: auto;
 }
 
-/*Adds source to the bottom of the page*/
-.container::before {
-    content: "Photo by Patrick Schneider";
-    position: absolute;
-    bottom: 10px;
-    left: 480px;
-    color: #b08863;
-    z-index: 1;
+.forText {
+    width: 45%;
+    display: flex;
+    align-items: flex-start;
+    /* optional: aligns content to the top */
+    justify-content: flex-start;
+    /* optional: aligns content to the left */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-/*Formatting for the heading text*/
-#heading {
-    height: 25%;
-    width: 40%;
-    position: absolute;
-    inset-inline-start: 90px;
-    inset-block-start: 220px;
-    font-size: 90px;
-    color: #b08863;
-    font-family: "Source Serif 4", serif;
+.text {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%; /* Ensures it fills parent for vertical centering */
 }
 
-/*Formatting for the subheading text*/
-#subheading {
-    height: 15%;
+.credits {
+    display: flex;
+    text-align: end;
+    align-self: flex-end;
+    justify-content: flex-end;
+    margin-top: auto;
+    margin-right: 10px;
+    font-family: "Outfit", sans-serif;
+    color: #b18864;
+    font-weight: 400;
+}
+
+h2,
+h3 {
+    font-family: "Outfit", sans-serif;
+}
+
+h2 {
+    font-size: 60px;
+    font-weight: 800;
+    color: #b18864;
+}
+
+h3 {
+    font-weight: 500;
+    color: white;
+}
+
+#buttonContain {
     width: 20%;
-    position: absolute;
-    top: 210px;
-    left: 92px;
-    font-size: 35px;
-    font-family: "Outfit", sans-serif;
-    color: #fff;
+    height: 7%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0);
+    border-radius: 30px;
+    text-decoration: none;
 }
 
-/*Formatting for the "explore" button*/
-#projbutton {
-    position: absolute;
-    top: 550px;
-    left: 95px;
-    z-index: 2;
-    width: 10%;
-    height: 8%;
+
+#exploreProjects {
+    width: 100%;
+    border-width: 3px;
+    border-color: rgba(0,0,0,0);
+    background-color: white;
     border-radius: 30px;
-    text-align: center;
+    height: 100%;
+    margin-top: 5%;
     font-family: "Outfit", sans-serif;
-    font-weight: 900;
     color: #a2cde6;
-    border: 0px;
-    background-color: #fff;
+    font-weight: 600;
+    text-align: center;
+    transition: 1s;
 }
- /*Explore button when hovered over*/
-#projbutton:hover {
-    cursor: pointer;
+
+#exploreProjects:hover {
+    background-color: #a2cde6;
+    color: white;
+    border-color: white;
+    transition: 1s;
 }
