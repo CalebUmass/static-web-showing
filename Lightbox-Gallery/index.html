@@ -691,44 +691,46 @@
                 }
                 );
 
-                //BASIC SLIDER CODE
-                window.onload = function () {
+                //BASIC SLIDER CODE (this just makes the slider move and adjust the display numbers and colors, but not how the code processes the slider's info)
+                window.onload = function () { //run slideOne() and sliderTwo() as soon as the website opens
                     slideOne();
                     slideTwo();
                 };
 
                 function slideOne() {
-                    if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-                        sliderOne.value = parseInt(sliderTwo.value) - minGap;
+                    if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) { //if the gap between the two sliders is less than or equal to the minGap
+                        sliderOne.value = parseInt(sliderTwo.value) - minGap; //change the value of slider one so it is exactly the value of minGap away from slider 2
                     }
-                    displayValOne.textContent = sliderOne.value;
-                    fillColor();
+                    displayValOne.textContent = sliderOne.value; //display the value of slider 1
+                    fillColor(); //run the fill color function (below)
                 }
                 function slideTwo() {
                     if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
-                        sliderTwo.value = parseInt(sliderOne.value) + minGap;
+                        sliderTwo.value = parseInt(sliderOne.value) + minGap; //change the value of slider two so it is exactly the value of minGap away from slider 1
                     }
-                    displayValTwo.textContent = sliderTwo.value;
-                    fillColor();
+                    displayValTwo.textContent = sliderTwo.value; //display the value of slider 2
+                    fillColor(); //run the fillColor function (below)
                 }
-                function fillColor() {
+                function fillColor() { //this controls how color appears between the two sliders, but not on either side of them.
                     const min = parseInt(sliderOne.min); // 1950
                     const max = parseInt(sliderOne.max); // 2050
-
-                    const percent1 = (((parseInt(sliderOne.value) - min) / (max - min)) * 100) - 5;
+                    
+                    //decide how much of the slider is what color using percentages. +/- 5 are just for better visuals
+                    const percent1 = (((parseInt(sliderOne.value) - min) / (max - min)) * 100) - 5; 
                     const percent2 = (((parseInt(sliderTwo.value) - min) / (max - min)) * 100) + 5;
 
-                    sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}%, #9a6f55 ${percent1}%, #9a6f55 ${percent2}%, #dadae5 ${percent2}%)`;
+                    sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}%, #9a6f55 ${percent1}%, #9a6f55 ${percent2}%, #dadae5 ${percent2}%)`; //this controls the color
                 }
-                //CODE FOR GIVING ACCORDIONS THE TAG IS ACTIVE
+                
+                //CODE FOR GIVING ACCORDIONS THE TAG "IS ACTIVE"
                 function addClasstoAccordions() {
-                    Array.from(accordions).forEach(acc => {
-                        const pills = acc.querySelectorAll('.pill');
-                        const hasActive = Array.from(pills).some(pill => pill.classList.contains('pill--active'));
-                        if (hasActive) {
-                            acc.classList.add('isActive');
+                    Array.from(accordions).forEach(acc => { //iterate through each accordion
+                        const pills = acc.querySelectorAll('.pill'); //find all the pills in the accordion
+                        const hasActive = Array.from(pills).some(pill => pill.classList.contains('pill--active')); //check to see if any of the pills have the class "pill--active"
+                        if (hasActive) { 
+                            acc.classList.add('isActive'); //if there are active pills, give the accordion class "isActive"
                         } else {
-                            acc.classList.remove('isActive');
+                            acc.classList.remove('isActive'); //if there aren't, remove the "isActive" class
                         }
                     });
                 }
@@ -736,44 +738,47 @@
                 //SLIDER SCRIPTS
                 //TOGGLE SLIDER ACTIVE
                 function sliderClassToggle() {
-                    const min = parseInt(sliderOne.value);
-                    const max = parseInt(sliderTwo.value);
-                    if (min !== intOneDef || max !== intTwoDef) {
-                        sliderContainer.classList.add("slider--active");
+                    const min = parseInt(sliderOne.value); //the minimum is the inputted value of the left slider
+                    const max = parseInt(sliderTwo.value); //the maximum is the inputted value of the right slider
+                    if (min !== intOneDef || max !== intTwoDef) { //if at least one of the sliders is not in its default position
+                        sliderContainer.classList.add("slider--active"); //give the sliderContainer the class "slider--active"
                     } else {
-                        sliderContainer.classList.remove("slider--active");
+                        sliderContainer.classList.remove("slider--active"); //if neither slider has been moved, remove the slider--active class
                     }
                 }
-
-                sliderOne.addEventListener('input', sliderClassToggle);
+                //run this code as soon as there is input in either slider
+                sliderOne.addEventListener('input', sliderClassToggle); 
                 sliderTwo.addEventListener('input', sliderClassToggle);
 
 
-                //HOW THE SLIDER WORKS
+                //HOW THE SLIDER WORKS AS A FILTER
                 function filterYearwithSlider() {
-                    yearSearch.value = '';
+                    //clear the search bars in the sidebar
+                    yearSearch.value = ''; 
                     trenchSearch.value = '';
 
+                    //remove the pill--active classes and the pill--shown classes (just makes sure that the pills do not conflict with the slider)
                     Array.from(allthePills).forEach(pill => {
                         pill.classList.remove('pill--active');
                         pill.classList.remove('pill--shown');
                     });
 
+                    //clear the search bar for no conflict
                     searchInput.value = '';
 
-                    const min = parseInt(sliderOne.value);
-                    const max = parseInt(sliderTwo.value);
-                    Array.from(imagestoFilter).forEach(image => {
-                        const imageDescription = image.querySelector('p').textContent;
-                        const splitDescription = imageDescription.split(",");
-                        const textYear = splitDescription[1] && splitDescription[1].trim();
-                        const imageYear = parseInt(textYear);
+                    const min = parseInt(sliderOne.value); //the default value of the min slider
+                    const max = parseInt(sliderTwo.value); //the default value of the max slider
+                    Array.from(imagestoFilter).forEach(image => { //for each image
+                        const imageDescription = image.querySelector('p').textContent; //get the paragraph text of each image
+                        const splitDescription = imageDescription.split(","); //split it at the comma
+                        const textYear = splitDescription[1] && splitDescription[1].trim(); //get index one of the string (which would be the year), and trim the whitespace
+                        const imageYear = parseInt(textYear); //convert it to an int (makes it easier to do inequalities)
 
-                        if (!isNaN(imageYear) && imageYear >= min && imageYear <= max) {
+                        if (!isNaN(imageYear) && imageYear >= min && imageYear <= max) { //if the year of the image is a number and is between the year sliders range, then show it
                             image.classList.remove('hidden');
                             image.setAttribute('data-toggle', 'lightbox');
                             image.setAttribute('data-gallery', 'photo_gallery');
-                        } else {
+                        } else { //if it doesn't meet both parameters, hide the image
                             image.classList.add('hidden');
                             image.removeAttribute('data-toggle');
                             image.removeAttribute('data-gallery');
@@ -783,21 +788,21 @@
 
 
                 //CODE FOR LOGGING ACTIVE FILTERS
-                function getCount() {
-                    addClasstoAccordions();
-                    const totalAccordions = document.getElementsByClassName("accordion-item");
-                    const usedVals = new Set()
-                    let i = 0;
+                function getCount() { //returns a set of all the active accordions 
+                    addClasstoAccordions(); //call the addClasstoAccordions to add the active class to all active accordions
+                    const totalAccordions = document.getElementsByClassName("accordion-item"); //get all of the accordion items
+                    const usedVals = new Set() //create an empty set
+                    let i = 0; //initialize i at 0
 
-                    Array.from(totalAccordions).forEach(accordi => {
-                        if (accordi.classList.contains('isActive')) {
-                            i += 1;
-                            const toAdd = accordi.id;
-                            usedVals.add(toAdd)
+                    Array.from(totalAccordions).forEach(accordi => { //for each accordion
+                        if (accordi.classList.contains('isActive')) {//if it has the isActive class
+                            i += 1; //add 1 to i
+                            const toAdd = accordi.id; //toAdd is the accordion's id
+                            usedVals.add(toAdd) //thet toAdd to the se
                         };
 
                     })
-                    return usedVals;
+                    return usedVals; //returns a set of all the active accordions 
                 }
 
 
@@ -806,7 +811,7 @@
 
                 function filteringImages() {
 
-                    const imageidmap = new Map(); //initialize a map to hold image id, value pairs.
+                    const imageidmap = new Map(); //initialize a map to hold image id, value pairs. 
 
                     //a for loop that adds all image-items to imageidmap with a starting value of 0.
                     Array.from(imagestoFilter).forEach(block => {
@@ -854,7 +859,7 @@
                                 }
                             });
                         });
-                        const lengthofsetofAccordions = setofActiveAccordions.size;
+                        const lengthofsetofAccordions = setofActiveAccordions.size; //get the size of the set (so we can compare how many matches a pill has to how many accordions there are
                         imageidmap.forEach((itemvalue, item) => {
                             // item is the image id, itemvalue is the count
                             if (parseInt(itemvalue) === parseInt(lengthofsetofAccordions)) { //if the value of the item in the imageidmap is equal to the length of the setofActiveAccordions:
@@ -872,13 +877,13 @@
                     }
                 }
 
-                formWatch.addEventListener('submit', function (event) {
-                    event.preventDefault();
-                    searchInput.value = '';
-                    filteringImages();
+                formWatch.addEventListener('submit', function (event) { //add event listener to the submit in the sidebar
+                    event.preventDefault(); //prevent the page from reloading
+                    searchInput.value = ''; //clear the searchbar
+                    filteringImages(); //call the filtering images function
                 });
 
-                function restoreDefaults() {
+                function restoreDefaults() { //code for the restore defaults button
                     // Reset pills
                     Array.from(allthePills).forEach(pill => {
                         pill.classList.remove('pill--active');
@@ -909,7 +914,7 @@
                     noResultsMessage.style.display = 'none';
                 }
 
-                restoreDef.addEventListener("click", restoreDefaults);
+                restoreDef.addEventListener("click", restoreDefaults); //gets called when clicked on
 
             </script>
             <!-------------------------------------------------------------------------------------------------------------------------->
