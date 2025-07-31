@@ -92,7 +92,7 @@ body {
     height: 0vh;
     font-size: 80px;
     color: #fff;
-    font-family: "Source Serif 4", serif;
+    font-family: "Outfit", sans-serif;
     padding-top: 10px;
     margin-bottom: 100px;
 }
@@ -106,7 +106,7 @@ body {
     position: relative;
     margin-top: 15px;
 
-    font-family: "DM Serif Display", serif;
+    font-family: "Outfit", sans-serif;
     font-size: 28px;
     margin-bottom: 10px;
     color: #166b53;
