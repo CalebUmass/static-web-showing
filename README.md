@@ -242,7 +242,7 @@ Distributed under the MIT. See `LICENSE.txt` for more information.
 **Caleb Richards**  
 [LinkedIn](https://www.linkedin.com/in/caleb-richards-aab742375) – carichards@umass.edu
 
-**Ai Mai**  
+**Ai Mei**  
 [LinkedIn](https://www.linkedin.com/in/ai-mei-zhang-227429244) – aimeiazhang@umass.edu
 
 **Malie Geery**  
