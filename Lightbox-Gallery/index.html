@@ -395,23 +395,13 @@
                                                                 ALL SCRIPTS
             <!-------------------------------------------------------------------------------------------------------------------------->
 
-                
             <!-------------------------------------------------------------------------------------------------------------------------->
-                                                            ALL CONSTANTS AND VARIABLES
+                                                            CONSTANTS AND VARIABLES
             <!-------------------------------------------------------------------------------------------------------------------------->
             <script>
                 //const search-- this gets the searchBar by id in the Controls Sidebar Movement Section
-                //const pills-- get all pills with class pill in the Function for Searching Pills in Side Bar Section
-                //const searchByYear-- gets the search bar from the search by year accordion Function for Searching Pills in Side Bar Section
-                //const searchByTrench-- gets the search bar from the search by description accordion Function for Searching Pills in Side Bar Section
-                //const sortSelect-- get the whole sort section (the part that appears when the sort button is clicked) in the Script for Sorting
-                //const rows-- get everything with class row (it is only one) in the Script for Sorting
-                //const allImageItems-- create an array from every item with class .image-item in the Script for Sorting
-                //SCRIPT TO AUTOGENERATE PILLS
             </script>
-            <!-------------------------------------------------------------------------------------------------------------------------->
-
-            <!-------------------------------------------------------------------------------------------------------------------------->           
+            <!-------------------------------------------------------------------------------------------------------------------------->         
             <script> //CONTROLS SIDEBAR MOVEMENT
                  const search = document.getElementById("searchBar");
 
@@ -429,6 +419,16 @@
                     search.style.opacity = 1; //the search bar is visible again
                     search.classList.remove('disabled'); //search bar is enabled
                 }
+            </script>
+            <!-------------------------------------------------------------------------------------------------------------------------->
+
+            <!-------------------------------------------------------------------------------------------------------------------------->
+                                                            CONSTANTS AND VARIABLES
+            <!-------------------------------------------------------------------------------------------------------------------------->
+            <script>
+                //const pills-- get all pills with class pill in the Function for Searching Pills in Side Bar Section
+                //const searchByYear-- gets the search bar from the search by year accordion Function for Searching Pills in Side Bar Section
+                //const searchByTrench-- gets the search bar from the search by description accordion Function for Searching Pills in Side Bar Section
             </script>
             <!-------------------------------------------------------------------------------------------------------------------------->
             <script> //FUNCTION FOR SEARCHING FOR PILLS IN SIDE BAR
@@ -455,6 +455,16 @@
                 searchByTrench.addEventListener('input', filterPills); //the search by description accordion calls this when it starts getting input
             </script>
 
+            <!-------------------------------------------------------------------------------------------------------------------------->
+            
+            <!-------------------------------------------------------------------------------------------------------------------------->
+                                                            CONSTANTS AND VARIABLES
+            <!-------------------------------------------------------------------------------------------------------------------------->
+            <script>
+                //const sortSelect-- get the whole sort section (the part that appears when the sort button is clicked) in the Script for Sorting
+                //const rows-- get everything with class row (it is only one) in the Script for Sorting
+                //const allImageItems-- create an array from every item with class .image-item in the Script for Sorting
+            </script>
             <!-------------------------------------------------------------------------------------------------------------------------->
             <script> //SCRIPT FOR SORTING
                 const sortSelect = document.getElementById('sortSelect'); //get the whole sort section (the part that appears when the sort button is clicked)
@@ -515,14 +525,23 @@
             </script>
 
             <!-------------------------------------------------------------------------------------------------------------------------->
+            <!-------------------------------------------------------------------------------------------------------------------------->
+                                                            CONSTANTS AND VARIABLES
+            <!-------------------------------------------------------------------------------------------------------------------------->
             <script>
-                //SCRIPT TO AUTOGENERATE PILLS
+                //const filterAccordions-- this gets all the accordion-item filters
+                //const imageItems-- this gets all of the image-Items
+                //tagsSet-- A set of arrays containing information about each image item. At index 0 of each array, we have the description of the image, and at index 1, we have the year the image was made. It is a set so there are not duplicate tags.
+                //const newTag-- the brand new pill button we are making for each tag
+            </script>
+            <!-------------------------------------------------------------------------------------------------------------------------->
+            <script> //SCRIPT TO AUTOGENERATE PILLS
                 function makingTags() { //this function is for creating the pill tags
                     const filterAccordions = document.getElementsByClassName('accordion-item filter'); //this gets all the accordion-item filters
-                    const imageItems = document.getElementsByClassName("image-item");
+                    const imageItems = document.getElementsByClassName("image-item"); //this gets all of the image-Items
 
-                    Array.from(filterAccordions).forEach(filter => {
-                        let tagsSet = new Set();
+                    Array.from(filterAccordions).forEach(filter => { //for each filter
+                        let tagsSet = new Set(); //initialize a new set that will hold all the 
 
                         Array.from(imageItems).forEach(item => {
                             const textArray = item.querySelector('p').textContent.split(',').map(tag => tag.trim());
@@ -530,21 +549,21 @@
                             const theIndex = filter.getAttribute("index");
                             const theIndexNum = parseInt(theIndex)
                             const unformattedTag = textArray.at(theIndexNum);
-                            const tag = unformattedTag;
-                            tagsSet.add(tag);
+                            const tag = unformattedTag; 
+                            tagsSet.add(tag); //this adds an array to the set for each image-item. At index 0 of each array, we have the description of the image, and at index 1, we have the year the image was made.
                         })
 
-                        tagsSet.forEach(tag => {
-                            const newTag = document.createElement("button");
+                        tagsSet.forEach(tag => { //for each array in tagset
+                            const newTag = document.createElement("button"); //newTag is the brand new pill button we are making for each tag
 
-                            if (filter.id === "Year") {
+                            if (filter.id === "Year") { //we do this if the filter we are iterating through is the year filter (because we need to check that there is a year included)
                                 try {
-                                    let testingifYear = parseInt.tag();
-                                    newTag.id = `${tag}`;
+                                    let testingifYear = parseInt.tag(); //we try to get parse the tag as an integer
+                                    newTag.id = `${tag}`; //if it works, we make the id and the text content equivalent to its year
                                     newTag.textContent = tag;
-                                } catch {
-                                    newTag.id = "Unknown";
-                                    newTag.textContent = "Unkown";
+                                } catch { //if it doesn't work, we make a new tag called unknown.
+                                    newTag.id = "Unknown"; 
+                                    newTag.textContent = "Unknown";
                                 } finally {
                                     newTag.classList.add("pill");
                                     newTag.classList.add(`pill${filter.id}`);
