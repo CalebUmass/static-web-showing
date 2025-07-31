@@ -64,9 +64,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started. To avoid retyping too much info, do a search and replace with your text editor for the following: `CalebUmass`, `static-web-showing`, `CalebBirdRicha1`, `caleb-richards-aab742375`, `gmail`, `carichards`, `static-web-showing`, `This website serves as a central hub for showcasing digital projects created by the 2025 Poggio Civitate archaeological field school.`, `MIT`
+[![Sceenshot of product home][product-screenshot]](https://poggiocivitate.net)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -82,7 +80,6 @@ Here's a blank template to get started. To avoid retyping too much info, do a se
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -90,7 +87,7 @@ To add a project to this webpage or make edits follow these steps.
 
 ### Prerequisites
 
-To work with this project, ensure you have the following installed:
+First, to work with this project, ensure you have the following installed:
 
 * **npm**
   ```sh
@@ -134,7 +131,7 @@ To work with this project, ensure you have the following installed:
    - To change the HTML:  
      Edit either HTML + CSS files inside the `/Projects-Landing-Page-main-copy` folder using VS Code.
 
-5. **Push your changes to GitHub**
+5. **Push your/the changes to GitHub**
    ```sh
    git add .
    git commit -m "Add new project / update HTML"
@@ -145,7 +142,7 @@ To work with this project, ensure you have the following installed:
 
 ### Deploying to AWS Lightsail Apache Server
 
-1. **SSH into your Lightsail server**
+1. **SSH into your/the Lightsail server**
    ```sh
    ssh -i ~/path/to/LightsailDefaultKey.pem bitnami@<YOUR_PUBLIC_IP>
    ```
@@ -180,7 +177,7 @@ http://<YOUR_PUBLIC_IP>/static-web-showing/
 Or, if you’ve set up HTTPS and a domain:
 
 ```
-https://yourdomain.com/
+https://poggiocivitate.net
 ```
 
 ---
@@ -194,8 +191,9 @@ https://yourdomain.com/
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://github.com/CalebUmass/prototype1)_
-_For more examples, please refer to the [Documentation](https://github.com/maliegeery/Projects-Landing-Page)_
+- [CalebUmass/prototype1](https://github.com/CalebUmass/prototype1)
+- [maliegeery/Projects-Landing-Page](https://github.com/maliegeery/Projects-Landing-Page)
+- [ai-meii/](https://github.com/ai-meii)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -237,6 +235,9 @@ Distributed under the MIT. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
+**Cole Reilly**
+[LinkedIn](https://www.linkedin.com/in/cole-adam-reilly-61b43b162) - careilly@umass.edu
+
 **Caleb Richards**  
 [LinkedIn](https://www.linkedin.com/in/caleb-richards-aab742375) – carichards@umass.edu
 
@@ -265,7 +266,7 @@ Project Link: [https://github.com/CalebUmass/static-web-showing](https://github.
 [license-url]: https://github.com/CalebUmass/static-web-showing/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/caleb-richards-aab742375
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: images/product-screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
