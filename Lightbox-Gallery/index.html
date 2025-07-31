@@ -404,7 +404,10 @@
                 //const pills-- get all pills with class pill in the Function for Searching Pills in Side Bar Section
                 //const searchByYear-- gets the search bar from the search by year accordion Function for Searching Pills in Side Bar Section
                 //const searchByTrench-- gets the search bar from the search by description accordion Function for Searching Pills in Side Bar Section
-                //
+                //const sortSelect-- get the whole sort section (the part that appears when the sort button is clicked) in the Script for Sorting
+                //const rows-- get everything with class row (it is only one) in the Script for Sorting
+                //const allImageItems-- create an array from every item with class .image-item in the Script for Sorting
+                //SCRIPT TO AUTOGENERATE PILLS
             </script>
             <!-------------------------------------------------------------------------------------------------------------------------->
 
@@ -474,19 +477,19 @@
                             const bText = b.querySelector('p').textContent.trim().toLowerCase();
                             return aText.localeCompare(bText);
                         });
-                    } else if (method === 'yearasc') {
+                    } else if (method === 'yearasc') { //if the method is ASCENDING
                         sorted.sort((a, b) => {
                             const aYear = extractYear(a.querySelector('p').textContent);
                             const bYear = extractYear(b.querySelector('p').textContent);
                             return aYear - bYear;
                         });
-                    } else if (method === 'yeardesc') {
+                    } else if (method === 'yeardesc') { //if the method is DESCENDING
                         sorted.sort((a, b) => {
                             const aYear = extractYear(a.querySelector('p').textContent);
                             const bYear = extractYear(b.querySelector('p').textContent);
                             return bYear - aYear;
                         });
-                    } else if (method === 'revalphabetical') {
+                    } else if (method === 'revalphabetical') { //if the method is REVERSE ALPHABETICAL
                         sorted.sort((a, b) => {
                             const aText = a.querySelector('p').textContent.trim().toLowerCase();
                             const bText = b.querySelector('p').textContent.trim().toLowerCase();
@@ -500,13 +503,12 @@
                 }
 
                 sortSelect.addEventListener('change', () => { //called when the sort method is changed
-                    const method = sortSelect.value;
-                    if (method === 'default') {
-                        // Restore default order of images without reloading
+                    const method = sortSelect.value; //get the method that was selected
+                    if (method === 'default') { // Restore default order of images without reloading
                         const galleryRow = document.getElementById('galleryRow');
                         galleryRow.innerHTML = '';
                         allImageItems.forEach(item => galleryRow.appendChild(item));
-                    } else {
+                    } else { //call sort images with the select method
                         sortImages(method);
                     }
                 });
@@ -515,8 +517,8 @@
             <!-------------------------------------------------------------------------------------------------------------------------->
             <script>
                 //SCRIPT TO AUTOGENERATE PILLS
-                function makingTags() {
-                    const filterAccordions = document.getElementsByClassName('accordion-item filter');
+                function makingTags() { //this function is for creating the pill tags
+                    const filterAccordions = document.getElementsByClassName('accordion-item filter'); //this gets all the accordion-item filters
                     const imageItems = document.getElementsByClassName("image-item");
 
                     Array.from(filterAccordions).forEach(filter => {
