@@ -156,6 +156,22 @@ h1 {
     visibility: hidden;
 }
 
+#homePage {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+
+    color: white;
+    background-color: orange;
+    border: 2px solid orange;
+    border-radius: 20px;
+
+    top: -40px;
+    left: -1050px;
+
+    width: 100px;
+}
+
 
 @keyframes appear{
     0% {
