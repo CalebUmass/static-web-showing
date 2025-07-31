@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // navbar functionality
     const navbarToggle = document.getElementById('navbarToggle');
     const navbarMenu = document.getElementById('navbarMenu');
     if (navbarToggle) {
@@ -19,4 +20,24 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('theme', newTheme);
         });
     }
+
+
+    // info functionality
+    const infoBtn = document.getElementById('info-btn');
+    const infoModal = document.getElementById('info-modal');
+    const closeInfo = document.getElementById('close-info');
+
+    infoBtn.addEventListener('click', () => {
+        infoModal.classList.remove('hidden');
+    });
+
+    closeInfo.addEventListener('click', () => {
+        infoModal.classList.add('hidden');
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === infoModal) {
+        infoModal.classList.add('hidden');
+        }
+    });
 });

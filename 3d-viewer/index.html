@@ -10,7 +10,10 @@
     <script src="theme-init.js"></script>
     <header class="navbar">
         <div class="navbar__container">
+            <div class="navbar__brand-wrapper">
             <a href="#" class="navbar__brand">3D Viewer</a>
+                <button id="info-btn" class="info-icon" aria-label="Site instructions">ℹ️</button>
+            </div>
             <button class="navbar__toggle" id="navbarToggle" aria-label="Toggle navigation" aria-controls="navbarMenu" aria-expanded="false">
                 <span class="bar"></span><span class="bar"></span><span class="bar"></span>
             </button>
@@ -27,6 +30,15 @@
             </nav>
         </div>
     </header>
+
+    <div id="info-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-info" class="close">&times;</span>
+            <h2>How to Use This Site</h2>
+            <p>Click on any 3D model to explore it interactively. You can zoom, rotate, and inspect each artifact using your mouse or touch gestures.</p>
+            <p>Use the light/dark theme toggle in the top right to switch between visual modes.</p>
+        </div>
+    </div>
 
     <!-- Main content area for 3D models -->
     <main class="models">
