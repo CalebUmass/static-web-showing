@@ -15,12 +15,11 @@
 
         <!--NAVBAR CODE (top of the screen)-->
        <!--NAVBAR-->
-        <nav class="navbar navbar-light" id="navigationBar">
+        <nav class="navbar navbar-light" id="navigationBar"> <!--Bootstrap code for navbar-->
 
-            <div class="container-fluid" id="navigation">
+            <div class="container-fluid" id="navigation"> <!--Bootstrap code for navbar-->
 
                 <!--HOME BUTTON-->
-
                 <a href="../Projects-Landing-Page-main-copy/projects-page.html" id="homeButton">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
                         class="bi bi-house" viewBox="0 0 20 20">
@@ -29,29 +28,29 @@
                     </svg>
                 </a>
 
+                
+                <div id="navbarButtons" class="ms-auto"> <!--Contains all features of the navbar we want on the right side of the screen-->
                 <!--EXPLANATION BUTTON-->
-                <!-- Button trigger modal -->
-                <!--CHANGE-->
-                <div id="navbarButtons" class="ms-auto">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="helpButton">
+                <!-- Button that triggers modal -->
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="helpButton"> <!--Bootstrap formatting-->
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                             class="bi bi-question-lg" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
                                 d="M4.475 5.458c-.284 0-.514-.237-.47-.517C4.28 3.24 5.576 2 7.825 2c2.25 0 3.767 1.36 3.767 3.215 0 1.344-.665 2.288-1.79 2.973-1.1.659-1.414 1.118-1.414 2.01v.03a.5.5 0 0 1-.5.5h-.77a.5.5 0 0 1-.5-.495l-.003-.2c-.043-1.221.477-2.001 1.645-2.712 1.03-.632 1.397-1.135 1.397-2.028 0-.979-.758-1.698-1.926-1.698-1.009 0-1.71.529-1.938 1.402-.066.254-.278.461-.54.461h-.777ZM7.496 14c.622 0 1.095-.474 1.095-1.09 0-.618-.473-1.092-1.095-1.092-.606 0-1.087.474-1.087 1.091S6.89 14 7.496 14" />
-                        </svg>
+                        </svg> <!--SVG acts as the home button-->
                     </button>
 
-                    <!-- Modal -->
+                    <!-- Modal --> <!--This is what appears when you click on the question button-->
                     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> <!--Bootstrap formatting-->
+                        <div class="modal-dialog"> <!--Bootstrap formatting-->
+                            <div class="modal-content"> <!--Bootstrap formatting-->
+                                <div class="modal-header"> <!--Bootstrap formatting: this is the header of the popup-->
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Using this Website</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                        aria-label="Close"></button> <!--Dismiss button that makes the modal hidden again-->
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body"> <!--Body text of the modal-->
                                     To navigate this website, there are a few tools you can utilize to find images
                                     quicker!</br>
                                     You can use <b><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -82,24 +81,25 @@
                                     <i><b>Restore Defaults</b></i> button. <br>
                                     To apply filters, you must click the <b>submit</b> button.
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" data-bs-dismiss="modal" id="closeHelp">Close</button>
+                                <div class="modal-footer"> <!--Popup footer-->
+                                    <button type="button" data-bs-dismiss="modal" id="closeHelp">Close</button> <!--Close button at the bottom also closes the popup-->
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!--SORT FUNCTION BAR-->
-                    <div class="sort">
-                        <div class="nav-item dropdown px-2" id="sortBar">
+                    <div class="sort"> <!--Contains the all the sort bar stuff-->
+                        <div class="nav-item dropdown px-2" id="sortBar"> <!--Bootstrap formatting-->
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                                aria-expanded="false"> <!--Bootstrap formatting-->
                                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" fill="currentColor"
                                     class="bi bi-arrow-down-up" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
-                                </svg>
+                                </svg> <!--SVG serves as the sort button-->
                             </a>
+                            <!--This is all the dropdown options-->
                             <div class="dropdown-menu dropdown-menu-center" id="sortSelect">
                                 <button value="default" class="dropdownOption"
                                     onclick="window.location.reload()">Default</button>
@@ -121,7 +121,7 @@
                     <!--SEARCH BAR-->
                     <form class="d-flex" id="searchBar">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-                            id="searchInput">
+                            id="searchInput"> <!--me-2 controls positioning-->
                     </form>
 
                     <!--SIDE BAR-->
@@ -131,31 +131,37 @@
                                 d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
                             <path
                                 d="M6 11.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5" />
-                        </svg></button>
+                        </svg></button> <!--This controls the button that opens the navbar-->
                     <div id="mySidebar" class="sidebar">
                         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                         <!--Filters-->
-                        <form id="filterForm">
-                            <div class="accordion" id="accordionExample">
-                                <div class="accordion-item filter" id="Year" index="-1">
-                                    <h2 class="accordion-header">
+                        <form id="filterForm"> <!--This form is for EVERYTHING in the sidebar-->
+                            <div class="accordion" id="accordionExample"> <!--All accordions are contained here-->
+                               
+                                <!--FILTER BY YEAR-->
+                                <div class="accordion-item filter" id="Year" index="-1"> <!--Mostly bootstrap formatting. The index is set for the Javascript later-->
+                                    <h2 class="accordion-header"> <!--This contains the text that is present when the accordion is closed-->
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapseOne"
                                             aria-expanded="false" aria-controls="collapseOne">
                                             Filter by Year
-                                        </button>
+                                        </button> <!--Makes the accordion open or collapse with JS-->
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse"
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body" id="accordion-body-2">
+                                            <!--Search bar for filter by year-->
                                             <form>
                                                 <input class="form-control me-2 searchPills" type="search"
                                                     placeholder="Search" aria-label="Search" id="searchSearchbyYear">
                                             </form>
+                                            <!--All the pills created in the Javascript will appear here. We have created the Unknown pill manually-->
                                             <button class="pill pillYear" type="button" id="Unknown">Unknown</button>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!--FILTER BY KEYWORD-->
                                 <div class="accordion-item filter" id="Trench" index="0">
                                     <h2 class="accordion-header">
                                         <button class="accordion-button collapsed" type="button"
@@ -167,15 +173,17 @@
                                     <div id="collapseTwo" class="accordion-collapse collapse"
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body" id="accordion-body-1">
-                                            <input class="form-control me-2 searchPills" type="search"
-                                                placeholder="Search" aria-label="Search" id="searchSearchbyTrench">
-                                            <!--<button class="pill pillTrench" type="button" id="ETAP">ETAP</button>
-                                        <button class="pill pillTrench" type="button" id="WTAP">WTAP</button>
-                                        <button class="pill pillTrench" type="button" id="NTAP">NTAP</button>-->
+                                            <form>
+                                                <input class="form-control me-2 searchPills" type="search"
+                                                    placeholder="Search" aria-label="Search" id="searchSearchbyTrench">
+                                            </form>
+                                            <!--Pills will appear here-->
                                         </div>
                                     </div>
                                 </div>
-                                <div class="accordion-item slider" id="yearSlider">
+
+                                <!--YEAR RANGE SLIDER-->
+                                <div class="accordion-item slider" id="yearSlider"> 
                                     <h2 class="accordion-header">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseThree" aria-expanded="true"
@@ -187,17 +195,19 @@
                                         data-bs-parent="#accordionExample">
                                         <div class="accordion-body" id="slider-body">
                                             <div class="wrapper">
-                                                <div class="values">
+                                                <div class="values"> <!--These are used both for the visible text in the accordion that tells us what the year is, as well as for formatting the range slider-->
                                                     <span id="range1">
-                                                        0
+                                                        1975
                                                     </span>
                                                     <span> &dash; </span>
                                                     <span id="range2">
-                                                        100
+                                                        2025
                                                     </span>
                                                 </div>
+                                                <!--SLIDER STUFF-->
                                                 <div class="contain" id="containSlider">
-                                                    <div class="slider-track"></div>
+                                                    <div class="slider-track"></div> <!--The slider-track controls the track that the sliders are on-->
+                                                    <!--To do a double sided slider, we need to make two sliders. Value initializes there initial value-->
                                                     <input type="range" min="1950" max="2050" value="1975" id="slider-1"
                                                         oninput="slideOne()">
                                                     <input type="range" min="1950" max="2050" value="2025" id="slider-2"
@@ -207,35 +217,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="submitFilters" type="submit" id="submitFilters">Submit</button>
+                                <button class="submitFilters" type="submit" id="submitFilters">Submit</button> <!--Submit button to submit the whole sidebar-->
                             </div>
                         </form>
-                        <button id="restoreDefaults">Restore Defaults</button>
+                        <button id="restoreDefaults">Restore Defaults</button> <!--Clears all fields-->
                     </div>
                 </div>
-                <!--End CHANGE-->
-
-                <!-------------------------------------------------------------------------------------------------------------------------->
-
-                <script> //CONTROLS SIDEBAR MOVEMENT
-                    /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
-                    const search = document.getElementById("searchBar");
-
-                    function openNav() {
-                        document.getElementById("mySidebar").style.width = "300px";
-                        document.getElementById("openbutton").style.opacity = 0;
-                        search.style.opacity = 0;
-                        search.classList.add('disabled');
-                    }
-
-                    /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
-                    function closeNav() {
-                        document.getElementById("mySidebar").style.width = "0";
-                        document.getElementById("openbutton").style.opacity = 1;
-                        search.style.opacity = 1;
-                        search.classList.remove('disabled');
-                    }
-                </script>
 
             </div>
         </nav>
@@ -403,51 +390,87 @@
                 No results found.
             </p>
 
+            
+            <!-------------------------------------------------------------------------------------------------------------------------->
+                                                                ALL SCRIPTS
             <!-------------------------------------------------------------------------------------------------------------------------->
 
+                
+            <!-------------------------------------------------------------------------------------------------------------------------->
+                                                            ALL CONSTANTS AND VARIABLES
+            <!-------------------------------------------------------------------------------------------------------------------------->
+            <script>
+                //const search-- this gets the searchBar by id in the Controls Sidebar Movement Section
+                //const pills-- get all pills with class pill in the Function for Searching Pills in Side Bar Section
+                //const searchByYear-- gets the search bar from the search by year accordion Function for Searching Pills in Side Bar Section
+                //const searchByTrench-- gets the search bar from the search by description accordion Function for Searching Pills in Side Bar Section
+                //
+            </script>
+            <!-------------------------------------------------------------------------------------------------------------------------->
+
+            <!-------------------------------------------------------------------------------------------------------------------------->           
+            <script> //CONTROLS SIDEBAR MOVEMENT
+                 const search = document.getElementById("searchBar");
+
+
+                function openNav() { //this gets called by the openbutton
+                    document.getElementById("mySidebar").style.width = "300px"; //styling for the sidebar     
+                    document.getElementById("openbutton").style.opacity = 0; //hide the openbutton
+                    search.style.opacity = 0; //hide the search bar
+                    search.classList.add('disabled'); //disable the search bar
+                }
+
+                function closeNav() { //this gets called by the X button in the sidebar
+                    document.getElementById("mySidebar").style.width = "0"; //hides the sidebar
+                    document.getElementById("openbutton").style.opacity = 1; //the openbutton becomes visible again
+                    search.style.opacity = 1; //the search bar is visible again
+                    search.classList.remove('disabled'); //search bar is enabled
+                }
+            </script>
+            <!-------------------------------------------------------------------------------------------------------------------------->
             <script> //FUNCTION FOR SEARCHING FOR PILLS IN SIDE BAR
-                const searchTags = document.getElementsByClassName('searchPills');
-                const pills = document.getElementsByClassName('pill');
-                const searchByYear = document.getElementById('searchSearchbyYear');
-                const searchByTrench = document.getElementById('searchSearchbyTrench');
+                const pills = document.getElementsByClassName('pill'); //get all pills with class pill
+                const searchByYear = document.getElementById('searchSearchbyYear'); //gets the search bar from the search by year accordion
+                const searchByTrench = document.getElementById('searchSearchbyTrench'); //gets the search bar from the search by description accordion
 
                 function filterPills(event) {
-                    const searchTerm = event.target.value.trim().toLowerCase();
-                    let matchCount = 0;
+                    const searchTerm = event.target.value.trim().toLowerCase(); //turn search to all lowercase (makes capitalization not an issue)
+                    let matchCount = 0; //let matchCount start at 0
 
-                    Array.from(pills).forEach(item => {
-                        const pillsValue = item.textContent.toLowerCase();
-                        if (searchTerm.length > 0 && pillsValue.includes(searchTerm)) {
-                            item.classList.add('pill--shown');
-                            matchCount++;
-                        } else {
-                            item.classList.remove('pill--shown');
+                    Array.from(pills).forEach(item => { //for each pill
+                        const pillsValue = item.textContent.toLowerCase(); //turn the value of the pill to lowercase
+                        if (searchTerm.length > 0 && pillsValue.includes(searchTerm)) { //if the search is not nothing AND the pill's value includes the search term
+                            item.classList.add('pill--shown'); //give the pill the class pill--shown (this makes the pill visible)
+                            matchCount++; //increment the matchCount
+                        } else { //if the pill does not include the search
+                            item.classList.remove('pill--shown'); //hide the pill
                         }
                     });
                 }
 
-                searchByYear.addEventListener('input', filterPills);
-                searchByTrench.addEventListener('input', filterPills);
+                searchByYear.addEventListener('input', filterPills); //the search by year accordion calls this when it starts getting input
+                searchByTrench.addEventListener('input', filterPills); //the search by description accordion calls this when it starts getting input
             </script>
 
             <!-------------------------------------------------------------------------------------------------------------------------->
             <script> //SCRIPT FOR SORTING
-                const sortSelect = document.getElementById('sortSelect');
-                const rows = document.querySelectorAll('.row');
+                const sortSelect = document.getElementById('sortSelect'); //get the whole sort section (the part that appears when the sort button is clicked)
+                const rows = document.querySelectorAll('.row'); //get everything with class row (it is only one)
 
-                const allImageItems = Array.from(document.querySelectorAll('.image-item'));
+                const allImageItems = Array.from(document.querySelectorAll('.image-item')); //create an array from every item with class .image-item
 
-                function extractYear(text) {
-                    const match = text.match(/\b(19|20)\d{2}\b/);
-                    return match ? parseInt(match[0]) : 0;
+                function extractYear(text) { //this function works to get the year from any text 
+                    const match = text.match(/\b(19|20)\d{2}\b/); //matches this style of text (could be an issue if a year does not start with 19 or 20 but this is a problem for much later down the road)
+                    return match ? parseInt(match[0]) : 0; //returns an array where the first item is the match, and if there is no match, it returns 0
                 }
 
                 function sortImages(method) {
-                    const sorted = [...allImageItems];
+                    const sorted = [...allImageItems]; //creates a new array of all image items so we don't modify the original allImageItems
 
-                    if (method === 'alphabetical') {
+                    if (method === 'alphabetical') { //if method is ALPHABETICAL
                         sorted.sort((a, b) => {
-                            const aText = a.querySelector('p').textContent.trim().toLowerCase();
+                            //compares the text of the image-items and tells the code which should come first. 
+                            const aText = a.querySelector('p').textContent.trim().toLowerCase(); 
                             const bText = b.querySelector('p').textContent.trim().toLowerCase();
                             return aText.localeCompare(bText);
                         });
@@ -471,21 +494,12 @@
                         })
                     }
 
-                    const parent = rows[0].parentNode;
-                    rows.forEach(row => row.innerHTML = '');
-
-                    for (let i = 0; i < sorted.length; i++) {
-                        const rowIndex = Math.floor(i / 3);
-                        if (!rows[rowIndex]) continue;
-                        rows[rowIndex].appendChild(sorted[i]);
-                    }
-
-                    const galleryRow = document.getElementById('galleryRow');
-                    galleryRow.innerHTML = '';
-                    sorted.forEach(item => galleryRow.appendChild(item));
+                    const galleryRow = document.getElementById('galleryRow'); //get the row that contains the gallery
+                    galleryRow.innerHTML = ''; //clear existing items
+                    sorted.forEach(item => galleryRow.appendChild(item)); //Reappend sorted items
                 }
 
-                sortSelect.addEventListener('change', () => {
+                sortSelect.addEventListener('change', () => { //called when the sort method is changed
                     const method = sortSelect.value;
                     if (method === 'default') {
                         // Restore default order of images without reloading
