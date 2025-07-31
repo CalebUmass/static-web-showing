@@ -1,4 +1,4 @@
-This is a walkthrough on how to update the web URL + process of creating poggiocivitate.net
+This is a walkthrough on how to update the web URL and set up poggiocivitate.net
 
 Creation:
 This server is streamed on apache2 making it fast, reliable, and easy to work with. Another plus is that Apache makes it very simple and easy to convert the routing from HTTP to HTTPS as long as you own a real domain name somewhere on the internet.
@@ -17,8 +17,9 @@ Steps:
 
    cd /opt/bitnami/apache2/htdocs
 
-3. Update your site from GitHub (if using Git which is byfar the easiest option):
+3. Update your site from GitHub (if using Git, which is by far the easiest option):
 
+   cd /opt/bitnami/apache2/htdocs/static-web-showing
    git pull
 
 ---
@@ -65,9 +66,9 @@ https://poggiocivitate.net/static-web-showing/Projects-Landing-Page-main-copy/in
 
     sudo nano /opt/bitnami/apache2/htdocs/static-web-showing/Projects-Landing-Page-main-copy/.htaccess
 
-2. Add this line
+2. Add this line:
 
-    Redirect 301 /static-web-showing/Projects-Landing-Page-main-copy/index.html https://poggiocivitate.net
+   Redirect 301 /static-web-showing/Projects-Landing-Page-main-copy/index.html https://poggiocivitate.net
 
 3.	Save & exit (Ctrl+O, Enter, then Ctrl+X)
 
@@ -85,13 +86,35 @@ https://poggiocivitate.net/static-web-showing/Projects-Landing-Page-main-copy/in
     sudo /opt/bitnami/ctlscript.sh restart apache
 
 
+Changes After Server Was Running
+================================
+
+- Made it easier to get into the main projects directory by:
+    cd /opt/bitnami/apache2/htdocs/static-web-showing
+    | | |
+    V V V
+    proj
+
+- Made it easier to update the website by:
+    cd /opt/bitnami/apache2/htdocs/static-web-showing
+    git pull
+    | | | |
+    V V V V
+    update
+
 
 Key Files & Commands
+====================
 
-Path / Command                                      | Description                        
-----------------------------------------------------|------------------------------------
-/opt/bitnami/apache2/htdocs/                        | Location of website files          
-/opt/bitnami/apache2/conf/bitnami/bitnami.conf      | Apache config file (edit domain)   
-sudo /opt/bitnami/ctlscript.sh restart apache       | Restart Apache                     
-sudo /opt/bitnami/bncert-tool                       | Setup HTTPS/SSL                    
+Path / Command                                              | Description
+------------------------------------------------------------|--------------------------------------------------------------
+/opt/bitnami/apache2/htdocs/                               | Root directory where website files are stored
+/opt/bitnami/apache2/htdocs/static-web-showing/            | Main project directory (`cd proj`)
+/opt/bitnami/apache2/conf/bitnami/bitnami.conf             | Apache config file (edit domain, reverse proxy, etc.)
+/opt/bitnami/apache2/logs/error_log                        | Apache error log (useful for debugging)
+/opt/bitnami/ctlscript.sh restart apache                   | Restart Apache server only
+/opt/bitnami/ctlscript.sh restart                          | Restart all Bitnami services (Apache, MySQL, etc.)
+sudo /opt/bitnami/bncert-tool                              | Setup HTTPS/SSL (Let’s Encrypt)
+/opt/bitnami/apache2/htdocs/static-web-showing && git pull | Update website from GitHub (`update`)
+cd /opt/bitnami/apache2/htdocs/static-web-showing          | Navigate to project directory (`proj`)             
 
