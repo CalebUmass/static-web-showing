@@ -192,7 +192,6 @@ body {
     overflow-y: scroll;
     padding-top: 60px;
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
-    opacity: .8;
 }
 
 /* The sidebar links */
