@@ -21,14 +21,14 @@
   <p align="center">
     This website serves as a central hub for showcasing digital projects created by the 2025 Poggio Civitate archaeological field school.
     <br />
-    <a href="https://github.com/CalebUmass/static-web-showing"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/CalebUmass/static-web-showing" target="_blank"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://poggiocivitate.net">View Demo</a>
+    <a href="https://poggiocivitate.net" target="_blank">View Demo</a>
     &middot;
-    <a href="https://github.com/CalebUmass/static-web-showing/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/CalebUmass/static-web-showing/issues/new?labels=bug&template=bug-report---.md" target="_blank">Report Bug</a>
     &middot;
-    <a href="https://github.com/CalebUmass/static-web-showing/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/CalebUmass/static-web-showing/issues/new?labels=enhancement&template=feature-request---.md" target="_blank">Request Feature</a>
   </p>
 </div>
 
