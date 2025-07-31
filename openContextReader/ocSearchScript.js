@@ -111,6 +111,11 @@ function reset(){
         document.getElementById("resetButton").style.visibility = "hidden"
     }
 
+function returnHome(){
+    homePage = "static-web-showing/Projects-Landing-Page-main-copy/index.html"
+    window.open(homePage);
+}
+
     /* An array and dictionary of all sub-filter ids, to fetch their value if needed and append them to the link*/
 
     let subFilterList = ['preserved', 'proximal-fused', 'distal-fused', 'side', 'age-category', 'skeletal-area', 'conservation-action', 'conservation-material']
