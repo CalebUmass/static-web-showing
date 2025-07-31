@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>openContextSearch</title>
+    <link rel="stylesheet" href="ocSearchStyle.css">
+
+</head>
+<body>
+
+<div class="container">
+            <div class="orangeBox">
+                <div class="whiteOutline">
+                    <h1>Search Filter</h1>
+                </div>
+            </div>
+</div>
+
+<div id="content">
+            <form id="0">
+                <select class="selectPrime" id="searchSelect"> <!--Main menu-->
+                    <option id="option" value="inital">What would you like to search by?</option>
+                    <option id="option" value="pcnum">PC Number</option>
+                    <option id="option" value="object-type">Object Type</option>
+                    <option id="option" value="fabric-category">Fabric Category</option>
+                    <option id="option" value="taxon">Taxon</option>
+                    <option id="option" value="element">Element</option>
+                    <option id="option" value="common-name">Common Name</option>
+                    <option id="option" value="decorative-technique">Decorative Technique</option>
+                    <option id="option" value="vessel-form">Vessel Form</option>
+                    <option id="option" value="count-type">Count Type</option>
+                    <option id="option" value="find-type">Find Type</option>
+                    <option id="option" value="motif">Motif</option>
+                    <option id="option" value="chronology">Chronology</option>
+                    <option id="option" value="record-type">Record Type</option>
+                    <option id="option" value="vessel-part-present">Vessel Part Present</option>
+                    <option id="option" value="modification">Modification</option>
+                </select>
+            </form>
+ 
+            <form id = "1">
+            <input  class="pcnum" id = "pcnum" placeholder="Type in the PC Number"/>
+            </form>
+       
+   
+            <form id="2">
+            <select class="select" id="object-type">
+                <option id="option" value="">Type Selection</option>
+                    <option id="option" value="architectural">Architectural</option>
+                    <option id="option" value="vessel">Vessel</option>
+                    <option id="option" value="textile-related">Textile Related</option>
+                    <option id="option" value="bone-4229-2">Bone</option>
+                    <option id="option" value="fastener">Fastener</option>
+                    <option id="option" value="organic-ecofact">Organic (ecofact)</option>
+                    <option id="option" value="ceramic-not-tile-1">Ceramic (not tile)</option>
+                    <option id="option" value="production-material">Production Material</option>
+                    <option id="option" value="ornament">Ornament</option>
+                    <option id="option" value="metal">Metal</option>
+                    <option id="option" value="unclassified-debris-misc">Unclassified / Debris / Misc. </option>
+                    <option id="option" value="shaped-object">Shaped Object</option>
+                    <option id="option" value="ceramic">Ceramic</option>
+                    <option id="option" value="costume-accessories">Costume, Accessories</option>
+                    <option id="option" value="tile">Tile</option>
+                    <option id="option" value="tool-weapon">Tool / Weapon</option>
+                    <option id="option" value="pyrotech-related">Pyrotech Related</option>
+                    <option id="option" value="architecture-element-1">Architecture Element</option>
+                    <option id="option" value="production-waste">Production Waste</option>
+                    <option id="option" value="other-8">Other</option>
+                    <option id="option" value="figurine-statuette">Figurine / Statuette </option>
+                    <option id="option" value="stone-object">Stone Object</option>
+                    <option id="option" value="stone-2-2">Stone</option>
+                    <option id="option" value="24-production-material-24-production-waste">24-production-material 24-production-waste</option>
+                    <option id="option" value="coin">Coin</option>
+                    <option id="option" value="architecturalchimney-cover-tile">Architectural::Chimney Cover Tile</option>
+                    <option id="option" value="die">Die</option>
+                    <option id="option" value="stele-base">Stele Base</option>
+                    <option id="option" value="24-architectural-24-shaped-object">24-architectural 24-shaped-object</option>
+                    <option id="option" value="24-vessel-24-production-waste">24-vessel 24-production-waste</option>
+            </select>
+            </form>
+    
+                <form id="3">
+                <select class="select" id="fabric-category">
+                    <option id="option" value="">Fabric Selection</option>
+                    <option id="option" value="terracotta">Terracotta</option>
+                    <option id="option" value="impasto">Impasto</option>
+                    <option id="option" value="bucchero">Bucchero</option>
+                    <option id="option" value="bronze">Bronze</option>
+                    <option id="option" value="clay">Clay</option>
+                    <option id="option" value="bone">Bone</option>
+                    <option id="option" value="ivory">Ivory</option>
+                    <option id="option" value="coarse-ware">Coarse Ware</option>
+                    <option id="option" value="iron">Iron</option>
+                    <option id="option" value="antler">Antler</option>
+                    <option id="option" value="plaster">Plaster</option>
+                    <option id="option" value="stone">Stone</option>
+                    <option id="option" value="slag">Slag</option>
+                    <option id="option" value="organic">Organic</option>
+                    <option id="option" value="fine-impasto">Fine Impasto</option>
+                    <option id="option" value="italo-corinthian-ware">Italo-Corinthian Ware</option>
+                    <option id="option" value="glass">Glass</option>
+                    <option id="option" value="orange-ware">Orange Ware</option>
+                    <option id="option" value="cream-ware">Cream Ware</option>
+                    <option id="option" value="chert">Chert</option>
+                    <option id="option" value="black-gloss-ceramic">Black Gloss Ceramic</option>
+                    <option id="option" value="ionic-ware">Ionic Ware</option>
+                    <option id="option" value="seed">Seed</option>
+                    <option id="option" value="fine-ware">Fine Ware</option>
+                    <option id="option" value="red-ware">Red Ware</option>
+                    <option id="option" value="shell">Shell</option>
+                    <option id="option" value="other-ceramic">Other Ceramic</option>
+                    <option id="option" value="terra-sigilata">Terra Sigilata</option>
+                    <option id="option" value="wood">Wood</option>
+                    <option id="option" value="horn">Horn</option>
+                    <option id="option" value="gray-ware">Gray Ware</option>
+                    <option id="option" value="medieval-1">Medieval</option>
+                    <option id="option" value="obsidian">Obsidian</option>
+                    <option id="option" value="amber">Amber</option>
+                    <option id="option" value="quartz">Quartz</option>
+                    <option id="option" value="lead">Lead</option>
+                    <option id="option" value="gold">Gold</option>
+                    <option id="option" value="silver">Silver</option>
+                    <option id="option" value="soil">Soil</option>
+                    <option id="option" value="unclassified">Unclassified</option>
+                    <option id="option" value="other-4">Other</option>
+
+                </select>
+                </form>
+      
+            <form id="4">
+                <select class="select" id="taxon">
+                    <option id="option" value="">Taxon</option>
+                    <option id="option" value="sus-scrofa-domestic">Sus Scrofa (domestic)</option>
+                    <option id="option" value="ovis-aries-capra-hircus">Ovis Aries / Capra Hircus</option>
+                    <option id="option" value="bos-taurus">Bos Taurus</option>
+                    <option id="option" value="medium-sized-mammal-1">Medium-Sized Mammal</option>
+                    <option id="option" value="large-mammal-1">Large Mammal</option>
+                    <option id="option" value="ovis-aries">Ovis Aries</option>
+                    <option id="option" value="medium-large-mammal">Medium-Large Mammal</option>
+                    <option id="option" value="cervus-elaphus">Cervus Elaphus</option>
+                    <option id="option" value="canis-familiaris"> Canis Familiaris</option>
+                    <option id="option" value="boscervidae">Bos/Cervidae</option>
+                    <option id="option" value="sus-scrofa-wild">Sus Scrofa (wild)</option>
+                    <option id="option" value="aves">Aves</option>
+                    <option id="option" value="small-to-medium-sized-mammal-1">Small-Medium-Sized Mammal</option>
+                    <option id="option" value="mollusca">Mollusca</option>
+                    <option id="option" value="capra-hircus">Capra Hircus</option>
+                    <option id="option" value="equus-sp">Equus sp.</option>
+                    <option id="option" value="testudines">Testudines</option>
+                    <option id="option" value="large-ungulate"> Large Ungulate</option>
+                    <option id="option" value="homo-sapiens">Homo Sapiens</option>
+                    <option id="option" value="lepus-spp">Lepus spp.</option>
+                    <option id="option" value="canis-sp">Canis sp.</option>
+                    <option id="option" value="small-mammal-1">Small-Mammal</option>
+                    <option id="option" value="columba-sp">Columba-sp</option>
+                    <option id="option" value="mammal-3">Mammal</option>
+                    <option id="option" value="cervidae">Cervidae</option>
+                    <option id="option" value="vulpes-vulpes-1">Vulpes Vulpes</option>
+                    <option id="option" value="capreolus-capreolus-1">Capreolus Capreolus</option>
+                    <option id="option" value="rodentia">Rodentia</option>
+                    <option id="option" value="felis-spp">Felis spp.</option>
+                    <option id="option" value="indeterminate">Indeterminate</option>
+                    <option id="option" value="anas-sp">Anas-Sp</option>
+                    <option id="option" value="equus-caballus">Equus Caballus</option>
+                    <option id="option" value="equus-asinus">Equus Asinus</option>
+                    <option id="option" value="aveslepus">Aves/Lepus</option>
+                    <option id="option" value="canis-lupus">Canis Lupus</option>
+                    <option id="option" value="fish-1">Fish</option>
+                    <option id="option" value="meles-meles">Meles Meles</option>
+                    <option id="option" value="anatidae">Anatidae</option>
+                    <option id="option" value="canisvulpes">Canis/Vulpes</option>
+                    <option id="option" value="capra-sp">Capra sp.</option>
+                    <option id="option" value="gyps-sp">Gyps sp.</option>
+                    <option id="option" value="land-snail-2">Land Snail</option>
+                    <option id="option" value="small-mammal-or-bird">Small Mammal or Bird</option>
+                    <option id="option" value="anser-sp">Anser sp.</option>
+                    <option id="option" value="aquila-sp">Aquila sp.</option>
+                    <option id="option" value="avricolinae">Avricolinae</option>
+                    <option id="option" value="bos-primigenius">Bos Primigenius</option>
+                    <option id="option" value="bosequus">Bos/Equus</option>
+                    <option id="option" value="bosovis">Bos/Ovis</option>
+                    <option id="option" value="castor-fiber">Castor Fiber</option>
+                    <option id="option" value="cervidaeequus">Cervidae/Equus</option>
+                    <option id="option" value="corvus-corax">Corvus Corax</option>
+                    <option id="option" value="fulica-sp">Fulica sp.</option> 
+                    <option id="option" value="grus-sp">Grus sp.</option>
+                    <option id="option" value="mammal-bird-1">Mammal / Bird</option>
+                    <option id="option" value="medium-sized-carnivore">Medium-Sized Carnivore</option>
+                    <option id="option" value="otididae">Otididae</option>
+                    <option id="option" value="phasianus">Phasianus</option>
+                    <option id="option" value="phasianus-sp">Phasianus sp.</option>
+                    <option id="option" value="reptile-1">Reptile</option>
+                    <option id="option" value="ursus-sp">Ursus sp.</option>
+                </select>
+            </form>
+ 
+        <form id="5">
+            <select class="select" id="element">
+                    <option id="option" value="">Element</option>
+                    <option id="option" value="mandibular-tooth">Mandibular Tooth</option>
+                    <option id="option" value="maxillary-tooth">Maxillary Tooth</option>
+                    <option id="option" value="humerus">Humerus</option>
+                    <option id="option" value="mandible">Mandible</option>
+                    <option id="option" value="phalanx-1">Phalanx 1</option>
+                    <option id="option" value="cranium">Cranium</option>
+                    <option id="option" value="tibia">Tibia</option>
+                    <option id="option" value="rib">Rib</option>
+                    <option id="option" value="radius">Radius</option>
+                    <option id="option" value="pelvis">Pelvis</option>
+                    <option id="option" value="vertebra-cervical">Vertebra, Cervical</option>
+                    <option id="option" value="ulna">Ulna</option>
+                    <option id="option" value="femur">Femur</option>
+                    <option id="option" value="phalanx-2">Phalanx 2</option>
+                    <option id="option" value="scapula">Scapula</option>
+                    <option id="option" value="vertebra-lumbar">Vertebra Lumbar</option>
+                    <option id="option" value="calcaneus">Calcaneus</option>
+                    <option id="option" value="astragalus">Astragalus</option>
+                    <option id="option" value="metacarpal-iiiiv">Metacarpal III/IV</option>
+                    <option id="option" value="vertebra-thoracic">Vertebra, Thoracic</option>
+                    <option id="option" value="metapodial">Metapodial</option>
+                    <option id="option" value="phalanx-3">Phalanx 3</option>
+                    <option id="option" value="metatarsal-iiiiv">Metatarsal III/IV</option>
+                    <option id="option" value="carpal">Carpal</option>
+                    <option id="option" value="metacarpal">Metacarpal</option>
+                    <option id="option" value="tarsal">Tarsal</option>
+                    <option id="option" value="long-bone">Long Bone</option>
+                    <option id="option" value="metatarsal">Metatarsal</option>
+                    <option id="option" value="metapodial-iiiiv">Metapodial III/IV</option>
+                    <option id="option" value="vertebra-sacral">Vertebra, Sacral</option>
+                    <option id="option" value="metapodial-ii-or-v">Metapodial II or V</option>
+                    <option id="option" value="patella">Patella</option>
+                    <option id="option" value="vertebra-caudal">Vertebra, Caudal</option>
+                    <option id="option" value="bone-indeterminate">Bone, Indeterminate</option>
+                    <option id="option" value="sesamoid">Sesamoid</option>
+                    <option id="option" value="carapaceplastron">Carapace/Plastron</option>
+                    <option id="option" value="metapodial-iii-or-iv">Metapodial III or IV</option>
+                    <option id="option" value="horn-core">Horn Core</option>
+                    <option id="option" value="antler-1">Antler 1</option>
+                    <option id="option" value="unidentified">Unidentified</option>                 
+                    <option id="option" value="fibula">Fibula</option>
+                    <option id="option" value="maxilla">Maxilla</option>
+                    <option id="option" value="metacarpal-iii">Metacarpal III</option>
+                    <option id="option" value="tooth">Tooth</option>                    
+                    <option id="option" value="vertebra-unidentified">Vertebra, Unidentified</option>
+                    <option id="option" value="coracoid">Coracoid</option>
+                    <option id="option" value="hyoid">Hyoid</option>
+                    <option id="option" value="shell-2">Shell</option>
+                    <option id="option" value="lateral-malleolus">Lateral Malleolus</option>
+                    <option id="option" value="axial-bone">Axial Bone</option>
+                    <option id="option" value="metatarsal-iii">Metatarsal III</option>
+                    <option id="option" value="carapace">Carapace</option>
+                    <option id="option" value="tibiotarsus">Tibiotarsus</option>
+                    <option id="option" value="carpometacarpus">Carpometacarpus</option>
+                    <option id="option" value="metatarsal-iii-or-iv">Metatarsal III or Iv</option>
+                    <option id="option" value="metacarpal-iv">Metacarpal IV</option>
+                    <option id="option" value="metatarsal-iv">Metatarsal IV</option>
+                    <option id="option" value="tarsometatarsus">Tarsometatarsus</option>
+                    <option id="option" value="plastron">Plastron</option>
+                    <option id="option" value="clam">Clam</option>
+                    <option id="option" value="ilium-6">Ilium</option>
+                    <option id="option" value="land-snail">Land Snail</option>
+                    <option id="option" value="metacarpal-iii-or-iv">Metacarpal III or IV</option>
+                    <option id="option" value="metacarpal-v">Metacarpal V</option>
+                    <option id="option" value="incisor-7">Incisor</option>
+                    <option id="option" value="premaxilla">Premaxilla</option>
+                    <option id="option" value="sternum">Sternum</option>
+                    <option id="option" value="vertebra">Vertebra</option>
+                    <option id="option" value="canine-3">Canine</option>
+                    <option id="option" value="metapodial-iii">Metapodial III</option>
+                    <option id="option" value="metatarsal-ii">Metatarsal II</option>
+                    <option id="option" value="molar">Molar</option>
+                    <option id="option" value="phalanx-1-digit-ii">Phalanx 1, Digit II</option>
+                    <option id="option" value="sternum">Sternum</option>
+            </select>
+        </form>
+ 
+        <form id="6">
+            <select class="select" id="common-name">
+                    <option id="option" value="">Common Name</option>
+                    <option id="option" value="pig">Pig</option>
+                    <option id="option" value="sheep-or-goat">Sheep or Goat</option>
+                    <option id="option" value="cattle-domestic">Cattle, Domestic</option>
+                    <option id="option" value="medium-sized-mammal">Medium Sized Mammal</option>
+                    <option id="option" value="large-mammal">Large Mammal</option>
+                    <option id="option" value="sheep-domestic">Sheep, Domestic</option>
+                    <option id="option" value="medium-large-animal-1">Medium Large Animal</option>
+                    <option id="option" value="red-deer">Red Deer</option>
+                    <option id="option" value="dog-domestic">Dog, Domestic</option>
+                    <option id="option" value="cattle-or-deer">Cattle or Deer</option>
+                    <option id="option" value="bird-indeterminate">Bird, Indeterminate</option>
+                    <option id="option" value="small-to-medium-sized-mammal">Small to Medium Sized Mammal</option>
+                    <option id="option" value="goat-domestic">Goat, Domestic</option>
+                    <option id="option" value="equid-indeterminate">Equid, Indeterminate</option>
+                    <option id="option" value="tortoiseturtle">Tortoise/Turtle</option>
+                    <option id="option" value="cattle-red-deer-or-equid">Cattle, Red Deer, or Equid</option>
+                    <option id="option" value="hare">Hare</option>
+                    <option id="option" value="shell-1">Shell</option>
+                    <option id="option" value="small-mammal">Small Mammal</option>
+                    <option id="option" value="mammal">Mammal</option>
+                    <option id="option" value="pigeondove">Pigeon/Dove</option>
+                    <option id="option" value="deer-1">Deer</option>
+                    <option id="option" value="fox">Fox</option>
+                    <option id="option" value="roe-deer">Roe Deer</option>
+                    <option id="option" value="shell-clam">Shell-Clam</option>
+                    <option id="option" value="shell-scallop">Shell-Scallop</option>
+                    <option id="option" value="rodent">Rodent</option>
+                    <option id="option" value="duck-1">Duck</option>
+                    <option id="option" value="shell-tusk-dentalium">Shell-Tusk (dentalium)</option>
+                    <option id="option" value="cat">Cat</option>
+                    <option id="option" value="horse-2">Horse</option>
+                    <option id="option" value="bird-small-mammal">Bird / Small Mammal</option>
+                    <option id="option" value="donkey">Donkey</option>
+                    <option id="option" value="badger">Badger</option>
+                    <option id="option" value="bird-or-hare">Bird or Hare</option>
+                    <option id="option" value="fish">Fish</option>
+                    <option id="option" value="wolf">Wolf</option>
+                    <option id="option" value="dog-or-fox">Dog or Fox</option>
+                    <option id="option" value="goat-wild">Goat, Wild</option>
+                    <option id="option" value="land-snail-1">Land Snail</option>
+                    <option id="option" value="pheasant">Pheasant</option>
+                    <option id="option" value="small-mammal-or-bird-1">Small Mammal or Bird</option>
+                    <option id="option" value="unidentified-1">Unidentified</option>
+                    <option id="option" value="vulture">Vulture</option>
+                    <option id="option" value="bear">Bear</option>
+                    <option id="option" value="beaver">Beaver</option>
+                    <option id="option" value="bustard">Bustard</option>
+                    <option id="option" value="cattle-or-equid">Cattle or Equid</option>
+                    <option id="option" value="cattle-or-sheep">Cattle or Sheep</option>
+                    <option id="option" value="cattle-wild">Cattle, Wild</option>
+                    <option id="option" value="common-raven">Common Raven</option>
+                    <option id="option" value="cone-snail">Cone Snail</option>
+                    <option id="option" value="coot">Coot</option>
+                    <option id="option" value="crane">Crane</option>
+                    <option id="option" value="deer-or-equid">Deer or Equid</option>
+                    <option id="option" value="eagle">Eagle</option>
+                    <option id="option" value="goose">Goose</option>
+                    <option id="option" value="human">Human</option>
+                    <option id="option" value="mammal-bird">Mammal / Bird</option>
+                    <option id="option" value="medium-sized-carnivore-1">Medium Sized Carnivore</option>
+                    <option id="option" value="reptile">Reptile</option>
+                    <option id="option" value="shell-cockle-saltwater-clam">Shell-Cockle (Saltwater clam)</option>
+                    <option id="option" value="shell-cone-snail">Shell-Cone Snail</option>
+                    <option id="option" value="shell-murex">Shell-Murex</option>
+                    <option id="option" value="vole">Vole</option>
+            </select>
+        </form>
+   
+        <form id="7">
+            <select class="select" id="decorative-technique">
+                    <option id="option" value="">Decorative Technique</option>
+                    <option id="option" value="incised">Incised</option>
+                    <option id="option" value="painted">Painted</option>
+                    <option id="option" value="stamped">Stamped</option>
+                    <option id="option" value="molded">Molded</option>
+                    <option id="option" value="cavetto">Cavetto</option>
+                    <option id="option" value="relief">Relief</option>
+                    <option id="option" value="impressed">Impressed</option>
+                    <option id="option" value="inscribed">Inscribed</option>
+                    <option id="option" value="inlay">Inlay</option>
+                    <option id="option" value="ridged">Ridged</option>
+                    <option id="option" value="applique">Applique</option>
+                    <option id="option" value="pierced">Pierced</option>
+                    <option id="option" value="fluted">Fluted</option>
+                    <option id="option" value="fenestrated">Fenestrated</option>
+                    <option id="option" value="beveled">Beveled</option>
+                    <option id="option" value="finger-incised">Finger Incised</option>
+                    <option id="option" value="letters">Letters</option>
+                    <option id="option" value="slipped">Slipped</option>
+                    <option id="option" value="hand-molded">Hand Molded</option>
+                    <option id="option" value="scalloped">Scalloped</option>
+                    <option id="option" value="roulette">Roulette</option>
+                    <option id="option" value="plastic">Plastic</option>
+                    <option id="option" value="stippled">Stippled</option>
+                    <option id="option" value="ribbed">Ribbed</option>
+                    <option id="option" value="mold-made">Mold Made</option>
+                    <option id="option" value="burnished">Burnished</option>
+                    <option id="option" value="other-15">Other</option>
+                    <option id="option" value="siglumsigla">Siglum/Sigla</option>
+                    <option id="option" value="punched">Punched</option>
+                    <option id="option" value="reticulated">Reticulated</option>
+                    <option id="option" value="finger-impressed">Finger Impressed</option>
+                    <option id="option" value="cut-out">Cut Out</option>
+                    <option id="option" value="bifurcated">Bifurcated</option>
+            </select>
+        </form>
+   
+
+        <form id="8">
+            <select class="select" id="vessel-form">
+                <option id="option" value="">Vessel Form</option>
+                <option id="option" value="form-unspecified">Form Unspecified</option>
+                <option id="option" value="bowl">Bowl</option>
+                <option id="option" value="cup">Cup</option>
+                <option id="option" value="plate">Plate</option>
+                <option id="option" value="lid">Lid</option>
+                <option id="option" value="crucible">Crucible</option>
+                <option id="option" value="vase">Vase</option>
+                <option id="option" value="oinochoe">Oinochoe</option>
+                <option id="option" value="pithos">Pithos</option>
+                <option id="option" value="kantharos">Kantharos</option>
+                <option id="option" value="tondo">Tondo</option>
+                <option id="option" value="cooking-stand">Cooking Stand</option>
+                <option id="option" value="cooking-bell">Cooking Bell</option>
+                <option id="option" value="globular-pot">Globular Pot</option>
+                <option id="option" value="aryballos">Aryballos</option>
+                <option id="option" value="amphora">Amphora</option>
+                <option id="option" value="cooking-vessel">Cooking Vessel</option>
+                <option id="option" value="dish">Dish</option>
+                <option id="option" value="cooking-pan-plate">Cooking Pan / Plate</option>
+                <option id="option" value="alabastron">Alabastron</option>
+                <option id="option" value="jar">Jar</option>
+                <option id="option" value="strainer-sieve">Strainer / Sieve</option>
+                <option id="option" value="jug">Jug</option>
+                <option id="option" value="pyxis">Pyxis</option>
+                <option id="option" value="skyphos">Skyphos</option>
+                <option id="option" value="tripod">Tripod</option>
+                <option id="option" value="focolus">Focolus</option>
+                <option id="option" value="krater">Krater</option>
+                <option id="option" value="lamp">Lamp</option>
+                <option id="option" value="other-5">Other</option>
+                <option id="option" value="stopper">Stopper</option>
+                <option id="option" value="braizer">Braizer</option>
+                <option id="option" value="cauldron">Cauldron</option>
+                <option id="option" value="flask">Flask</option>
+                <option id="option" value="heavy-vessel">Heavy Vessel</option>
+                <option id="option" value="kylix">Kylix</option>
+                <option id="option" value="lekythos">Lekythos</option>
+                <option id="option" value="omphalos">Omphalos</option>
+
+            </select>
+        </form>
+
+        <form id="9">
+            <select class="select" id="count-type">
+                <option id="option" value="">Count Type</option>
+                <option id="option" value="objects-fragments">Objects / Fragments</option>
+                <option id="option" value="objects">Objects</option> 
+                <option id="option" value="bowls-often-for-terracotta">Bowls (often for terracotta)</option>
+                <option id="option" value="bowls">Bowls</option> 
+                <option id="option" value="other-18">Other</option> 
+                <option id="option" value="buckets">Buckets</option> 
+            </select>
+        </form>
+
+        <form id="10">
+            <select class="select" id="find-type">
+                <option id="option" value="">Find Type</option>
+                <option id="option" value="tile-2">Tile</option>
+                <option id="option" value="bone-4229-2-3">Bone</option> 
+                <option id="option" value="ceramic-not-tile">Ceramic (not tile)</option>
+                <option id="option" value="ceramic-4">Ceramic</option> 
+                <option id="option" value="architecture-element">Architecture Element</option> 
+                <option id="option" value="other-17">Other</option>
+                <option id="option" value="metal-1">Metal</option> 
+                <option id="option" value="plaster-4">Plaster</option> 
+                <option id="option" value="stone-object-2">Stone Object</option> 
+                <option id="option" value="architectural-17">Architectural</option> 
+                <option id="option" value="stone-2-2-3">Stone</option> 
+ 
+            </select>
+        </form>
+
+        <form id="11">
+            <select class="select" id="motif">
+                <option id="option" value="">Motif</option>
+                <option id="option" value="guilloche">Guilloche</option>
+                <option id="option" value="seated-figure">Seated Figure</option>
+                <option id="option" value="banquet">Banquet</option>
+                <option id="option" value="horse-race">Horse Race</option>
+                <option id="option" value="feline">Feline</option>
+                <option id="option" value="gorgon">Gorgon</option>
+                <option id="option" value="circles">Circles</option>
+                <option id="option" value="female-1">Female</option>
+                <option id="option" value="procession">Procession</option>
+                <option id="option" value="rosette">Rosette</option>
+                <option id="option" value="palmette">Palmette</option>
+                <option id="option" value="dots">Dots</option>
+                <option id="option" value="volute">Volute</option>
+                <option id="option" value="animal">Animal</option>
+                <option id="option" value="lotus">Lotus</option>
+                <option id="option" value="tongue">Tongue</option>
+                <option id="option" value="bean">Bean</option>
+                <option id="option" value="flower">Flower</option>
+                <option id="option" value="geometric">Geometric</option>
+                <option id="option" value="quadruped">Quadruped</option>
+                <option id="option" value="sphinx">Sphinx</option>
+                <option id="option" value="meander">Meander</option>
+                <option id="option" value="hair">Hair</option>
+                <option id="option" value="notches">Notches</option>
+                <option id="option" value="rabbit">Rabbit</option>
+                <option id="option" value="braid">Braid</option>
+                <option id="option" value="panther">Panther</option>
+                <option id="option" value="figure">Figure</option>
+                <option id="option" value="bird">Bird</option>
+                <option id="option" value="triangular">Triangular</option>
+                <option id="option" value="lion">Lion</option>
+                <option id="option" value="chevron">Chevron</option>
+                <option id="option" value="potnia-theron">Potnia Theron</option>
+                <option id="option" value="deer">Deer</option>
+                <option id="option" value="male-2">Male</option>
+                <option id="option" value="stag">Stag</option>
+                <option id="option" value="vegetal">Vegetal</option>
+                <option id="option" value="griffin">Griffin</option>
+                <option id="option" value="horse">Horse</option>
+                <option id="option" value="ray">Ray</option>
+                <option id="option" value="ram">Ram</option>
+                <option id="option" value="other-16">Other</option>
+                <option id="option" value="bearded-head">Bearded Head</option>
+                <option id="option" value="bull">Bull</option>
+                <option id="option" value="bucrania">Bucrania</option>
+                <option id="option" value="duck">Duck</option>
+                <option id="option" value="bearded">Bearded</option>
+                <option id="option" value="caryatid">Caryatid</option>
+                <option id="option" value="florette">Florette</option>
+                <option id="option" value="cross-hatched">Cross-Hatched</option>
+                <option id="option" value="asterisk">Asterisk</option>
+                <option id="option" value="chevrons">Chevrons</option>
+                <option id="option" value="diagonal-slash">Diagonal ; Slash</option>
+                <option id="option" value="fan">Fan</option>
+                <option id="option" value="likely-star">Likely Star</option>
+                <option id="option" value="umpire">Umpire</option>
+                <option id="option" value="warrior">Warrior</option>
+                <option id="option" value="wrestler">Wrestler</option>
+            </select>
+        </form>
+
+        <form id="12">
+            <select class="select" id="chronology">
+                <option id="option" value="">Chronology</option>
+                <option id="option" value="securely-archaic">Securely Archaic</option>
+                <option id="option" value="securely-orientalizing">Securely Orientalizing</option> 
+                <option id="option" value="probably-orientalizing">Probably Orientalizing</option>
+                <option id="option" value="medieval">Medieval</option> 
+                <option id="option" value="undetermined">Undetermined</option> 
+                <option id="option" value="other">Other</option> 
+            </select>
+        </form>
+
+        <form id="13">
+            <select class="select" id="record-type">
+                <option id="option" value="">Record Type</option>
+                <option id="option" value="supplemental-find">Supplemental Find</option>
+                <option id="option" value="small-find">Small Find</option> 
+            </select>
+        </form>
+ 
+
+        <div>
+        <form id="14">
+            <select class="select" id="vessel-part-present">
+                <option id="option" value="">Vessel Part Present</option>
+                <option id="option" value="body-sherd-1">Body Sherd</option>
+                <option id="option" value="handle-1">Handle</option> 
+                <option id="option" value="rim-1">Rim</option>
+                <option id="option" value="base-2">Base</option> 
+                <option id="option" value="full-profile-1">Full Profile</option> 
+                <option id="option" value="tondo-2">Tondo</option> 
+                <option id="option" value="shoulder-1">Shoulder</option> 
+                <option id="option" value="spout">Spout</option> 
+                <option id="option" value="other-21">Other</option> 
+            </select>
+        </form>
+
+        <form id="15">
+            <select class="select" id="modification">
+                <option id="option" value="">Modification</option>
+                <option id="option" value="other-20">Other</option>
+                <option id="option" value="vitrified">Vitrified</option> 
+                <option id="option" value="cut-295">Cut</option>
+                <option id="option" value="reed-impressions">Reed Impressed</option> 
+                <option id="option" value="vitrifying">Vitrifying</option> 
+                <option id="option" value="sawn">Sawn</option> 
+                <option id="option" value="scratched">Scratched</option> 
+                <option id="option" value="drilled">Drilled</option> 
+                <option id="option" value="mold-marked">Mold Marked</option> 
+                <option id="option" value="scoring">Scoring</option> 
+                <option id="option" value="folded">Folded</option> 
+            </select>
+        </form>
+ 
+        <form id="16">
+            <select class="subSelect" id="preserved">
+                <option id="option" value="">% Preserved</option>
+                <option id="option" value="less-than-25-preserved">Less Than 25% Preserved</option> 
+                <option id="option" value="25-preserved">25% Preserved</option> 
+                <option id="option" value="complete-2">Complete</option> 
+                <option id="option" value="half-preserved-1">Half Preserved</option> 
+                <option id="option" value="75-preserved">75% Preserved</option> 
+            </select>
+        </form>
+
+    <form id="17">
+       <select class="subSelect" id="proximal-fused">
+        <option id="option" value="">Proximal Fused</option>
+        <option id="option" value="fused">Fused</option>
+        <option id="option" value="unfused">Unfused</option>
+        <option id="option" value="fusing">Fusing</option>
+       </select>
+    </form>
+
+    <form id="18">
+        <select class="subSelect" id="distal-fused">
+        <option id="option" value="">Distal Fused</option>
+        <option id="option" value="fused">Fused</option>
+        <option id="option" value="unfused">Unfused</option>
+        <option id="option" value="fusing">Fusing</option>
+        </select>
+    </form>
+
+    <form id="19">
+        <select class="subSelect" id="side">
+        <option id="option" value="">Side</option>
+        <option id="option" value="left">Left</option>
+        <option id="option" value="right">Right</option>
+        <option id="option" value="left-and-right">Left & Right</option>
+        </select>
+    </form>
+
+    <form id="20">
+        <select class="subSelect" id="age-category">
+        <option id="option" value="">Age Category</option>
+        <option id="option" value="perinate">Perinate</option>
+        <option id="option" value="hongomeadow-stage-v-18-24-months-1">Hongo/Meadow Stage V: 18-24 months</option>
+        <option id="option" value="hongomeadow-stage-vi-over-24-months-but-not-old-1">Hongo/Meadow Stage VI: over 24 months but not old</option>
+        <option id="option" value="zederpayne-stage-gh-1">Zeder/Payne stage: GH</option>
+        <option id="option" value="zederpayne-stage-fg-2">Zeder/Payne stage: FG</option>
+        <option id="option" value="hongomeadow-stage-iii-6-12-months-1">Hongo/Meadow Stage III: 6-12 months</option>
+        <option id="option" value="hongomeadow-stage-ii-up-to-6-months-1">Hongo/Meadow Stage II: up to 6 months</option>
+        <option id="option" value="zederpayne-stage-bc-1">Zeder/Payne stage: BC</option>
+        <option id="option" value="zederpayne-stage-e-2">Zeder/Payne stage: E</option>
+        <option id="option" value="hongomeadow-stage-i-newborn-1">Hongo/Meadow Stage I: newborn</option>
+        <option id="option" value="zederpayne-stage-ef-1">Zeder/Payne stage: EF</option>
+        <option id="option" value="hongomeadow-stage-vii-old-1"> Hongo/Meadow Stage VII: old</option>
+        <option id="option" value="hongomeadow-stage-iv-12-18-months-1">Hongo/Meadow Stage IV: 12-18 months</option>
+        <option id="option" value="zederpayne-stage-b-2">Zeder/Payne stage: B</option>
+        <option id="option" value="zederpayne-stage-g-3">Zeder/Payne stage: G</option>
+        <option id="option" value="zederpayne-stage-de-1">Zeder/Payne stage: DE</option>
+        <option id="option" value="zederpayne-stage-f-5">Zeder/Payne stage: F</option>
+        <option id="option" value="zederpayne-stage-cd-1">Zeder/Payne stage: CD</option>
+        <option id="option" value="zederpayne-stage-d">Zeder/Payne stage: D</option>
+        <option id="option" value="zederpayne-stage-bcd">Zeder/Payne stage: BCD</option>
+        <option id="option" value="zederpayne-stage-fgh-1">Zeder/Payne stage: FGH</option>
+        <option id="option" value="zederpayne-stage-h-3">Zeder/Payne stage: H</option>
+        <option id="option" value="zederpayne-stage-c-3">Zeder/Payne stage: C</option>
+        <option id="option" value="zederpayne-stage-cde">Zeder/Payne stage: CDE</option>
+        <option id="option" value="hongomeadow-stage-iv-or-v-ca-12-24-months">Hongo/Meadow Stage IV or V: ca. 12-24 months</option>
+        <option id="option" value="hongomeadow-stage-v-or-vi-18-24-months-or-over-24-mon-1">Hongo/Meadow Stage V or VI: 18-24 months or over 24 months but not old</option>
+        <option id="option" value="zederpayne-stage-i-1">Zeder/Payne stage: I</option>
+        <option id="option" value="hongomeadow-stage-ii-or-iii">Hongo/Meadow Stage II or III</option>
+        <option id="option" value="hongomeadow-stage-iii-or-iv-ca-6-18-months">Hongo/Meadow Stage III or IV: ca. 6-18 months</option>
+        <option id="option" value="zederpayne-stage-efg">Zeder/Payne stage: EFG</option>
+        <option id="option" value="zederpayne-stage-ghi">Zeder/Payne stage: GHI</option>
+        <option id="option" value="zederpayne-stage-hi-1">Zeder/Payne stage: HI</option>
+        </select>
+    </form>
+
+    <div class="radioSelect">
+    <form id="fragmentSelect">
+        <label for="fragmentSelect">Fragment Noted(?)</label>
+        <input type="radio" name="fragment-noted" id="true" value="fragment-noted">
+        <label for="true">True</label>
+        <input type="radio" name="fragment-noted" id="false" value="fragment-noted">
+        <label for="false">False</label>
+    </form>
+
+    <form id="sexSelect">
+        <label for="sexSelect">Sex</label>
+        <input type="radio" name="sex" id="female" value="sex">
+        <label for="female">Female</label>
+        <input type="radio" name="sex" id="male" value="sex">
+        <label for="male">Male</label>
+    </form>
+    </div>
+
+    <form id="23">
+            <select class="subSelect" id="skeletal-area">
+                    <option id="option" value="">Skeletal Area</option>
+                    <option id="option" value="head">Head</option>
+                    <option id="option" value="feet">Feet</option>
+                    <option id="option" value="forelimb-upper-1">Forelimb, Upper</option>
+                    <option id="option" value="back">Back</option>
+                    <option id="option" value="hindlimb-upper-1">Hindlimb, Upper</option>
+                    <option id="option" value="hindlimb-lower-1">Hindlimb, Lower</option>
+                    <option id="option" value="forelimb-lower-1">Forelimb, Lower</option>
+            </select>
+        </form>
+    
+            <form id="24">
+            <select class="subSelect" id="conservation-action">
+                    <option id="option" value="">Conservation Action</option>
+                    <option id="option" value="cleaned">Cleaned</option>
+                    <option id="option" value="adhered">Adhered</option>
+                    <option id="option" value="consolidated">Consolidated</option>
+                    <option id="option" value="inhibited">Inhibited</option>
+                    <option id="option" value="degreased">Degreased</option>
+                    <option id="option" value="filled">Filled</option>
+                    <option id="option" value="rinsed">Rinsed</option>
+                    <option id="option" value="coated">Coated</option>
+                    <option id="option" value="lacquered">Lacquered</option>
+                    <option id="option" value="buffed">Buffed</option>
+                    <option id="option" value="desiccated">Desiccated</option>
+                    <option id="option" value="disassembled">Disassembled</option>
+                    <option id="option" value="not-recorded-1">Not Recorded</option>
+                    <option id="option" value="re-adhered">Re-adhered</option>
+                    <option id="option" value="dewatered">Dewatered</option>
+                    <option id="option" value="faced">Faced</option>
+                    <option id="option" value="reshaped">Reshaped</option>
+                    <option id="option" value="backed">Backed</option>
+                    <option id="option" value="burnished-1">Burnished</option>
+                    <option id="option" value="dowelled">Dowelled</option>
+                    <option id="option" value="in-painted">In-painted</option>
+                    <option id="option" value="sanded">Sanded</option>
+            </select>
+        </form>
+ 
+        <form id="25">
+            <select class="subSelect" id="conservation-material">
+                    <option id="option" value="">Conservation Material</option>
+                    <option id="option" value="acetone">Acetone</option>
+                    <option id="option" value="alcohol">Alcohol</option>
+                    <option id="option" value="acryloid-b-72">Acryloid B-72</option>
+                    <option id="option" value="tap-water">Tap Water</option>
+                    <option id="option" value="no-value-x">No Value (--)</option>
+                    <option id="option" value="cellulose-nitrate">Cellulose Nitrate</option>
+                    <option id="option" value="acryloid-b-48">Acryloid B-48</option>
+                    <option id="option" value="benzotriazole">Benzotriazole</option>
+                    <option id="option" value="fumed-silica">Fumed Silica</option>
+                    <option id="option" value="acrylic-paint">Acrylic Paint</option>
+                    <option id="option" value="distilled-water">Distilled Water</option>
+                    <option id="option" value="glass-microballoons">Glass Microballoons</option>
+                    <option id="option" value="phosphoric-acid">Phosphoric Acid</option>
+                    <option id="option" value="tannic-acid">Tannic Acid</option>
+                    <option id="option" value="saliva">Saliva</option>
+                    <option id="option" value="dental-plaster">Dental Plaster</option>
+                    <option id="option" value="plaster-1">Plaster</option>
+                    <option id="option" value="acryloid-b-48n">Acryloid B-48N</option>
+                    <option id="option" value="fine-surface-polyfill-a">Fine Surface Polyfill A</option>
+                    <option id="option" value="microcrystalline-wax">Microcrystalline Wax</option>
+                    <option id="option" value="epoxy-resin">Epoxy Resin</option>
+                    <option id="option" value="not-recorded">Not Recorded</option>
+                    <option id="option" value="polyfill-a">Polyfill A</option>
+                    <option id="option" value="vinyl-spackling">Vinyl Spackling</option>
+                    <option id="option" value="gypsum-plaster">Gypsum Plaster</option>
+                    <option id="option" value="smokesponge">Smokesponge</option>
+                    <option id="option" value="alabastrino-plaster">Alabastrino Plaster</option>
+                    <option id="option" value="kneadable-putty">Kneadable Putty</option>
+                    <option id="option" value="tissue">Tissue</option>
+                    <option id="option" value="acryloid-b-48l">Acryloid B-48l</option>
+                    <option id="option" value="acrylolid-b-48">Acrylolid B-48</option>
+                    <option id="option" value="cheesecloth">Cheesecloth</option>
+                    <option id="option" value="deionised-water">Deionised Water</option>
+                    <option id="option" value="fibreglass">Fibreglass</option>
+                    <option id="option" value="japanese-tissue">Japanese Tissue</option>
+                    <option id="option" value="metal-wire">Metal Wire</option>
+                    <option id="option" value="modelspan-21-gsm">Modelspan 21 gsm</option>
+                    <option id="option" value="paper-pulp">Paper Pulp</option>
+                    <option id="option" value="petroleum-spirit">Petroleum Spirit</option>
+                    <option id="option" value="plaster-of-paris">Plaster of Paris</option>
+                    <option id="option" value="plastizote">Plastizote</option>
+                    <option id="option" value="polyester-webbing">Polyester Webbing</option>
+                    <option id="option" value="polyvinyl-acetate">Polyvinyl Acetate</option>
+                    <option id="option" value="pva">PVA</option>
+                    <option id="option" value="vinavyl">Vinavyl</option>
+
+            </select>
+        </form>
+
+    <button onclick="openTab()" id="searchButton">Search</button>
+    <!-- <button id="resetButton">Back to Previous</button> -->
+
+</div>
+
+    <script src="ocSearchScript.js"></script>
+
+</body>
+</html>

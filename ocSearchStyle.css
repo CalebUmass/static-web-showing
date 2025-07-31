@@ -1,0 +1,238 @@
+/*Box label styling*/
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: slideLeft 2s ease-out forwards;
+    animation-delay: 1s;
+}
+
+.orangeBox {
+    background-color: #ffd580;
+    width: 450px;
+    height: 450px;
+    border-radius: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.whiteOutline {
+    border: 5px solid white;
+    width: 400px;
+    height: 400px;
+    border-radius: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+h1 {
+    color: white;
+}
+
+@keyframes slideLeft {
+    0% {
+        transform: translateX(0px);
+    }
+
+    100% {
+        transform: translateX(-470px);
+    }
+}
+
+/*Filter styling*/
+
+#content {
+    position: absolute;
+    top: 2vw;
+    left:70vw;
+    align-self: center;
+}
+
+.selectPrime {
+    position: absolute;
+
+    color: orange;
+    background-color: white;
+    border: 3px solid orange;
+    border-radius: 20px;
+
+    height: 50px;
+    width: 450px;
+    top: 290px;
+    left: -340px;
+
+    opacity: 0;
+
+    animation: appear 2s ease-out forwards;
+    animation-delay: 1.5s;
+}
+
+.selectPrime:focus,
+.selectPrime:hover{
+    outline: none;
+    border: 3px solid #5F9EA0;
+}
+
+.select {
+    position: absolute;
+
+    color: orange;
+    background-color: white;
+    border: 3px solid orange;
+    border-radius: 20px;
+
+    height: 50px;
+    width: 450px;
+    top: 290px;
+    left: -340px;
+
+    visibility: hidden;
+}
+
+.select:focus,
+.select:hover{
+    outline: none;
+    border: 3px solid #5F9EA0;
+}
+
+#pcnum {
+    position: absolute;
+
+    color: orange;
+    background-color: white;
+    border: 3px solid orange;
+    border-radius: 20px;
+
+    height: 50px;
+    width: 600px;
+    top: 290px;
+    left: -340px;
+
+    visibility: hidden;
+}
+
+#pcnum::placeholder {
+    opacity: 0.5;
+    color: orange;
+}
+
+#searchButton {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    
+
+    color: white;
+    background-color: orange;
+    border: 2px solid orange;
+    border-radius: 20px;
+
+    width: 100px;
+    top: 285px;
+    left: 100px;
+
+    visibility: hidden;
+
+
+    
+}
+
+
+@keyframes appear{
+    0% {
+        opacity: 0;
+        left: -300px;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/*Subfilter styling*/
+
+.subSelect {
+    position: absolute;
+
+    color: orange;
+    background-color: white;
+    border: 3px solid orange;
+    border-radius: 20px;
+
+    height: 50px;
+    width: 150px;
+
+    visibility: hidden;
+}
+
+.radioSelect {
+   display: inline-block;
+
+   visibility: hidden;
+}
+
+#fragmentSelect{
+    position: absolute;
+
+    color: orange;
+
+    top: 350px;
+    left: -330px;
+
+}
+
+#sexSelect{
+    position: relative;
+
+    color: orange;
+
+    top: 349px;
+    left: -50px;
+}
+
+#conservation-material {
+    top: 390px;
+    left: -340px;
+    width: 160px;
+}
+
+#conservation-action {
+    top: 390px;
+    left: -170px;
+}
+
+#preserved {
+    top: 390px;
+    left: -10px;
+    width: 120px;
+}
+
+#skeletal-area {
+    top: 450px;
+    left: -340px;
+}
+
+#distal-fused {
+    top: 450px;
+    left: -20px;
+}
+
+#proximal-fused {
+    top: 450px;
+    left: -180px;
+}
+
+#age-category {
+    top: 510px;
+    left: -340px;
+}
+
+#side {
+    top: 510px;
+    left: -180px;
+    width: 100px;
+}
