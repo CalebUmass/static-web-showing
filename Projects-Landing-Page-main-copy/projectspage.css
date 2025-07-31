@@ -91,18 +91,18 @@ body {
     font-size: 80px;
     color: #fff;
     font-family: "Source Serif 4", serif;
-    padding-top: 0px;
+    padding-top: 10px;
+    margin-bottom: 100px;
 }
 
 /*This is the formatting that applies to each project*/
 .project {
     border-radius: 30px;
-    padding: 80px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
     text-align: center;
     position: relative;
-    margin-top: 135px;
+    margin-top: 15px;
 
     font-family: "DM Serif Display", serif;
     font-size: 28px;
