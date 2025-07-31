@@ -282,8 +282,3 @@ Project Link: [https://github.com/CalebUmass/static-web-showing](https://github.
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-<<<<<<< HEAD
-[JQuery-url]: https://jquery.com 
-=======
-[JQuery-url]: https://jquery.com 
->>>>>>> 00aad70acd459c3920604b0840e8987c54a38441
