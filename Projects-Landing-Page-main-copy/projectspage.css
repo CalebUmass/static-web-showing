@@ -19,6 +19,11 @@
     background-size: cover;
 }
 
+#project-5 {
+    background-image: url("openContextReader/ocSearchCover.png")
+    background-size: cover;
+}
+
 #project-last {
     background-image: url("media/GitHub.jpg");
     background-size: cover;
