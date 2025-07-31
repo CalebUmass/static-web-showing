@@ -52,8 +52,24 @@ body {
     font-family: "Outfit", sans-serif;
 }
 
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.col {
+    flex: 0 0 calc((100% - 40px) / 3);
+    max-width: calc((100% - 40px) / 3);
+    margin: 0;
+    box-sizing: border-box;
+    min-height: 500px;
+    background-position: center;
+}
+
 /*Contains the page's content*/
-.container {
+.contains {
     min-height: 100vh;
     width: 100%;
     display: flex;
@@ -160,7 +176,6 @@ body {
 }
 
 .openbtn:hover { /*controls the appearance of the three lines when hovered over*/
-    background-color: #fff;
     color: rgba(162,205,230,1)
 }
 
