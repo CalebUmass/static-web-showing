@@ -1,12 +1,12 @@
 # Project Title
 
-![Banner or Logo Image](/imgs/readmecover.jpg) <!-- optional -->
+![Banner or Logo Image](imgs/readmecover.jpg) <!-- optional -->
 
 > One-sentence project description that captures the essence of what this does.
 
 ---
 
-## 📦 Table of Contents
+## Table of Contents
 
 - [Built With](#build-with)
 - [About](#about)
