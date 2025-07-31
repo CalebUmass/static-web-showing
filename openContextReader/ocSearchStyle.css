@@ -137,8 +137,23 @@ h1 {
 
     visibility: hidden;
 
+}
 
-    
+#resetButton {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+
+    color: white;
+    background-color: orange;
+    border: 2px solid orange;
+    border-radius: 20px;
+
+    width: 100px;
+    top: 264px;
+    left: 210px;
+
+    visibility: hidden;
 }
 
 
