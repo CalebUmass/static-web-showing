@@ -1,0 +1,129 @@
+/* --- Theming and Layout Styles --- */
+:root {
+    --color-background: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-text-primary: #212529;
+    --color-text-secondary: #6c757d;
+    --color-border: #dee2e6;
+    --color-primary: #007bff;
+    --color-primary-hover: #0056b3;
+    --transition-speed: 0.3s;
+    --navbar-height: 70px;
+    --navbar-padding: 1.5rem;
+    --container-width: 1140px;
+    --border-radius: 8px;
+    --font-family-sans-serif: system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="dark"] {
+    --color-background: #121212;
+    --color-surface: #1e1e1e;
+    --color-text-primary: #e0e0e0;
+    --color-text-secondary: #a0a0a0;
+    --color-border: #333333;
+    --color-primary: #3391ff;
+    --color-primary-hover: #5ca8ff;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: var(--font-family-sans-serif);
+    font-size: 1rem;
+    line-height: 1.6;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.content { height: 200vh; padding: 100px var(--navbar-padding); text-align: center; }
+ul { list-style: none; margin: 0; padding: 0; }
+a { text-decoration: none; color: var(--color-primary); }
+a:hover { color: var(--color-primary-hover); }
+
+/* --- Navbar Styles --- */
+.navbar {
+    height: var(--navbar-height);
+    display: flex;
+    align-items: center;
+    position: sticky; top: 0;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+    z-index: 1000;
+}
+
+.navbar__container {
+    display: flex; justify-content: space-between; align-items: center;
+    width: 100%; max-width: var(--container-width);
+    margin: 0 auto; padding: 0 var(--navbar-padding);
+}
+
+.navbar__brand {
+    font-size: 1.5rem; font-weight: bold; color: var(--color-text-primary);
+    text-decoration: none; transition: color var(--transition-speed) ease;
+}
+
+.navbar__toggle {
+    display: block; border: none; background: transparent; cursor: pointer; padding: 0.5rem;
+}
+
+.navbar__toggle .bar {
+    display: block; width: 25px; height: 3px; margin: 5px auto;
+    background-color: var(--color-text-primary);
+    transition: all var(--transition-speed) ease;
+}
+
+.navbar__toggle.is-active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.navbar__toggle.is-active .bar:nth-child(2) { opacity: 0; }
+.navbar__toggle.is-active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.navbar__menu {
+    display: none; flex-direction: column; width: 100%;
+    position: absolute; top: var(--navbar-height); left: 0;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 999;
+}
+
+.navbar__menu.is-active { display: flex; }
+.navbar__item { text-align: center; border-top: 1px solid var(--color-border); }
+.navbar__link { display: block; padding: 1.25rem; font-weight: bold; }
+
+:is(.navbar__toggle, .navbar__link, #theme-toggle):focus-visible {
+    outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: 4px;
+}
+
+/* --- Theme Toggle Button Styles --- */
+#theme-toggle {
+    background: none; border: none; cursor: pointer;
+    padding: 0.5rem; border-radius: 50%; display: flex; align-items: center;
+}
+
+.theme-icon {
+    width: 24px; height: 24px; color: var(--color-text-secondary);
+    transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+#theme-toggle:hover .theme-icon, #theme-toggle:focus .theme-icon {
+    color: var(--color-text-primary); transform: rotate(15deg);
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+
+[data-theme="dark"] .sun-icon { display: block; }
+[data-theme="dark"] .moon-icon { display: none; }
+
+/* --- Desktop Styles --- */
+@media (min-width: 768px) {
+    .navbar__toggle { display: none; }
+    .navbar__menu {
+        display: flex; flex-direction: row; align-items: center; position: static;
+        width: auto; background-color: transparent; border: none;
+    }
+    .navbar__list { display: flex; align-items: center; gap: 1rem; }
+    .navbar__item { border-top: none; }
+    .navbar__link { padding: 0.5rem; }
+    .navbar__item:last-child { margin-left: 1.5rem; }
+}
