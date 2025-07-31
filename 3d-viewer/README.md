@@ -2,7 +2,7 @@
 
 ![Banner or Logo Image](imgs/readmecover.jpg) <!-- optional -->
 
-> One-sentence project description that captures the essence of what this does.
+> View 3D artifacts from Poggio Civitate
 
 ---
 
