@@ -15,7 +15,7 @@
 
         /*General sub-filters that apply to every category, makes them visible*/
 
-        if (x == "pcnum") {
+        if (x != "pcnum") {
             document.getElementById("fragmentSelect").style.visibility = "visible"
             document.getElementById("conservation-material").style.visibility = "visible"
             document.getElementById("conservation-action").style.visibility = "visible"
