@@ -8,20 +8,23 @@
 
 /* Event listener for selecting what to search by */
     document.getElementById("searchSelect").addEventListener("change", function(){
-        /*Gets searchSelect value, pulling up the corresponding dropdown and hides searchSelect*/
+  /*Gets searchSelect value, pulling up the corresponding dropdown and hides searchSelect*/
         x = document.getElementById("searchSelect").value
-        document.getElementById("searchSelect").style.visibility = "hidden"
-        document.getElementById(`${x}`).style.visibility = "visible"
+         if (x != "inital") {
+            document.getElementById("searchSelect").style.visibility = "hidden"
+            document.getElementById(`${x}`).style.visibility = "visible"
 
         /*General sub-filters that apply to every category, makes them visible*/
 
-        if (x != "pcnum") {
+            document.getElementById("resetButton").style.visibility = "visible"
+            document.getElementById('searchButton').style.visibility = "visible"
+
+         if (x != "pcnum") {
             document.getElementById("fragmentSelect").style.visibility = "visible"
             document.getElementById("conservation-material").style.visibility = "visible"
             document.getElementById("conservation-action").style.visibility = "visible"
-            document.getElementById('searchButton').style.visibility = "visible"
         }
-        
+
         /*Sub-filters that apply only to biologicalFilters*/
         var biologicalFilters = ['taxon', 'element', 'common-name']
         if(biologicalFilters.includes(document.getElementById("searchSelect").value)) {
@@ -34,6 +37,7 @@
             document.getElementById("sexSelect").style.visibility = "visible"
         }
     }
+}
 );
 
 /* Functions that fetch link based on user input */
@@ -88,6 +92,23 @@
         } else { 
             window.open(typeSearch(), "_blank");
         } 
+    }
+
+function reset(){
+        document.getElementById("searchSelect").style.visibility = "visible" 
+        document.getElementById(`${document.getElementById("searchSelect").value}`).style.visibility = "hidden"
+        document.getElementById("fragmentSelect").style.visibility = "hidden"
+        document.getElementById("conservation-material").style.visibility = "hidden"
+        document.getElementById("conservation-action").style.visibility = "hidden"
+        document.getElementById('searchButton').style.visibility = "hidden"
+        document.getElementById("preserved").style.visibility = "hidden"
+        document.getElementById("proximal-fused").style.visibility = "hidden"
+        document.getElementById("distal-fused").style.visibility = "hidden"
+        document.getElementById("side").style.visibility = "hidden"
+        document.getElementById("age-category").style.visibility = "hidden"
+        document.getElementById("skeletal-area").style.visibility = "hidden"
+        document.getElementById("sexSelect").style.visibility = "hidden"
+        document.getElementById("resetButton").style.visibility = "hidden"
     }
 
     /* An array and dictionary of all sub-filter ids, to fetch their value if needed and append them to the link*/
