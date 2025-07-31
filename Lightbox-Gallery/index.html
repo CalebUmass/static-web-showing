@@ -563,19 +563,17 @@
                                 } catch { //if it doesn't work, we make a new tag called unknown.
                                     newTag.id = "Unknown"; 
                                     newTag.textContent = "Unknown";
-                                } finally {
-                                    newTag.classList.add("pill");
-                                    newTag.classList.add(`pill${filter.id}`);
-                                    newTag.setAttribute("type", "button");
-                                    newTag.id = `${tag}`;
-                                    newTag.textContent = tag;
-                                    const currentAccordion = filter;
-                                    const accordionBody = currentAccordion.querySelector('.accordion-body');
+                                } finally { //run this after we do the try--catch
+                                    newTag.classList.add("pill"); //add the pill class to the new pill
+                                    newTag.classList.add(`pill${filter.id}`); //add another class to the pills that is pill + the name of the filter (i.e. pillYear)
+                                    newTag.setAttribute("type", "button"); //make the pill type="button"
+                                    const currentAccordion = filter; 
+                                    const accordionBody = currentAccordion.querySelector('.accordion-body'); //append the new pill to the accordion
                                     if (accordionBody) {
                                         accordionBody.appendChild(newTag);
                                     }
                                 }
-                            } else {
+                            } else { //if the type of filter is not year, then do the following (it is the same as before, but not a check for if there is a year
                                 newTag.classList.add("pill");
                                 newTag.classList.add(`pill${filter.id}`);
                                 newTag.setAttribute("type", "button");
@@ -591,18 +589,18 @@
                     })
                 }
 
-                document.addEventListener("DOMContentLoaded", () => {
-                    makingTags();
-                    document.querySelectorAll(".pill").forEach(pill => {
-                        pill.addEventListener("click", () => {
-                            pill.classList.toggle("pill--active");
-                            const accordion = pill.closest('.accordion-item');
-                            const hasActivePill = accordion && accordion.querySelector('.pill.pill--active') !== null;
-                            if (accordion) {
+                document.addEventListener("DOMContentLoaded", () => { //add event listener for when the page loads
+                    makingTags(); //run the making tags function as soon as the page loads
+                    document.querySelectorAll(".pill").forEach(pill => { //iterate through the pills (after they are created)
+                        pill.addEventListener("click", () => { //add an event listener to when the pills are clicked
+                            pill.classList.toggle("pill--active"); //toggle the pill--active class on and off
+                            const accordion = pill.closest('.accordion-item'); //finds the element's parent accordion
+                            const hasActivePill = accordion && accordion.querySelector('.pill.pill--active') !== null; //if the accordion exists and the accordion has a child with class .pill.pill--active
+                            if (accordion) { 
                                 if (hasActivePill) {
-                                    accordion.classList.add('hasActive');
+                                    accordion.classList.add('hasActive'); //if the accordion has an active pill, give it the class hasActive
                                 } else {
-                                    accordion.classList.remove('hasActive');
+                                    accordion.classList.remove('hasActive'); //if the accordion does not have an active pill, remove the class hasActive
                                 }
                             }
                         });
@@ -611,78 +609,83 @@
             </script>
 
             <!-------------------------------------------------------------------------------------------------------------------------->
-
             <script>
                 //ALL CONSTANTS
-                let sliderOne = document.getElementById("slider-1");
-                let sliderTwo = document.getElementById("slider-2");
-                let sliderOneDefault = sliderOne.getAttribute("value");
-                let sliderTwoDefault = sliderTwo.getAttribute("value");
-                let displayValOne = document.getElementById("range1");
-                let displayValTwo = document.getElementById("range2");
-                let minGap = 0;
-                let sliderTrack = document.querySelector(".slider-track");
-                let sliderMaxValue = document.getElementById("slider-1").max;
-                const accordions = document.getElementsByClassName("accordion-item");
-                const formWatch = document.getElementById('filterForm');
-                const imagestoFilter = document.getElementsByClassName('image-item');
-                const accordionstoFilter = document.getElementsByClassName('accordion-item');
-                const intOneDef = parseInt(sliderOneDefault);
-                const compareMin = parseInt(sliderOne.value);
-                const intTwoDef = parseInt(sliderTwoDefault);
-                const compareMax = parseInt(sliderTwo.value);
-                const sliderContainer = document.getElementById("containSlider");
-                const allthePills = document.getElementsByClassName("pill");
-                const yearSearch = document.getElementById("searchSearchbyYear");
-                const trenchSearch = document.getElementById("searchSearchbyTrench");
-                const restoreDef = document.getElementById("restoreDefaults")
+                let sliderOne = document.getElementById("slider-1"); //this is the left slider (minimum)
+                let sliderTwo = document.getElementById("slider-2"); //this is the right slider (maximum) 
+                let sliderOneDefault = sliderOne.getAttribute("value"); //gets the value of slider 1 (what the user has set it to)
+                let sliderTwoDefault = sliderTwo.getAttribute("value"); //gets the value of slider 2 (what the user has set it to)
+                let displayValOne = document.getElementById("range1"); //the displayed value for slider 1
+                let displayValTwo = document.getElementById("range2"); //the displayed value for slider 2
+                let minGap = 0; //minimum gap between the year slider is 0 (makes sure they do not overlap)
+                let sliderTrack = document.querySelector(".slider-track"); //the track that the sliders are both on
+                let sliderMaxValue = document.getElementById("slider-1").max; //the maximum value that the slides can be
+                const accordions = document.getElementsByClassName("accordion-item"); //each accordion item (type of filter)
+                const formWatch = document.getElementById('filterForm'); //the form that contains all the filters
+                const imagestoFilter = document.getElementsByClassName('image-item'); //get all the images and their data
+                const intOneDef = parseInt(sliderOneDefault); //the default value of slider 1 as an integer
+                const compareMin = parseInt(sliderOne.value); //the set value of slider 1 as an integer
+                const intTwoDef = parseInt(sliderTwoDefault);  //the default value of slider 2 as an integer
+                const compareMax = parseInt(sliderTwo.value); //the set value of slider 2 as an integer
+                const sliderContainer = document.getElementById("containSlider"); //the container for the whole slider
+                const allthePills = document.getElementsByClassName("pill"); //gets the pills
+                const yearSearch = document.getElementById("searchSearchbyYear"); //the search form in the filter by year section
+                const trenchSearch = document.getElementById("searchSearchbyTrench"); //the search form in the filter by keyword section
+                const restoreDef = document.getElementById("restoreDefaults") //restore defaults button
 
                 //SCRIPT FOR SEARCHING WHOLE WEBPAGE
-                const searchForm = document.getElementById('searchBar');
-                const searchInput = document.getElementById('searchInput');
-                const imageItems = document.getElementsByClassName("image-item");
-                const noResultsMessage = document.getElementById('noResultsMessage');
+                const searchForm = document.getElementById('searchBar'); //the main searchbar at the top
+                const searchInput = document.getElementById('searchInput'); //the user input in the search bar
+                const imageItems = document.getElementsByClassName("image-item"); //image items
+                const noResultsMessage = document.getElementById('noResultsMessage'); //the no results message
 
                 function searchImages() {
-                    const searchTerm = searchInput.value.trim().toLowerCase();
-                    let matchCount = 0;
+                    const searchTerm = searchInput.value.trim().toLowerCase(); //turn the user input into lower case (searching is not case sensitive)
+                    let matchCount = 0; //initialize the match count at 0
 
-                    Array.from(imageItems).forEach(item => {
-                        const imageName = item.querySelector('p').textContent.toLowerCase();
-                        if (imageName.includes(searchTerm)) {
-                            item.setAttribute('data-toggle', 'lightbox');
-                            item.setAttribute('data-gallery', 'photo_gallery');
-                            item.classList.remove('hidden');
-                            matchCount++;
+                    Array.from(imageItems).forEach(item => { //for each image in the array
+                        const imageName = item.querySelector('p').textContent.toLowerCase(); //turn the paragraph text into all lower case
+                        if (imageName.includes(searchTerm)) { //if the paragraph text of the image contains the searched term
+                            item.setAttribute('data-toggle', 'lightbox'); //show the image in the lightbox view
+                            item.setAttribute('data-gallery', 'photo_gallery'); //show the image in the gallery
+                            item.classList.remove('hidden'); //remove the hidden class
+                            matchCount++; //increment the matchCount
                         } else {
-                            item.removeAttribute('data-toggle');
-                            item.removeAttribute('data-gallery');
-                            item.classList.add('hidden');;
+                            item.removeAttribute('data-toggle'); //remove the image from the lightbox
+                            item.removeAttribute('data-gallery'); //remove the image from the image gallery
+                            item.classList.add('hidden');; //add the hidden class
                         }
                     });
 
-                    noResultsMessage.style.display = matchCount === 0 ? 'block' : 'none';
+                    noResultsMessage.style.display = matchCount === 0 ? 'block' : 'none'; //if the matchCount is 0, show the no results message
                 }
 
 
-                searchInput.addEventListener('input', function () {
-                    Array.from(allthePills).forEach(pill => {
+                searchInput.addEventListener('input', function () {//event listener is triggered when the user starts inputting into the search bar
+                    //when the search bar is being typed into, all the pills get cleared 
+                    Array.from(allthePills).forEach(pill => { 
                         pill.classList.remove('pill--active');
                         pill.classList.remove('pill--shown');
-                        yearSearch.value = '';
+                        //clear the searchbars in the sidebar
+                        yearSearch.value = ''; 
                         trenchSearch.value = '';
                     });
+                    //set the slider values back to their default
                     sliderOne.value = sliderOneDefault;
                     sliderTwo.value = sliderTwoDefault;
+                    //display the default values for the slider
                     displayValOne.textContent = sliderOneDefault;
                     displayValTwo.textContent = sliderTwoDefault;
+                    //call the fillColor function to change the color of the slider (so it lines up with the circles on either side), and toggle the "slider--active" class off
                     fillColor();
                     sliderContainer.classList.remove("slider--active");
-
+                    
+                    //close the navigation bar, then run the searchImages() function
                     closeNav();
                     searchImages();
                 });
 
+                //when the search gets submitted, do not reload the page
                 searchForm.addEventListener('submit', function (event) {
                     event.preventDefault(); // Stop the form from reloading the page
                 }
@@ -828,7 +831,7 @@
                             varb.setAttribute('data-gallery', 'photo_gallery');
                         })
                     } else {
-                        Array.from(accordionstoFilter).forEach(filter => { //iterate through each accordion-item
+                        Array.from(accordions).forEach(filter => { //iterate through each accordion-item
                             const accordid = filter.id; //the id of each accordion-item
                             const pills = filter.querySelectorAll('.pill'); //getting all of the child pills of each accordion-item 
                             const pillsset = new Set(); //set of pill ids
