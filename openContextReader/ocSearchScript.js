@@ -118,7 +118,9 @@ function returnHome(){
 
     /* An array and dictionary of all sub-filter ids, to fetch their value if needed and append them to the link*/
 
-    let subFilterList = ['preserved', 'proximal-fused', 'distal-fused', 'side', 'age-category', 'skeletal-area', 'conservation-action', 'conservation-material']
+    const subFilter = document.getElementsByClassName("subSelect")
+    const subFilterList = Array.from(subFilter).map(element => element.id)
+
     let radioDict = {true:'fragment-noted', false:'fragment-noted', female:'sex', male: 'sex'};
 
     function subSearch(){
@@ -138,6 +140,7 @@ function returnHome(){
         }
        return addTo
     }
+
 
 
 
