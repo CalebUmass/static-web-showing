@@ -121,7 +121,13 @@ function returnHome(){
     const subFilter = document.getElementsByClassName("subSelect")
     const subFilterList = Array.from(subFilter).map(element => element.id)
 
-    let radioDict = {true:'fragment-noted', false:'fragment-noted', female:'sex', male: 'sex'};
+    const radioInput = document.querySelectorAll('input[type="radio"]');
+    const radioList1 = Array.from(radioInput).map(element => element.id);
+    const radioList2 = Array.from(radioInput).map(element => element.value);
+    const radioDict = new Object();
+    for (let i = 0; i < radioList1.length; i++){
+        radioDict[`${radioList1[i]}`] = `${radioList2[i]}`
+    }
 
     function subSearch(){
         var addTo = [];
@@ -140,6 +146,7 @@ function returnHome(){
         }
        return addTo
     }
+
 
 
 
