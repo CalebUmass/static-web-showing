@@ -112,7 +112,7 @@ function reset(){
     }
 
 function returnHome(){
-    homePage = "https://poggiocivitate.net/static-web-showing/Projects-Landing-Page-main-copy/projects-page.html"
+    homePage = "https://poggiocivitate.net"
     window.open(homePage);
 }
 
@@ -146,6 +146,7 @@ function returnHome(){
         }
        return addTo
     }
+
 
 
 
