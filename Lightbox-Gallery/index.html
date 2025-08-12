@@ -557,7 +557,7 @@
                             if (filter.id === "Year") { //we do this if the filter we are iterating through is the year filter (because we need to check that there is a year included)
                                 try {
                                     let testingifYear = parseInt(tag); //we try to get parse the tag as an integer
-                                    console.log("It worked")
+                                    console.log("It worked");
                                     newTag.id = `${tag}`; //if it works, we make the id and the text content equivalent to its year
                                     newTag.textContent = tag;
                                 } catch (error){ //if it doesn't work, we make a new tag called unknown.
