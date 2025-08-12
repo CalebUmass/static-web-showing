@@ -566,6 +566,7 @@
                                     console.log(newTag.textContent);
                                 } catch { //if it doesn't work, we make a new tag called unknown.
                                     console.log("We caught an error");
+                                    console.error(error);
                                     newTag.id = "Unknown"; 
                                     newTag.textContent = "Unknown";
                                 } finally { //run this after we do the try--catch
