@@ -5,6 +5,7 @@ async function convert(event) { //this is an async function so that the output s
     
     //calls loader element
     if (loaderElement != null) { //this makes sure that the code can access the loader element and prevents any error if it can't. If the loaderElement is found, it will display the loader as soon as the function is called.
+        console.log("The loader should appear now!")
         loaderElement.style.display = "block";
     }
 
