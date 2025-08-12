@@ -557,20 +557,17 @@
 
                             if (filter.id === "Year") { //we do this if the filter we are iterating through is the year filter (because we need to check that there is a year included)
                                 try {
-                                    console.log("Known year");
-                                    console.log(tag)
                                     let testingifYear = parseInt.tag(); //we try to get parse the tag as an integer
                                     newTag.id = `${tag}`; //if it works, we make the id and the text content equivalent to its year
                                     newTag.textContent = tag;
                                 } catch { //if it doesn't work, we make a new tag called unknown.
-                                    console.log("Unknown year");
-                                    console.log(tag)
                                     newTag.id = "Unknown"; 
                                     newTag.textContent = "Unknown";
                                 } finally { //run this after we do the try--catch
                                     newTag.classList.add("pill"); //add the pill class to the new pill
                                     newTag.classList.add(`pill${filter.id}`); //add another class to the pills that is pill + the name of the filter (i.e. pillYear)
                                     newTag.setAttribute("type", "button"); //make the pill type="button"
+                                    console.log(newTag)
                                     const currentAccordion = filter; 
                                     const accordionBody = currentAccordion.querySelector('.accordion-body'); //append the new pill to the accordion
                                     if (accordionBody) {
