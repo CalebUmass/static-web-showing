@@ -561,6 +561,8 @@
                                     newTag.id = `${tag}`; //if it works, we make the id and the text content equivalent to its year
                                     newTag.textContent = tag;
                                 } catch { //if it doesn't work, we make a new tag called unknown.
+                                    console.log("Unknown year");
+                                    console.log(tag)
                                     newTag.id = "Unknown"; 
                                     newTag.textContent = "Unknown";
                                 } finally { //run this after we do the try--catch
