@@ -552,6 +552,7 @@
                         })
 
                         tagsSet.forEach(tag => { //for each array in tagset
+                            console.log(tag);
                             const newTag = document.createElement("button"); //newTag is the brand new pill button we are making for each tag
 
                             if (filter.id === "Year") { //we do this if the filter we are iterating through is the year filter (because we need to check that there is a year included)
