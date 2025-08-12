@@ -536,7 +536,6 @@
             <!-------------------------------------------------------------------------------------------------------------------------->
             <script> //SCRIPT TO AUTOGENERATE PILLS
                 function makingTags() { //this function is for creating the pill tags
-                    console.log("Pills are being made")
                     const filterAccordions = document.getElementsByClassName('accordion-item filter'); //this gets all the accordion-item filters
                     const imageItems = document.getElementsByClassName("image-item"); //this gets all of the image-Items
 
@@ -560,6 +559,8 @@
                                     let testingifYear = parseInt.tag(); //we try to get parse the tag as an integer
                                     newTag.id = `${tag}`; //if it works, we make the id and the text content equivalent to its year
                                     newTag.textContent = tag;
+                                    console.log("This is a tag with a valid year")
+                                    console.log(newTag.textContent)
                                 } catch { //if it doesn't work, we make a new tag called unknown.
                                     newTag.id = "Unknown"; 
                                     newTag.textContent = "Unknown";
