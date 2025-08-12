@@ -208,7 +208,7 @@ html {
     z-index: 9999; /*Makes sure it covers the output screen while it is running*/
     width: 100%;
     height: 100vh;
-    background-image: url('media/engjell-gjepali-M0OIyN5u8ZM-unsplash.jpg'); /*Has the same background as the input and output pages so it looks more seamless*/
+    background-image: url('engjell-gjepali-M0OIyN5u8ZM-unsplash.jpg'); /*Has the same background as the input and output pages so it looks more seamless*/
     background-size: cover;
     background-position: center center;
 }
