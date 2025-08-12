@@ -553,16 +553,15 @@
 
                         tagsSet.forEach(tag => { //for each array in tagset
                             const newTag = document.createElement("button"); //newTag is the brand new pill button we are making for each tag
-                            console.log("This is the tag ", tag);
 
-                            console.log("This is filter.id ", filter.id);
                             if (filter.id === "Year") { //we do this if the filter we are iterating through is the year filter (because we need to check that there is a year included)
                                 try {
-                                    let testingifYear = parseInt.tag(); //we try to get parse the tag as an integer
-                                    console.log(testingifYear);
+                                    let testingifYear = parseInt(tag); //we try to get parse the tag as an integer
+                                    console.log("It worked")
                                     newTag.id = `${tag}`; //if it works, we make the id and the text content equivalent to its year
                                     newTag.textContent = tag;
-                                } catch { //if it doesn't work, we make a new tag called unknown.
+                                } catch (error){ //if it doesn't work, we make a new tag called unknown.
+                                    console.log("This is the error",error);
                                     newTag.id = "Unknown"; 
                                     newTag.textContent = "Unknown";
                                 } finally { //run this after we do the try--catch
