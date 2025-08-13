@@ -6,6 +6,19 @@
         }
     });
 
+    /* An array and dictionary of all sub-filter ids, to fetch their value if needed and append them to the link*/
+
+    var subFilter = document.getElementsByClassName("subSelect")
+    var subFilterList = Array.from(subFilter).map(element => element.id)
+
+    var radioInput = document.querySelectorAll('input[type="radio"]');
+    var radioList1 = Array.from(radioInput).map(element => element.id);
+    var radioList2 = Array.from(radioInput).map(element => element.value);
+    var radioDict = new Object();
+    for (let i = 0; i < radioList1.length; i++){
+        radioDict[`${radioList1[i]}`] = `${radioList2[i]}`
+    }
+
 /* Event listener for selecting what to search by */
     document.getElementById("searchSelect").addEventListener("change", function(){
   /*Gets searchSelect value, pulling up the corresponding dropdown and hides searchSelect*/
@@ -115,19 +128,6 @@ function returnHome(){
     window.open("https://poggiocivitate.net", "_self");
 }
 
-    /* An array and dictionary of all sub-filter ids, to fetch their value if needed and append them to the link*/
-
-    const subFilter = document.getElementsByClassName("subSelect")
-    const subFilterList = Array.from(subFilter).map(element => element.id)
-
-    const radioInput = document.querySelectorAll('input[type="radio"]');
-    const radioList1 = Array.from(radioInput).map(element => element.id);
-    const radioList2 = Array.from(radioInput).map(element => element.value);
-    const radioDict = new Object();
-    for (let i = 0; i < radioList1.length; i++){
-        radioDict[`${radioList1[i]}`] = `${radioList2[i]}`
-    }
-
     function subSearch(){
         var addTo = [];
         for (let i = 0; i < subFilterList.length; i++){
@@ -145,6 +145,7 @@ function returnHome(){
         }
        return addTo
     }
+
 
 
 
