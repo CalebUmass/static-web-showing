@@ -112,8 +112,7 @@ function reset(){
     }
 
 function returnHome(){
-    homePage = "https://poggiocivitate.net"
-    window.open(homePage);
+    window.open("https://poggiocivitate.net", "_self");
 }
 
     /* An array and dictionary of all sub-filter ids, to fetch their value if needed and append them to the link*/
@@ -146,6 +145,7 @@ function returnHome(){
         }
        return addTo
     }
+
 
 
 
