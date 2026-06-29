@@ -1,77 +1,30 @@
-async function convert(event) { //this is an async function so that the output screen does not appear UNTIL all conversions have been done, and makes sure the loader works properly
-    event.preventDefault() //prevents the page from reloading
+//register the Italian Monte Mario / Italy zone 1 projection (EPSG:3003) with its datum shift
+proj4.defs("EPSG:3003", "+proj=tmerc +lat_0=0 +lon_0=9 +k=0.9996 +x_0=1500000 +y_0=0 +ellps=intl +towgs84=-104.1,-49.1,-9.9,0.971,-2.917,0.714,-11.68 +units=m +no_defs")
 
-    var loaderElement = document.getElementById("loader-overlay"); //gets the loader overlay and the loader(a child of loader-overlay)
-    
-    //calls loader element
-    if (loaderElement != null) { //this makes sure that the code can access the loader element and prevents any error if it can't. If the loaderElement is found, it will display the loader as soon as the function is called.
-        console.log("The loader should appear now!")
-        loaderElement.style.display = "block";
-    }
+function convert(event) {
+    event.preventDefault()
 
-    //getting input from the html input
-    var x = parseFloat(document.getElementById("xcoord").value); //get the inputted x value
-    var y = parseFloat(document.getElementById("ycoord").value); //get the inputted y value
+    var x = parseFloat(document.getElementById("xcoord").value)
+    var y = parseFloat(document.getElementById("ycoord").value)
 
-    //converts var x and var y to espg coordinates automatically
-    const espgx = (x * 0.999221692962) + (y * 0.0447248683267) + 1695135.19719; 
-    const espgy = (x * (-0.0439247185204)) + (y * 0.999281902346) + 4780651.43589;
+    //site grid (x,y) -> EPSG:3003 projected coords, same affine as before
+    const espgx = (x * 0.999221692962) + (y * 0.0447248683267) + 1695135.19719
+    const espgy = (x * (-0.0439247185204)) + (y * 0.999281902346) + 4780651.43589
 
-    //get the URL of the Open Context which can convert coordinates to WGS.
-    //var url = `https://opencontext.org/utilities/reproject?format=geojson&geometry=Point&input-proj=poggio-civitate&output-proj=EPSG:4326&x=${x}&y=${y}` //Used literals for the URL so that we pass the inputted x and y coordinates immediately to the website
-    var url = `/static-web-showing/proxy.php?x=${x}&y=${y}`
-    //initializing a try-catch-finally here so that if the webpage does not return results, or the input is invalid, or if there is any other error on the side of Open Context, the code will not break.
-    try {
+    //EPSG:3003 -> WGS84 lon/lat, done locally with proj4 (no API, no proxy)
+    const [longitude, latitude] = proj4("EPSG:3003", "WGS84", [espgx, espgy])
 
-        const response = await fetch(url); //awaits the information from the website -- does not run until it receives it
-        const data = await response.json(); //after the previous code is run, we convert the information to JSON
-        const dataArray = data['coordinates']; //accessing the coordinates returned by fetching them by key ('coordinates')
-        //get longitude and latitude by index
-        const longitude = dataArray[0]; 
-        const latitude = dataArray[1];
+    document.getElementById("input-display").innerHTML =
+        `<strong>X</strong>: ${x}<br><strong>Y</strong>: ${y}`
+    document.getElementById("wgs-display").innerHTML =
+        `<strong>Longitude</strong>: ${longitude.toFixed(7)}<br><strong>Latitude</strong>: ${latitude.toFixed(7)}`
+    document.getElementById("espg-display").innerHTML =
+        `<strong>X</strong>: ${espgx}<br><strong>Y</strong>: ${espgy}`
 
-        //display the inputted values in the input-display section
-        document.getElementById("input-display").innerHTML = `
-    <strong>X</strong>: ${x}<br>
-    <strong>Y</strong>: ${y}`;
+    document.getElementById("xcoord").value = ""
+    document.getElementById("ycoord").value = ""
 
-        //display the WGS coordinates in the wgs-display section
-        document.getElementById("wgs-display").innerHTML = `
-    <strong>Longitude</strong>: ${longitude}<br>
-    <strong>Latitude</strong>: ${latitude}`;
-
-        //display the ESPG coordinates in the espg-display section
-        document.getElementById("espg-display").innerHTML = `
-    <strong>X</strong>: ${espgx}<br>
-    <strong>Y</strong>: ${espgy}`;
-
-        //clear the input fields (in case the user wants to make additional searches)
-        document.getElementById("xcoord").value = "";
-        document.getElementById("ycoord").value = "";
-
-        //This runs if the code fails to retrieve information from OpenContext
-    } catch (error) {
-        //still displays the inputted coordinates
-        document.getElementById("input-display").innerHTML =
-            `X: ${x}<br>
-            Y: ${y}`;
-        //does not display any outputs
-        document.getElementById("wgs-display").innerHTML = "Could not load results"
-        document.getElementById("espg-display").innerHTML = "Could not load results"
-        console.error(error);
-    } finally {
-        // Scroll to output section instantly *before* hiding the loader
-        document.getElementById("output").scrollIntoView({ behavior: "auto" });
-
-        // Hide the loader overlay afterward
-        var loaderOverlay = document.getElementById("loader-overlay");
-        if (loaderOverlay != null) {
-            loaderOverlay.style.display = "none";
-        }
-        //display the output page and hide the input page
-        document.getElementById("input").style.display = "none";
-        document.getElementById("output").style.display = "flex";
-    }
+    document.getElementById("output").scrollIntoView({ behavior: "auto" })
+    document.getElementById("input").style.display = "none"
+    document.getElementById("output").style.display = "flex"
 }
-
-
