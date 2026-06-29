@@ -165,20 +165,8 @@ First, to work with this project, ensure you have the following installed:
 
 4. **(Optional) Restart Apache (if needed)**
    ```sh
-   sudo /opt/bitnami/ctlscript.sh restart apache
+   sudo systemctl reload apache2
    ```
-
-   Your updated site should now be live at:
-
-```
-https://<YOUR_PUBLIC_IP>/static-web-showing/
-```
-
-Or, if you’ve set up HTTPS and a domain:
-
-```
-https://poggiocivitate.net
-```
 
 ---
 
