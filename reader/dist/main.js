@@ -10,7 +10,7 @@ async function bootstrap() {
     });
     app.useStaticAssets((0, path_1.join)(__dirname, '..', 'public'));
     await app.listen(3000, '0.0.0.0');
-    console.log(`🚀 Server running at http://localhost:3000`);
+    console.log(`🚀 Server running at https://localhost:3000`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

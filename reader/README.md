@@ -34,14 +34,14 @@ npm run start:dev
 ```
 
 By default, the server runs on: `https://poggiocivitate.net/api` but can be 
-configured to run on by changing `local host` to you public ip adress -> `http://<YOUR_IP_ADDRESS>:3000`
+configured to run on by changing `local host` to you public ip adress -> `https://<YOUR_IP_ADDRESS>:3000`
 
 ### 3. Set API Endpoint in Frontend
 
 In your `main.js` frontend file:
 
 ```js
-const API_URL = 'http://<YOUR_IP_ADDRESS>:3000';
+const API_URL = 'https://<YOUR_IP_ADDRESS>:3000';
 ```
 
 Replace `<YOUR_IP_ADDRESS>` accordingly.
@@ -51,7 +51,7 @@ Replace `<YOUR_IP_ADDRESS>` accordingly.
 Visit:
 
 ```text
-http://<YOUR_IP_ADDRESS>:3000
+https://<YOUR_IP_ADDRESS>:3000
 ```
 
 Replace `<YOUR_IP_ADDRESS>` with your machine’s IP (e.g., `192.168.1.42`).

@@ -171,7 +171,7 @@ First, to work with this project, ensure you have the following installed:
    Your updated site should now be live at:
 
 ```
-http://<YOUR_PUBLIC_IP>/static-web-showing/
+https://<YOUR_PUBLIC_IP>/static-web-showing/
 ```
 
 Or, if you’ve set up HTTPS and a domain:
