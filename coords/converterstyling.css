@@ -161,6 +161,8 @@ html {
     text-align: center;
     position: relative;
     margin-top: 135px;
+    display: flex;
+    flex-direction: column;
 }
 
 .output-columns h3 { /*Design for the headings of each output glass card*/
@@ -169,11 +171,15 @@ html {
     margin-bottom: 10px;
     color: #166b53;
 }
-
+.output-columns .glass-card .vesco-label {
+    margin-top: auto; /*pushes the VESCO heading and the values below it to the bottom of the card*/
+}
 /* Output Values */
 #input-display,
 #wgs-display,
-#espg-display { /*Design for the outputted text (from the JS file)*/
+#espg-display 
+#Vwgs-display,
+#Vespg-display{ /*Design for the outputted text (from the JS file)*/
     margin-top: 10px;
     color: #333;
     font-size: 16px;

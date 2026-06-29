@@ -7,12 +7,15 @@ function convert(event) {
     var x = parseFloat(document.getElementById("xcoord").value)
     var y = parseFloat(document.getElementById("ycoord").value)
 
-    //site grid (x,y) -> EPSG:3003 projected coords, same affine as before
+    //site grid (x,y) -> EPSG:3003 projected coords
     const espgx = (x * 0.999221692962) + (y * 0.0447248683267) + 1695135.19719
     const espgy = (x * (-0.0439247185204)) + (y * 0.999281902346) + 4780651.43589
-
+    //site grid (x,y) VESCO -> EPSG:3003 projected coords
+    const Vespgx = (x * 0.87120992587 ) + (y * 0.486029300286 ) + 1694396.08449
+    const Vespgy = (x * (-0.487297729938 )) + (y * 0.873675651295) + 4782618.57257
     //EPSG:3003 -> WGS84 lon/lat, done locally with proj4 (no API, no proxy)
     const [longitude, latitude] = proj4("EPSG:3003", "WGS84", [espgx, espgy])
+    const [Vlong,Vlat] = proj4("EPSG:3003", "WGS84", [Vespgx, Vespgy])
 
     document.getElementById("input-display").innerHTML =
         `<strong>X</strong>: ${x}<br><strong>Y</strong>: ${y}`
@@ -20,6 +23,11 @@ function convert(event) {
         `<strong>Longitude</strong>: ${longitude.toFixed(7)}<br><strong>Latitude</strong>: ${latitude.toFixed(7)}`
     document.getElementById("espg-display").innerHTML =
         `<strong>X</strong>: ${espgx}<br><strong>Y</strong>: ${espgy}`
+
+    document.getElementById("Vwgs-display").innerHTML =
+        `<strong>Longitude</strong>: ${Vlong.toFixed(7)}<br><strong>Latitude</strong>: ${Vlat.toFixed(7)}`
+    document.getElementById("Vespg-display").innerHTML =
+        `<strong>X</strong>: ${Vespgx}<br><strong>Y</strong>: ${Vespgy}`
 
     document.getElementById("xcoord").value = ""
     document.getElementById("ycoord").value = ""
