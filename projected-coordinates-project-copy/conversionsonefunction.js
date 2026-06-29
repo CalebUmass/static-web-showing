@@ -18,8 +18,8 @@ async function convert(event) { //this is an async function so that the output s
     const espgy = (x * (-0.0439247185204)) + (y * 0.999281902346) + 4780651.43589;
 
     //get the URL of the Open Context which can convert coordinates to WGS.
-    var url = `https://opencontext.org/utilities/reproject?format=geojson&geometry=Point&input-proj=poggio-civitate&output-proj=EPSG:4326&x=${x}&y=${y}` //Used literals for the URL so that we pass the inputted x and y coordinates immediately to the website
-    
+    //var url = `https://opencontext.org/utilities/reproject?format=geojson&geometry=Point&input-proj=poggio-civitate&output-proj=EPSG:4326&x=${x}&y=${y}` //Used literals for the URL so that we pass the inputted x and y coordinates immediately to the website
+    var url = `proxy.php?x=${x}&y=${y}`
     //initializing a try-catch-finally here so that if the webpage does not return results, or the input is invalid, or if there is any other error on the side of Open Context, the code will not break.
     try {
 
