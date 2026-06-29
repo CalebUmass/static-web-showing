@@ -149,13 +149,13 @@ First, to work with this project, ensure you have the following installed:
 
 2. **Navigate to the Apache server directory**
    ```sh
-   cd /opt/bitnami/apache2/htdocs/static-web-showing
+   cd /var/www/html
    ```
 
 3. **Pull the latest changes from GitHub**
    If you’ve already cloned the repo on the server:
    ```sh
-   git pull origin main
+   sudo git pull origin main
    ```
 
    If not yet cloned:
