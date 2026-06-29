@@ -19,7 +19,7 @@ async function convert(event) { //this is an async function so that the output s
 
     //get the URL of the Open Context which can convert coordinates to WGS.
     //var url = `https://opencontext.org/utilities/reproject?format=geojson&geometry=Point&input-proj=poggio-civitate&output-proj=EPSG:4326&x=${x}&y=${y}` //Used literals for the URL so that we pass the inputted x and y coordinates immediately to the website
-    var url = `proxy.php?x=${x}&y=${y}`
+    var url = `/static-web-showing/proxy.php?x=${x}&y=${y}`
     //initializing a try-catch-finally here so that if the webpage does not return results, or the input is invalid, or if there is any other error on the side of Open Context, the code will not break.
     try {
 
