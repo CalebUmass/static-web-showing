@@ -12,7 +12,7 @@
 }
 
 #project-3 {
-    background-image: url("../trench-book-reader/public/images/cover.png");
+    background-image: url("../reader/public/images/cover.png");
     background-size: cover;
 }
 
@@ -22,12 +22,12 @@
 }
 
 #project-5 {
-    background-image: url("../openContextReader/ocSearchCover.png");
+    background-image: url("../oc-search/ocSearchCover.png");
     background-size: cover;
 }
 
 #project-6 {
-    background-image: url("../3d-viewer/imgs/3dViewercoverimage.png");
+    background-image: url("../3d-gallery/imgs/3dViewercoverimage.png");
     background-size: cover;
 }
 
