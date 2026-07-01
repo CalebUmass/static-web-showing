@@ -32,13 +32,15 @@ html {
 ======================= */
 
     .back-arrow {
-      text-decoration: none;
-      font-size: 24px;
-      color: #176b53;
-      display: inline-flex;
-      align-items: center;
-      padding: 10px;
-    }
+    position: relative;
+    z-index: 100; /*keeps the back link clickable above the output page*/
+    text-decoration: none;
+    font-size: 24px;
+    color: #176b53;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px;
+}
 
     .back-arrow:hover {
       opacity: 0.7;
@@ -146,60 +148,94 @@ html {
 
 /* Output Columns */
 
-.output-columns { /*This designs the output column container (which holds all three glass-cards). I used flex-start alignment and display: flex so that the glass columns fit nicely within the page.*/
+/* Output Page */
+#output {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 30px;
+    padding: 40px 0;
+    overflow-y: auto; /*scrolls if the cards are taller than the screen*/
+}
+
+.output-columns {
     display: flex;
     gap: 40px;
     justify-content: center;
-    align-items: flex-start;
+    align-items: stretch; /*all three cards share the same height*/
     padding: 0 40px;
     width: 100%;
 }
 
-.output-columns .glass-card { /*This specifically adds design to the output column glass cards. I did this because the output column glass cards need to be different widths than the input one, and have a different relationship with their container*/
-    width: 300px;
-    height: 400px;
+.output-columns .glass-card {
+    width: 320px;
+    padding: 30px 24px;
     text-align: center;
-    position: relative;
-    margin-top: 135px;
     display: flex;
     flex-direction: column;
+    gap: 26px; /*even spacing between the PC and VESCO blocks*/
 }
 
-.output-columns h3 { /*Design for the headings of each output glass card*/
+/*the CRS name at the top of each card (Local / WGS84 / EPSG:3003)*/
+.card-title {
     font-family: "DM Serif Display", serif;
-    font-size: 28px;
-    margin-bottom: 10px;
+    font-size: 30px;
     color: #166b53;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(22, 107, 83, 0.35);
 }
-.output-columns .glass-card .vesco-label {
-    margin-top: auto; /*pushes the VESCO heading and the values below it to the bottom of the card*/
+
+/*the Poggio Civitate / VESCO subheadings*/
+.coord-block h4 {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    color: #166b53;
+    margin-bottom: 8px;
 }
+
 /* Output Values */
 #input-display,
 #wgs-display,
-#espg-display 
+#espg-display,
 #Vwgs-display,
-#Vespg-display{ /*Design for the outputted text (from the JS file)*/
-    margin-top: 10px;
-    color: #333;
-    font-size: 16px;
-    line-height: 1.5;
+#Vespg-display {
+    color: #2b2b2b;
+    font-size: 19px; /*larger coordinate text*/
+    line-height: 1.6;
+    margin-bottom: 10px;
 }
 
-/* New Search Button */ 
-#newsearch { /*Design for the button to start a new search, and its positioning*/
-    margin-top: 405px;
-    padding: 10px 20px;
+/* Copy Buttons */
+.copy-btn {
+    align-self: center;
+    padding: 5px 18px;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 2px solid #166b53;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.copy-btn:hover {
+    background-color: #88a2a0;
+}
+
+/* New Search Button */
+#newsearch {
+    padding: 12px 28px;
     border-radius: 30px;
     border: 2px solid #166b53;
     background-color: #d5d8cb;
     color: #166b53;
     font-family: "DM Serif Display", serif;
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-#newsearch:hover { /*Change the color of the button on hover*/
+#newsearch:hover {
     background-color: #88a2a0;
 }
 
@@ -285,4 +321,19 @@ html {
     100% {
         height: 0%;
     }
+}
+.copy-btn {
+    margin-top: 8px;
+    padding: 4px 14px;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 2px solid #166b53;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background-color: #88a2a0;
 }

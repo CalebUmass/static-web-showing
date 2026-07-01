@@ -22,12 +22,12 @@ function convert(event) {
     document.getElementById("wgs-display").innerHTML =
         `<strong>Longitude</strong>: ${longitude.toFixed(7)}<br><strong>Latitude</strong>: ${latitude.toFixed(7)}`
     document.getElementById("espg-display").innerHTML =
-        `<strong>X</strong>: ${espgx}<br><strong>Y</strong>: ${espgy}`
+    `<strong>X</strong>: ${espgx.toFixed(3)}<br><strong>Y</strong>: ${espgy.toFixed(3)}`
 
     document.getElementById("Vwgs-display").innerHTML =
         `<strong>Longitude</strong>: ${Vlong.toFixed(7)}<br><strong>Latitude</strong>: ${Vlat.toFixed(7)}`
     document.getElementById("Vespg-display").innerHTML =
-        `<strong>X</strong>: ${Vespgx}<br><strong>Y</strong>: ${Vespgy}`
+        `<strong>X</strong>: ${Vespgx.toFixed(3)}<br><strong>Y</strong>: ${Vespgy.toFixed(3)}`
 
     document.getElementById("xcoord").value = ""
     document.getElementById("ycoord").value = ""
@@ -35,4 +35,15 @@ function convert(event) {
     document.getElementById("output").scrollIntoView({ behavior: "auto" })
     document.getElementById("input").style.display = "none"
     document.getElementById("output").style.display = "flex"
+}
+function copyText(id, btn) {
+    const text = document.getElementById(id).innerText
+    navigator.clipboard.writeText(text).then(function () {
+        const original = btn.textContent
+        btn.textContent = "Copied!"
+        setTimeout(function () { btn.textContent = original }, 1500)
+    }).catch(function () {
+        btn.textContent = "Copy failed"
+        setTimeout(function () { btn.textContent = "Copy" }, 1500)
+    })
 }

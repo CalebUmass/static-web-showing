@@ -20,7 +20,7 @@
     <a href="../projects/projects-page.html" class="back-arrow">
         <span class="arrow-icon">&#8592;</span> Back
     </a>
-    
+
     <!-- Input Form -->
     <div class="container">
         <!-- Input Section -->
@@ -28,51 +28,77 @@
             <div id="bg-container">
                 <h2 id="heading1">Coordinates to Projected Coordinates</h2>
             </div>
-            <div class="glass-card" id="inputbox"> <!--Class glass-card is used to stylize all "glass card" objects (the translucent containers)-->
-                <h3 class="input-subheading">Input coordinates to get projected coordinates.</h3> <!--Heading within glass card-->
+            <div class="glass-card" id="inputbox">
+                <!--Class glass-card is used to stylize all "glass card" objects (the translucent containers)-->
+                <h3 class="input-subheading">Input coordinates to get projected coordinates.</h3>
+                <!--Heading within glass card-->
                 <form id="inputform"> <!--This form accepts all the coordinates to convert-->
                     <div class="input-field">
                         <label for="xcoord">x-coordinate:</label>
-                        <input type="number" name="xcoord" id="xcoord" step="any" required> <!--Input type is number so that users can only enter valid coordinates. Has required so that both boxes need to be filled in order for form to submit (makes it harder to break the code)-->
+                        <input type="number" name="xcoord" id="xcoord" step="any" required>
+                        <!--Input type is number so that users can only enter valid coordinates. Has required so that both boxes need to be filled in order for form to submit (makes it harder to break the code)-->
                     </div>
                     <div class="input-field">
                         <label for="ycoord">y-coordinate:</label>
                         <input type="number" name="ycoord" id="ycoord" step="any" required>
                     </div>
-                    <input type="submit" id="submit" value="Submit"> <!--The submit button. This triggers the code in conversionsonefunction.js, so do not change any info about it unless you also update it in the JS-->
+                    <input type="submit" id="submit" value="Submit">
+                    <!--The submit button. This triggers the code in conversionsonefunction.js, so do not change any info about it unless you also update it in the JS-->
                 </form>
             </div>
         </div>
-        
+
         <!-- Output Section --> <!--This appears after the JS code has run.-->
-        <div class="pages" id="output" style="display: none;"> <!--Display is none to keep it hidden until the JS runs-->
-            <div id="bg-container"> <!--This container holds all the output, but its main function is to contain the background image-->
-                <div class="output-columns"> <!--This holds all three columns, each which include a set of coordinates-->
-                    <div class="glass-card">
-                        <h3>Your Input:</h3>
+        <div class="pages" id="output" style="display: none;">
+            <div id="bg-container"></div> <!--background image only-->
+            <div class="output-columns">
+
+                <div class="glass-card">
+                    <h3 class="card-title">Local</h3>
+                    <div class="coord-block">   
+                        <h4>Site Grid</h4>
                         <div id="input-display"></div>
-                    </div>
-                    <div class="glass-card">
-                        <h3>PC WGS Coordinates:</h3>
-                        <div id="wgs-display"></div>
-                        <h3 class="vesco-label">VESCO WGS Coordinates:</h3>
-                        <div id="Vwgs-display"></div>
-                    </div>
-                    <div class="glass-card">
-                        <h3>PC EPSG Coordinates:</h3>
-                        <div id="espg-display"></div>
-                        <h3 class="vesco-label">VESCO EPSG Coordinates:</h3>
-                        <div id="Vespg-display"></div>
+                        <button type="button" class="copy-btn" onclick="copyText('input-display', this)">Copy</button>
                     </div>
                 </div>
+
+                <div class="glass-card">
+                    <h3 class="card-title">WGS84</h3>
+                    <div class="coord-block">
+                        <h4>Poggio Civitate</h4>
+                        <div id="wgs-display"></div>
+                        <button type="button" class="copy-btn" onclick="copyText('wgs-display', this)">Copy</button>
+                    </div>
+                    <div class="coord-block">
+                        <h4>Vescovado di Murlo</h4>
+                        <div id="Vwgs-display"></div>
+                        <button type="button" class="copy-btn" onclick="copyText('Vwgs-display', this)">Copy</button>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 class="card-title">EPSG:3003</h3>
+                    <div class="coord-block">
+                        <h4>Poggio Civitate</h4>
+                        <div id="espg-display"></div>
+                        <button type="button" class="copy-btn" onclick="copyText('espg-display', this)">Copy</button>
+                    </div>
+                    <div class="coord-block">
+                        <h4>Vescovado di Murlo</h4>
+                        <div id="Vespg-display"></div>
+                        <button type="button" class="copy-btn" onclick="copyText('Vespg-display', this)">Copy</button>
+                    </div>
+                </div>
+
             </div>
-            <button id="newsearch" onclick="switchToInput()">New Search</button> <!--This button allows the user to input new coordinates. The switchtoInput function will take them back to the input screen.-->
+            <button id="newsearch" onclick="switchToInput()">New Search</button>
         </div>
     </div>
     </div>
-    
+
     <!--LOADER-->
-    <div id="loader-overlay" class="loader-overlay" style="display: none;"> <!--Display is none so that the loader is hidden until needed-->
+    <div id="loader-overlay" class="loader-overlay" style="display: none;">
+        <!--Display is none so that the loader is hidden until needed-->
         <div class="loader">
             <div class="loader-inner"></div>
         </div>
