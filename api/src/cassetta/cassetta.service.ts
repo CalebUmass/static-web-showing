@@ -8,8 +8,14 @@
 //- very first request (no index on disk): builds synchronously, one-time wait
 //- manual refresh is ignored when the index is younger than
 //  MIN_REFRESH_MINUTES so the public button cannot burn API quota
+
+//@googleapis/drive and @googleapis/sheets are the per-API packages. The
+//monolithic googleapis package carries type definitions for every Google
+//API at once, which is enough to exhaust the heap when tsc runs on a small
+//instance; these two pull in only what this service touches.
 import { Injectable, Logger } from '@nestjs/common';
-import { google } from 'googleapis';
+import { drive_v3, drive } from '@googleapis/drive';
+import { sheets_v4, sheets, auth as sheetsAuth } from '@googleapis/sheets';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -25,8 +31,8 @@ interface CassettaIndex {
 }
 
 //paths resolve from the api/ working directory the service runs in
-const KEY_FILE = process.env.CASSETTA_SERVICE_ACCOUNT || path.resolve(process.cwd(), '/home/ubuntu/magsearch/service_account.json');
-const FOLDER_ID = process.env.CASSETTA_FOLDER_ID || '1CWjwIGOu3AJHeweNKe-yZZYwDDeIKfuf';
+const KEY_FILE = process.env.CASSETTA_SERVICE_ACCOUNT || path.resolve(process.cwd(), 'service_account.json');
+const FOLDER_ID = process.env.CASSETTA_FOLDER_ID || '1L8nX2erpvzC7tOjMUTGGU3tu8dxsxX9F';
 const CACHE_FILE = process.env.CASSETTA_CACHE_FILE || path.resolve(process.cwd(), 'data', 'cassetta_index.json');
 const TTL_HOURS = Number(process.env.CASSETTA_TTL_HOURS) || 12;
 const MIN_REFRESH_MINUTES = Number(process.env.CASSETTA_MIN_REFRESH_MIN) || 10;
@@ -90,7 +96,10 @@ export class CassettaService {
       return { started: false, reason: 'index is recent enough' };
     }
     if (this.rebuilding) return { started: false, reason: 'a rebuild is already running' };
-    this.startRebuild();
+    //the catch matters: nothing awaits this promise, and an unhandled
+    //rejection takes the whole process down on node 15+, so a bad key or a
+    //Google outage would kill the photos endpoints too
+    this.startRebuild().catch(() => undefined);
     return { started: true };
   }
 
@@ -139,9 +148,9 @@ export class CassettaService {
   //downloads the whole folder: two API calls per spreadsheet, tab titles
   //then a batchGet of column A of every tab at once
   private async buildIndex(): Promise<CassettaIndex> {
-    const auth = new google.auth.GoogleAuth({ keyFile: KEY_FILE, scopes: SCOPES });
-    const drive = google.drive({ version: 'v3', auth });
-    const sheets = google.sheets({ version: 'v4', auth });
+    const gauth = new sheetsAuth.GoogleAuth({ keyFile: KEY_FILE, scopes: SCOPES });
+    const driveClient: drive_v3.Drive = drive({ version: 'v3', auth: gauth as any });
+    const sheetsClient: sheets_v4.Sheets = sheets({ version: 'v4', auth: gauth as any });
 
     //same query as the original python script
     const q = `'${FOLDER_ID}' in parents and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false`;
@@ -149,7 +158,7 @@ export class CassettaService {
     let pageToken: string | undefined;
     do {
       const resp = await this.withBackoff(() =>
-        drive.files.list({ q, fields: 'nextPageToken, files(id, name)', pageSize: 1000, pageToken }),
+        driveClient.files.list({ q, fields: 'nextPageToken, files(id, name)', pageSize: 1000, pageToken }),
       );
       for (const f of resp.data.files ?? []) {
         if (f.id && f.name) files.push({ id: f.id, name: f.name });
@@ -162,7 +171,7 @@ export class CassettaService {
     const entries: Record<string, CassettaMatch[]> = {};
     for (const file of files) {
       const meta = await this.withBackoff(() =>
-        sheets.spreadsheets.get({ spreadsheetId: file.id, fields: 'sheets.properties.title' }),
+        sheetsClient.spreadsheets.get({ spreadsheetId: file.id, fields: 'sheets.properties.title' }),
       );
       const tabs = (meta.data.sheets ?? [])
         .map((s) => s.properties?.title)
@@ -172,7 +181,7 @@ export class CassettaService {
       //single quotes inside a tab name double up in A1 notation
       const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:A`);
       const batch = await this.withBackoff(() =>
-        sheets.spreadsheets.values.batchGet({ spreadsheetId: file.id, ranges }),
+        sheetsClient.spreadsheets.values.batchGet({ spreadsheetId: file.id, ranges }),
       );
 
       (batch.data.valueRanges ?? []).forEach((vr, i) => {

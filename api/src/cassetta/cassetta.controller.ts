@@ -6,7 +6,7 @@
 import { BadRequestException, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
 import { CassettaService } from './cassetta.service';
 
-@Controller('api/cassetta')
+@Controller('cassetta')
 export class CassettaController {
   constructor(private readonly cassetta: CassettaService) {}
 
