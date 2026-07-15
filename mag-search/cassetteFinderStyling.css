@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Cormorant+Infant&display=swap');
+
+/*Global*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    height: 100%;
+    font-family: "Cormorant Infant", serif;
+    overflow: hidden; /*only one page (input or output) is shown at a time*/
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+}
+
+.pages {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*=======================
+   Back Arrow
+=======================*/
+
+.back-arrow {
+    position: relative;
+    z-index: 100; /*keeps the back link clickable above both pages*/
+    text-decoration: none;
+    font-size: 24px;
+    color: #176b53;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.back-arrow:hover {
+    opacity: 0.7;
+}
+
+.arrow-icon {
+    margin-right: 8px;
+}
+
+/*Background*/
+#bg-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('???.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1; /*sits behind the glass cards*/
+}
+
+#bg-container::before { /*photo credit overlay*/
+    content: "Photo by ??? ???";
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: #d5d8cb;
+    z-index: 1;
+}
+
+/*Heading outside of the glass cards*/
+#heading1 {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 48px;
+    font-family: "DM Serif Display", serif;
+    color: #166b53;
+}
+
+/*Glass Card*/
+.glass-card {
+    background: rgba(213, 216, 203, 0.6);
+    border-radius: 30px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/*=======================
+   Input Page
+=======================*/
+
+/*column layout so the history card can sit below the input box and scroll*/
+#input {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 30px;
+    padding: 130px 20px 40px; /*top padding clears the page heading*/
+    overflow-y: auto;
+}
+
+#inputbox {
+    width: 460px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.input-subheading {
+    font-size: 20px;
+    color: #166b53;
+    font-family: "DM Serif Display", serif;
+    margin-bottom: 20px;
+}
+
+/*Toggles*/
+.toggle-label {
+    font-size: 17px;
+    color: #166b53;
+    margin: 14px 0 6px;
+}
+
+.toggle-group {
+    display: inline-flex;
+    background-color: rgba(213, 216, 203, 0.8);
+    border: 2px solid #166b53;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.toggle-group button {
+    padding: 8px 16px;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+    color: #166b53;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-group button:hover {
+    background-color: #b9c4b4;
+}
+
+.toggle-group button.active {
+    background-color: #166b53;
+    color: #d5d8cb;
+}
+
+/*Input Fields*/
+.input-field {
+    margin: 20px 0 8px;
+}
+
+.input-field label {
+    font-size: 20px;
+    display: block;
+    margin-bottom: 5px;
+    color: #166b53;
+}
+
+.input-field input {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border-radius: 30px;
+    border: 0px;
+    background-color: #d5d8cb;
+    font-size: 16px;
+    text-align: center;
+}
+
+/*small line under the input showing accepted formats*/
+.input-hint {
+    font-size: 14px;
+    color: #2b2b2b;
+    opacity: 0.75;
+    margin-bottom: 6px;
+}
+
+/*Submit Button*/
+#submit {
+    margin-top: 16px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-family: "DM Serif Display", serif;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 2px solid #166b53;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#submit:hover {
+    background-color: #88a2a0;
+}
+
+#submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/*index state line + refresh control*/
+#indexStatus {
+    margin-top: 18px;
+    font-size: 15px;
+    color: #166b53;
+}
+
+#refreshBtn {
+    margin-top: 8px;
+    padding: 5px 18px;
+    font-family: "DM Serif Display", serif;
+    font-size: 13px;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 1px solid #166b53;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#refreshBtn:hover {
+    background-color: #b9c4b4;
+}
+
+/*History card (below the input box, session only)*/
+.history-card {
+    width: 640px;
+    max-width: 92vw;
+    padding: 24px 30px;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+.history-card .card-title {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.history-entry {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(22, 107, 83, 0.25);
+}
+
+.history-entry:last-child {
+    border-bottom: none;
+}
+
+.history-input {
+    display: block;
+    font-family: "DM Serif Display", serif;
+    font-size: 16px;
+    color: #166b53;
+}
+
+.history-out {
+    display: block;
+    font-size: 15px;
+    color: #2b2b2b;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.history-miss {
+    color: #8a3b2e;
+    font-style: italic;
+}
+
+/*=======================
+   Output Page
+=======================*/
+
+#output {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 40px 20px;
+    overflow-y: auto; /*scrolls if the results are taller than the screen*/
+}
+
+/*single result card, centered like one column of the converter output*/
+.result-card {
+    width: 420px;
+    max-width: 92vw;
+    padding: 30px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    flex-shrink: 0;
+}
+
+.card-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 30px;
+    color: #166b53;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(22, 107, 83, 0.35);
+}
+
+/*the catalog number subheading inside the result card*/
+.coord-block h4 {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    color: #166b53;
+    margin-bottom: 8px;
+}
+
+/*the scaff + cassetta line, the reason the page exists, so it reads large*/
+#locationDisplay {
+    color: #2b2b2b;
+    font-size: 26px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.notfound-text {
+    color: #2b2b2b;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/*Copy Button*/
+.copy-btn {
+    align-self: center;
+    padding: 5px 18px;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 2px solid #166b53;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.copy-btn:hover {
+    background-color: #88a2a0;
+}
+
+/*New Search Button*/
+#newsearch {
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: 2px solid #166b53;
+    background-color: #d5d8cb;
+    color: #166b53;
+    font-family: "DM Serif Display", serif;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+}
+
+#newsearch:hover {
+    background-color: #88a2a0;
+}

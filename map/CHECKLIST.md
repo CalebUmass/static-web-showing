@@ -63,18 +63,19 @@
     the image link.
 17. Add the map to the projects landing page the same way as the other
     projects, and give it a quick check on a phone.
+18. Update the excavation years dropdown to be work a bit better, 60 different clickable options is not great. Filter by decade? or just type?
 
 ## Phase 4: the editor (admin.html)
 
-18. Add `admin.html` to `map/` and set its START center and zoom. The API
+19. Add `admin.html` to `map/` and set its START center and zoom. The API
     constant already points at `/api/photos`.
-19. Verify both gates in a private browser window: Apache basic auth
+20. Verify both gates in a private browser window: Apache basic auth
     prompts first, then a save attempt without the passphrase fails with
     "bad passphrase", and with it succeeds.
-20. Onboard the editors: URL, htpasswd credentials, the passphrase, and a
+21. Onboard the editors: URL, htpasswd credentials, the passphrase, and a
     five-minute walkthrough of select, edit, Move point, Aim at a map
     click, and Save. Confirm a saved edit shows up on the public map
     (within the 60 second cache window).
-21. Finish the safety net: install the daily backup cron for the database
+22. Finish the safety net: install the daily backup cron for the database
     and run `sync_to_qgis.sh` once end to end to prove the round trip back
     into QGIS works.

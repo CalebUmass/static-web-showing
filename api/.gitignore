@@ -3,3 +3,5 @@ dist/
 *.db
 *.db-wal
 *.db-shm
+service_account.json
+data/

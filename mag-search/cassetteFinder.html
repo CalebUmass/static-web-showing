@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cassetta Finder</title>
+    <link href="cassetteFinderStyling.css" rel="stylesheet">
+    <!--Links to fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300..700;1,300..700&display=swap"
+        rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+
+    <!--Back to homepage (back arrow)-->
+    <a href="../projects/projects-page.html" class="back-arrow">
+        <span class="arrow-icon">&#8592;</span> Back
+    </a>
+
+    <div class="container">
+
+        <!--Input Section-->
+        <div class="pages" id="input" style="display: flex;">
+            <div id="bg-container">
+                <h2 id="heading1">Cassetta Finder</h2>
+            </div>
+
+            <div class="glass-card" id="inputbox">
+                <h3 class="input-subheading">Find which scaffolding and cassetta holds an object.</h3>
+
+                <!--site used when the catalog number is typed without one-->
+                <div class="toggle-label">Site (when not typed):</div>
+                <div class="toggle-group" id="siteToggle">
+                    <button type="button" data-value="PC" class="active">Poggio Civitate</button>
+                    <button type="button" data-value="VdM">Vescovado di Murlo</button>
+                </div>
+
+                <form id="searchform">
+                    <div class="input-field">
+                        <label for="catNumber">Catalog number:</label>
+                        <input type="text" name="catNumber" id="catNumber" placeholder="PC 19720072"
+                            autocomplete="off" required>
+                    </div>
+                    <p class="input-hint">Accepted forms: PC 19720072, pc19720072, 1972 0072, VdM 1985-0003</p>
+
+                    <input type="submit" id="submit" value="Search">
+                </form>
+
+                <!--index state: object count, age of the cache, refresh control-->
+                <div id="indexStatus">Checking index status...</div>
+                <button type="button" id="refreshBtn" style="display: none;">Refresh index</button>
+            </div>
+
+            <!--session history of searches, hidden until there is at least one-->
+            <div class="glass-card history-card" id="historyCard" style="display: none;">
+                <h3 class="card-title">Recent Searches</h3>
+                <div id="historyList"></div>
+            </div>
+        </div>
+
+        <!--Output Section-->
+        <div class="pages" id="output" style="display: none;">
+            <div id="bg-container"></div> <!--background image only-->
+
+            <!--found result-->
+            <div class="glass-card result-card" id="foundCard" style="display: none;">
+                <h3 class="card-title">Object Located</h3>
+                <div class="coord-block">
+                    <h4 id="foundCatNumber"></h4>
+                    <div id="locationDisplay"></div>
+                    <button type="button" class="copy-btn" onclick="copyText('locationDisplay', this)">Copy</button>
+                </div>
+            </div>
+
+            <!--not found result-->
+            <div class="glass-card result-card" id="notFoundCard" style="display: none;">
+                <h3 class="card-title">Not Found</h3>
+                <div class="coord-block">
+                    <h4 id="missingCatNumber"></h4>
+                    <div class="notfound-text">No cassetta lists this object. Check the number, or refresh the
+                        index if the sheets changed recently.</div>
+                </div>
+            </div>
+
+            <button id="newsearch" onclick="switchToInput()">New Search</button>
+        </div>
+    </div>
+
+    <script src="cassetteFinder.js"></script>
+</body>
+
+</html>
