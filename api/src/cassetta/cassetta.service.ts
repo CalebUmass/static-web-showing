@@ -25,8 +25,8 @@ interface CassettaIndex {
 }
 
 //paths resolve from the api/ working directory the service runs in
-const KEY_FILE = process.env.CASSETTA_SERVICE_ACCOUNT || path.resolve(process.cwd(), 'service_account.json');
-const FOLDER_ID = process.env.CASSETTA_FOLDER_ID || '1L8nX2erpvzC7tOjMUTGGU3tu8dxsxX9F';
+const KEY_FILE = process.env.CASSETTA_SERVICE_ACCOUNT || path.resolve(process.cwd(), '/home/ubuntu/magsearch/service_account.json');
+const FOLDER_ID = process.env.CASSETTA_FOLDER_ID || '1CWjwIGOu3AJHeweNKe-yZZYwDDeIKfuf';
 const CACHE_FILE = process.env.CASSETTA_CACHE_FILE || path.resolve(process.cwd(), 'data', 'cassetta_index.json');
 const TTL_HOURS = Number(process.env.CASSETTA_TTL_HOURS) || 12;
 const MIN_REFRESH_MINUTES = Number(process.env.CASSETTA_MIN_REFRESH_MIN) || 10;
