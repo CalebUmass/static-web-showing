@@ -31,19 +31,29 @@ html {
    Back Arrow
 =======================*/
 
+/*pinned to the corner rather than sitting in the flow, so the card padding
+  cannot push the pages below the fold. The glass look comes from the shared
+  rule further down; only the pill shape and spacing are set here*/
 .back-arrow {
-    position: relative;
+    position: absolute;
+    top: 20px;
+    left: 20px;
     z-index: 100; /*keeps the back link clickable above both pages*/
     text-decoration: none;
     font-size: 24px;
     color: #176b53;
     display: inline-flex;
     align-items: center;
-    padding: 10px;
+    padding: 10px 22px;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/*colour shift rather than the old opacity fade, which would have washed out
+  the card behind the text along with the text itself*/
 .back-arrow:hover {
-    opacity: 0.7;
+    color: #0d4a39;
+    background-color: rgba(136, 162, 160, 0.75);
 }
 
 .arrow-icon {
@@ -57,14 +67,14 @@ html {
     left: 0;
     width: 100%;
     height: 100vh;
-    background-image: url('???.jpg');
+    background-image: url('bg.jpg');
     background-size: cover;
     background-position: center;
     z-index: -1; /*sits behind the glass cards*/
 }
 
 #bg-container::before { /*photo credit overlay*/
-    content: "Photo by ??? ???";
+    content: "Photo of Murlo";
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -72,26 +82,39 @@ html {
     z-index: 1;
 }
 
-/*Heading outside of the glass cards*/
+/*Heading, in its own glass card*/
+/*left/transform centres a card that is only as wide as its text; the old
+  width:100% would have stretched the card across the whole viewport*/
 #heading1 {
     position: absolute;
     top: 40px;
-    left: 0;
-    width: 100%;
-    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 40px;
+    border-radius: 30px;
+    white-space: nowrap; /*keeps the card hugging one line of text*/
     font-size: 48px;
     font-family: "DM Serif Display", serif;
     color: #166b53;
 }
 
 /*Glass Card*/
-.glass-card {
+/*the shared glass treatment only. Radius and padding stay with each element
+  so a card fits its own contents, and so this rule cannot overwrite the
+  spacing set in the sections above it*/
+.glass-card,
+.back-arrow,
+#heading1 {
     background: rgba(213, 216, 203, 0.6);
-    border-radius: 30px;
-    padding: 40px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/*the full-size cards: input box, history, results*/
+.glass-card {
+    border-radius: 30px;
+    padding: 40px;
 }
 
 /*=======================
@@ -104,7 +127,7 @@ html {
     justify-content: flex-start;
     align-items: center;
     gap: 30px;
-    padding: 130px 20px 40px; /*top padding clears the page heading*/
+    padding: 160px 20px 40px; /*top padding clears the heading card and keeps the old gap below it*/
     overflow-y: auto;
 }
 
@@ -366,4 +389,25 @@ html {
 
 #newsearch:hover {
     background-color: #88a2a0;
+}
+
+/*=======================
+   Narrow screens
+=======================*/
+
+/*a card that hugs its text will run off a phone screen at 48px, so the
+  heading steps down and the input box stops being a fixed width*/
+@media (max-width: 560px) {
+    #heading1 {
+        font-size: 30px;
+        padding: 12px 24px;
+    }
+
+    #input {
+        padding-top: 135px;
+    }
+
+    #inputbox {
+        width: 100%;
+    }
 }

@@ -7,7 +7,7 @@
 }
 
 #project-2 {
-    background-image: url("media/Covers.png");
+    background-image: url("media/coords-cover.png");
     background-size: cover;
 }
 
@@ -32,7 +32,12 @@
 }
 
 #project-7 {
-    background-image: url("../map/cover.png");
+    background-image: url("./media/map-cover.png");
+    background-size: cover;
+}
+
+#project-8 {
+    background-image: url("./media/mag-search-cover.png");
     background-size: cover;
 }
 

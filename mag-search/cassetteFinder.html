@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Cassetta Finder</title>
+    <title>Object Finder</title>
     <link href="cassetteFinderStyling.css" rel="stylesheet">
     <!--Links to fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,15 +24,16 @@
 
         <!--Input Section-->
         <div class="pages" id="input" style="display: flex;">
-            <div id="bg-container">
-                <h2 id="heading1">Cassetta Finder</h2>
-            </div>
+            <div id="bg-container"></div> <!--background image only-->
+
+            <!--sits in its own glass card, positioned rather than in the flex flow-->
+            <h2 id="heading1">Object Finder</h2>
 
             <div class="glass-card" id="inputbox">
-                <h3 class="input-subheading">Find which scaffolding and cassetta holds an object.</h3>
+                <h3 class="input-subheading">Find an object in the mag.</h3>
 
                 <!--site used when the catalog number is typed without one-->
-                <div class="toggle-label">Site (when not typed):</div>
+                <div class="toggle-label">Site (optional if typed):</div>
                 <div class="toggle-group" id="siteToggle">
                     <button type="button" data-value="PC" class="active">Poggio Civitate</button>
                     <button type="button" data-value="VdM">Vescovado di Murlo</button>
