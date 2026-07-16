@@ -51,7 +51,7 @@ function describeStatus(s) {
             : "Index not built yet. The first search builds it (takes a minute)."
     }
     const when = new Date(s.builtAt * 1000).toLocaleString()
-    const base = `Index: ${s.objects} objects across ${s.sheets} sheets. Updated ${when}.`
+    const base = `Index: ${s.objects} cassette across ${s.sheets} sheets. Updated ${when}.`
     return s.refreshing ? base + " Refreshing now..." : base
 }
 
