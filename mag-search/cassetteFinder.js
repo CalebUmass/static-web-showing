@@ -1,7 +1,9 @@
 /*
-Cassetta Finder
-Original Code: Ai Mei Zhang
-Web Port: Cole Adam Reilly
+Cassetta Finder, server-backed version.
+The index lives on the Lightsail server (cassetta_api.py), which owns the
+service account and re-pulls the Drive folder when its copy goes stale.
+Each search here is one tiny GET; no Google APIs, no keys, no localStorage
+copy of the sheets on each device.
 */
 
 //same-origin when the static site and the API live on the same Lightsail box;
@@ -51,7 +53,7 @@ function describeStatus(s) {
             : "Index not built yet. The first search builds it (takes a minute)."
     }
     const when = new Date(s.builtAt).toLocaleString()
-    const base = `Index: ${s.objects} cassette across ${s.sheets} sheets. Updated ${when}.`
+    const base = `Index: ${s.objects} objects across ${s.sheets} sheets. Updated ${when}.`
     return s.refreshing ? base + " Refreshing now..." : base
 }
 
@@ -88,11 +90,14 @@ function wireToggle(groupId, onChange) {
 
 /*=============== history ===============*/
 
-//"Scaff 3" + "295" -> "Scaff 3 cass. 295"; skips the prefix when the tab
-//name already says cassetta in some form
+//"Scaff. 03 Internal Mag Inventory" + "Cass. 55" -> "Scaff. 03 Cass. 55".
+//the spreadsheet titles carry a boilerplate suffix that is the same on every
+//sheet, so it says nothing and only crowds the result; the "cass." prefix is
+//added only when the tab name does not already carry one
 function formatLocation(match) {
+    const scaff = match.scaff.replace(/\s*internal mag inventory\s*/i, " ").trim()
     const cass = /cass/i.test(match.cass) ? match.cass : `cass. ${match.cass}`
-    return `${match.scaff} ${cass}`
+    return `${scaff} ${cass}`
 }
 
 function addToHistory(display, matches) {
