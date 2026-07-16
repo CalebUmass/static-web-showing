@@ -120,7 +120,10 @@ function renderHistory() {
         div.className = "history-entry"
         const outcome = entry.matches.length === 0
             ? `<span class="history-miss">not found</span>`
-            : entry.matches.map(formatLocation).join(" &nbsp;|&nbsp; ")
+            : entry.matches.map(function (m) {
+                const moved = m.relocation ? ` <span class="history-moved">(relocated)</span>` : ""
+                return escapeHtml(formatLocation(m)) + moved
+            }).join(" &nbsp;|&nbsp; ")
         div.innerHTML =
             `<span class="history-input">${entry.display}</span>` +
             `<span class="history-out">${outcome}</span>`
@@ -130,6 +133,21 @@ function renderHistory() {
 
 /*=============== output rendering ===============*/
 
+//spreadsheet cells are free text, so they get escaped before going anywhere
+//near innerHTML
+function escapeHtml(text) {
+    const div = document.createElement("div")
+    div.textContent = text
+    return div.innerHTML
+}
+
+//column C is an options field; when it says Other the real destination is the
+//free text in column D
+function describeRelocation(m) {
+    if (/other/i.test(m.relocation) && m.relocationNote) return m.relocationNote
+    return m.relocationNote ? `${m.relocation} (${m.relocationNote})` : m.relocation
+}
+
 function renderResult(display, matches) {
     const found = matches.length > 0
     document.getElementById("foundCard").style.display = found ? "flex" : "none"
@@ -137,8 +155,29 @@ function renderResult(display, matches) {
 
     if (found) {
         document.getElementById("foundCatNumber").textContent = display
+        //the shelf location stays alone in this element so Copy yields just that
         document.getElementById("locationDisplay").innerHTML =
-            matches.map(function (m) { return `<strong>${formatLocation(m)}</strong>` }).join("<br>")
+            matches.map(function (m) { return `<strong>${escapeHtml(formatLocation(m))}</strong>` }).join("<br>")
+
+        //a temporary move means the shelf location above is where it belongs,
+        //not where it currently is, so it needs to be hard to miss
+        const notice = document.getElementById("relocationNotice")
+        const moved = matches.filter(function (m) { return m.relocation })
+        if (moved.length > 0) {
+            notice.style.display = "block"
+            notice.innerHTML = moved.map(function (m) {
+                return `<strong>Currently relocated:</strong> ${escapeHtml(describeRelocation(m))}`
+            }).join("<br>")
+        } else {
+            notice.style.display = "none"
+        }
+
+        //the database link is a property of the object, so the first match that
+        //carries one wins; duplicates across cassette would repeat it
+        const linked = matches.find(function (m) { return m.link })
+        document.getElementById("objectLinks").innerHTML = linked
+            ? `<a class="object-link" href="${encodeURI(linked.link)}" target="_blank" rel="noopener noreferrer">View in Open Context</a>`
+            : ""
     } else {
         document.getElementById("missingCatNumber").textContent = display
     }

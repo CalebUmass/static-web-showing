@@ -22,6 +22,10 @@ import * as path from 'path';
 export interface CassettaMatch {
   scaff: string; //spreadsheet title, the scaffolding
   cass: string;  //tab title, the cassetta
+  //columns B to D, each omitted when the cell is empty so the index stays small
+  link?: string;           //Open Context url, column B
+  relocation?: string;     //the options field, column C
+  relocationNote?: string; //free text used when column C says Other, column D
 }
 
 interface CassettaIndex {
@@ -68,6 +72,25 @@ export class CassettaService {
   //and "PC 1972 0072" in a sheet cell all compare as "PC19720072"
   private normalizeKey(value: unknown): string {
     return String(value).toUpperCase().replace(/\s+/g, '');
+  }
+
+  //the sheets carry zero width spaces in the relocation column, which would
+  //otherwise read as a real value; also collapses stray whitespace
+  private cleanCell(value: unknown): string {
+    if (value === undefined || value === null) return '';
+    return String(value).replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  //turns a column A cell into the same canonical key a typed search produces,
+  //or null when the cell is not a catalog number at all (header rows, notes,
+  //blanks). Running the cell through the same cleanup as parseNumber matters:
+  //a sheet reading "PC 2017-0001" has to match someone typing "PC 20170001"
+  private cellKey(value: unknown): string | null {
+    const cleaned = this.cleanCell(value).replace(/[-_.,;/]+/g, ' ').replace(/\s+/g, ' ');
+    const m = cleaned.match(NUMBER_PATTERN);
+    if (!m) return null;
+    const site = m[1] && m[1].toUpperCase() !== 'PC' ? 'VdM' : 'PC';
+    return this.normalizeKey(`${site} ${m[2]}${m[3]}`);
   }
 
   /*=============== public api used by the controller ===============*/
@@ -169,6 +192,7 @@ export class CassettaService {
     if (files.length === 0) throw new Error('no Google Sheets found in the folder');
 
     const entries: Record<string, CassettaMatch[]> = {};
+    let skipped = 0; //cells that were not catalog numbers, logged as a sanity check
     for (const file of files) {
       const meta = await this.withBackoff(() =>
         sheetsClient.spreadsheets.get({ spreadsheetId: file.id, fields: 'sheets.properties.title' }),
@@ -179,20 +203,35 @@ export class CassettaService {
       if (tabs.length === 0) continue;
 
       //single quotes inside a tab name double up in A1 notation
-      const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:A`);
+      const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:D`);
       const batch = await this.withBackoff(() =>
         sheetsClient.spreadsheets.values.batchGet({ spreadsheetId: file.id, ranges }),
       );
 
       (batch.data.valueRanges ?? []).forEach((vr, i) => {
         for (const row of vr.values ?? []) {
-          if (row[0] === undefined || String(row[0]).trim() === '') continue;
-          const key = this.normalizeKey(row[0]);
-          (entries[key] ??= []).push({ scaff: file.name, cass: tabs[i] });
+          const key = this.cellKey(row[0]);
+          //skips header rows, blanks and anything that is not a catalog number
+          if (!key) {
+            skipped++;
+            continue;
+          }
+          const entry: CassettaMatch = { scaff: file.name, cass: tabs[i] };
+          const link = this.cleanCell(row[1]);
+          const relocation = this.cleanCell(row[2]);
+          const note = this.cleanCell(row[3]);
+          //only http links go in, so a stray value cannot become a javascript: href
+          if (/^https?:\/\//i.test(link)) entry.link = link;
+          if (relocation) entry.relocation = relocation;
+          if (note) entry.relocationNote = note;
+          (entries[key] ??= []).push(entry);
         }
       });
     }
 
+    //a skipped count in the thousands would mean a sheet uses a format cellKey
+    //does not recognise, rather than just header rows and blank cells
+    this.logger.log(`index built: ${Object.keys(entries).length} objects, ${files.length} sheets, ${skipped} cells skipped`);
     return { builtAt: Date.now(), sheetCount: files.length, entries };
   }
 
