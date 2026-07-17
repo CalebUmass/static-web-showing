@@ -70,11 +70,11 @@ html {
     background-image: url('./bg.JPG');
     background-size: cover;
     background-position: center;
-    z-index: -1; /*sits behind the glass cards*/
+    z-index: -1; /*sits behind the glass cardss*/
 }
 
 #bg-container::before { /*photo credit overlay*/
-    content: "Photo of Murlo";
+    content: "Photo of Murlo. Not by Neala Kelley";
     position: absolute;
     bottom: 10px;
     right: 10px;
