@@ -53,7 +53,7 @@ function describeStatus(s) {
             : "Index not built yet. The first search builds it (takes a minute)."
     }
     const when = new Date(s.builtAt).toLocaleString()
-    const base = `Index: ${s.objects} objects across ${s.sheets} sheets. Updated ${when}.`
+    const base = `Found: ${s.objects} objects, ${s.sheets} sheets. Updated ${when}.`
     return s.refreshing ? base + " Refreshing now..." : base
 }
 
