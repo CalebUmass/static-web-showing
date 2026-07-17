@@ -29,9 +29,14 @@ let inputMode = "site"   //site | epsg | wgs, which CRS the user is entering
 let siteSystem = "PC"    //PC | VESCO, which affine to use for the site grid
 let entryMode = "single" //single | batch
 
-//session-only history of converted points, newest first
-const historyEntries = []
-const HISTORY_MAX = 12
+//history of converted points, newest first, persisted in localStorage so it
+//survives reloads. Looking back up recent conversions is core to how the
+//tool is used, so this is essential (functional) data - no opt-in needed.
+const HISTORY_KEY = "coordConverterHistory"
+const HISTORY_MAX = 200
+const HISTORY_PAGE_SIZE = 8
+let historyEntries = loadHistory()
+let historyPage = 0
 
 /*=============== conversion math ===============*/
 
@@ -132,13 +137,38 @@ function parseBatch(text) {
 
 /*=============== history ===============*/
 
+function loadHistory() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(HISTORY_KEY))
+        if (Array.isArray(stored)) return stored
+    } catch (err) { /*corrupt or unavailable storage: start fresh*/ }
+    return []
+}
+
+function saveHistory() {
+    try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(historyEntries))
+    } catch (err) { /*private mode or quota: history stays session-only*/ }
+}
+
 function addToHistory(result) {
     historyEntries.unshift({
         mode: inputMode,
         system: siteSystem,
-        result: result
+        result: result,
+        at: Date.now()
     })
-    if (historyEntries.length > HISTORY_MAX) historyEntries.pop()
+    if (historyEntries.length > HISTORY_MAX) historyEntries.length = HISTORY_MAX
+    saveHistory()
+    historyPage = 0 //a new conversion always shows on the first page
+    renderHistory()
+}
+
+function clearHistory() {
+    if (!confirm("Clear the entire conversion history?")) return
+    historyEntries = []
+    try { localStorage.removeItem(HISTORY_KEY) } catch (err) { /*ignore*/ }
+    historyPage = 0
     renderHistory()
 }
 
@@ -151,17 +181,60 @@ function renderHistory() {
     }
     card.style.display = "block"
     list.innerHTML = ""
-    historyEntries.forEach(function (entry) {
+
+    const pageCount = Math.ceil(historyEntries.length / HISTORY_PAGE_SIZE)
+    if (historyPage >= pageCount) historyPage = pageCount - 1
+    const start = historyPage * HISTORY_PAGE_SIZE
+    const pageEntries = historyEntries.slice(start, start + HISTORY_PAGE_SIZE)
+
+    pageEntries.forEach(function (entry) {
         const r = entry.result
         const div = document.createElement("div")
         div.className = "history-entry"
         const inputLabel = MODE_CONFIG[entry.mode].short
+        const when = entry.at
+            ? `<span class="history-time">${new Date(entry.at).toLocaleString()}</span>`
+            : ""
         div.innerHTML =
             `<span class="history-input">${inputLabel} in (${TRANSFORMS[entry.system].name}): ` +
-            `${entry.mode === "site" ? fmtSite(r.site) : entry.mode === "epsg" ? fmtEpsg(r.epsg) : fmtWgs(r.wgs)}</span>` +
+            `${entry.mode === "site" ? fmtSite(r.site) : entry.mode === "epsg" ? fmtEpsg(r.epsg) : fmtWgs(r.wgs)}${when}</span>` +
             `<span class="history-out">Site: ${fmtSite(r.site)} &nbsp;|&nbsp; WGS84: ${fmtWgs(r.wgs)} &nbsp;|&nbsp; EPSG:3003: ${fmtEpsg(r.epsg)}</span>`
         list.appendChild(div)
     })
+
+    //pager only appears once the history spills past one page
+    const pager = document.getElementById("historyPager")
+    pager.style.display = pageCount > 1 ? "flex" : "none"
+    if (pageCount > 1) {
+        document.getElementById("historyPageLabel").textContent = `Page ${historyPage + 1} of ${pageCount}`
+        document.getElementById("historyPrev").disabled = historyPage === 0
+        document.getElementById("historyNext").disabled = historyPage === pageCount - 1
+    }
+}
+
+function turnHistoryPage(delta) {
+    historyPage += delta
+    renderHistory()
+}
+
+//plain-text export of the full history (not just the visible page)
+function exportHistory() {
+    const lines = [`Coordinate Converter - conversion history, exported ${new Date().toLocaleString()}`, ""]
+    historyEntries.forEach(function (entry) {
+        const r = entry.result
+        const when = entry.at ? new Date(entry.at).toLocaleString() : "unknown time"
+        lines.push(`[${when}] Input: ${MODE_CONFIG[entry.mode].short} (${TRANSFORMS[entry.system].name})`)
+        lines.push(`  Site:      ${fmtSite(r.site)}`)
+        lines.push(`  WGS84:     ${fmtWgs(r.wgs)}`)
+        lines.push(`  EPSG:3003: ${fmtEpsg(r.epsg)}`)
+        lines.push("")
+    })
+    const blob = new Blob([lines.join("\n")], { type: "text/plain" })
+    const a = document.createElement("a")
+    a.href = URL.createObjectURL(blob)
+    a.download = `coord-history-${new Date().toISOString().slice(0, 10)}.txt`
+    a.click()
+    URL.revokeObjectURL(a.href)
 }
 
 /*=============== output rendering ===============*/
@@ -284,6 +357,11 @@ document.addEventListener("DOMContentLoaded", function () {
     wireToggle("modeToggle", function (v) { inputMode = v; refreshInputLabels() })
     wireToggle("siteToggle", function (v) { siteSystem = v })
     wireToggle("entryToggle", function (v) { entryMode = v; refreshEntryMode() })
+    document.getElementById("historyPrev").addEventListener("click", function () { turnHistoryPage(-1) })
+    document.getElementById("historyNext").addEventListener("click", function () { turnHistoryPage(1) })
+    document.getElementById("historyExport").addEventListener("click", exportHistory)
+    document.getElementById("historyClear").addEventListener("click", clearHistory)
     refreshInputLabels()
     refreshEntryMode()
+    renderHistory() //restore the stored history on page load
 })

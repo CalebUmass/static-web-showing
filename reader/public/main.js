@@ -1,4 +1,10 @@
-const apiBase = 'https://poggiocivitate.net/api'; // ← poggio-civitate-project aws server
+// Same-origin paths: Apache proxies /api/* to the consolidated Node API
+// (api/ at the repo root) and serves this page plus all images directly.
+const apiBase = '/api';
+// Scanned pages and fallback images live next to this page, so relative
+// URLs keep working even if Apache later aliases the folder elsewhere.
+const booksBase = 'trench-books';
+const notFoundImage = 'images/imageNotFound.jpg';
 
 
 const select = document.getElementById('trenchBookSelect');
@@ -36,7 +42,7 @@ function clearImageCache() {
   console.log('🧹 Image cache cleared');
 }
 
-loadAndCacheImage(`${apiBase}/images/imageNotFound.jpg`);
+loadAndCacheImage(notFoundImage);
 
 async function loadAndCacheImage(url) {
   if (cache.has(url)) return cache.get(url);
@@ -44,14 +50,14 @@ async function loadAndCacheImage(url) {
   try {
     const res = await fetch(url);
     if (!res.ok)
-      return cache.get(`${apiBase}/images/imageNotFound.jpg`);  // Fallback to default image if fetch fails
+      return cache.get(notFoundImage);  // Fallback to default image if fetch fails
 
     const blob = await res.blob();
     const objectURL = URL.createObjectURL(blob);
     setCache(url, objectURL);
     return objectURL;
   } catch (err) {
-    return cache.get("/images/imageNotFound.jpg");
+    return cache.get(notFoundImage);
   }
 }
 
@@ -61,7 +67,7 @@ function preloadNextImages(count = 10) {
   for (let i = 1; i <= count; i++) {
     const idx = (currentIndex + i) % images.length;
     const file = images[idx];
-    const url = `${apiBase}/trench-books/${select.value}/${file}`;
+    const url = `${booksBase}/${select.value}/${file}`;
     if (!cache.has(url)) loadAndCacheImage(url);
   }
 }
@@ -72,7 +78,7 @@ function preloadPreviousImages(count = 5) {
   for (let i = 1; i <= count; i++) {
     const idx = (currentIndex - i + images.length) % images.length;
     const file = images[idx];
-    const url = `${apiBase}/trench-books/${select.value}/${file}`;
+    const url = `${booksBase}/${select.value}/${file}`;
     if (!cache.has(url)) loadAndCacheImage(url);
   }
 }
@@ -82,7 +88,7 @@ function preloadPreviousImages(count = 5) {
 async function showImage(index) {
   if (isLoadingImage) return; // ⛔ prevent re-entry
   isLoadingImage = true;
-  let pathToImage = '/images/imageNotFound.jpg'; // Default image path
+  let pathToImage = notFoundImage; // Default image path
   let filename = 'imageNotFound.jpg'; // Default filename
 
 
@@ -93,7 +99,7 @@ async function showImage(index) {
     const selected = select.value;
     filename = images[currentIndex];
 
-    pathToImage = `${apiBase}/trench-books/${selected}/${filename}`;
+    pathToImage = `${booksBase}/${selected}/${filename}`;
   }
 
   // call the function to load and cache the image
@@ -362,7 +368,9 @@ document.getElementById('clearFilters').addEventListener('click', () => {
 
 /* === Variable Reference ===
 
-apiBase         - Base URL for API requests to Poggio Civitate server
+apiBase         - Base path for API requests (proxied by Apache to the Node API)
+booksBase       - Base path for trench book page scans (served by Apache)
+notFoundImage   - Fallback image shown when a page scan is missing
 select          -  <select> dropdown for choosing trench books
 imagesContainer -  Container that holds image elements
 currentImage    -  <img> element displaying the current trench book page

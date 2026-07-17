@@ -1,7 +1,7 @@
 {
   "name": "dig-map-api",
   "version": "1.0.0",
-  "description": "Backend API for the Poggio Civitate interactive map (photo point editing)",
+  "description": "Consolidated backend API for poggiocivitate.net (map photo points, cassetta finder, trench book reader)",
   "private": true,
   "license": "MIT",
   "scripts": {

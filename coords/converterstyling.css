@@ -207,7 +207,7 @@ html {
     background-color: #88a2a0;
 }
 
-/*History card (below the input box, session only)*/
+/*History card (below the input box, persisted in localStorage)*/
 .history-card {
     width: 640px;
     max-width: 92vw;
@@ -243,6 +243,69 @@ html {
     color: #2b2b2b;
     line-height: 1.5;
     word-break: break-word;
+}
+
+/*timestamp beside the converted point*/
+.history-time {
+    float: right;
+    font-family: "Cormorant Infant", serif;
+    font-size: 13px;
+    color: rgba(43, 43, 43, 0.65);
+}
+
+/*pager between the list and the action buttons*/
+.history-pager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.history-pager span {
+    font-size: 14px;
+    color: #166b53;
+}
+
+/*shared look for pager + export/clear buttons*/
+.history-pager button,
+.history-actions button {
+    padding: 5px 18px;
+    font-family: "DM Serif Display", serif;
+    font-size: 13px;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 1px solid #166b53;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.history-pager button:hover:not(:disabled),
+.history-actions button:hover {
+    background-color: #b9c4b4;
+}
+
+.history-pager button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.history-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+/*clearing is destructive, so it reads in the warning color*/
+#historyClear {
+    color: #8a3b2e;
+    border-color: #8a3b2e;
+}
+
+#historyClear:hover {
+    background-color: rgba(138, 59, 46, 0.15);
 }
 
 /*=======================

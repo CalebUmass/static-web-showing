@@ -4,61 +4,46 @@
 
 ## Overview
 
-**Trench Book Viewer** is a full-stack web application built by Caleb Richards using **NestJS** to support the digital preservation and exploration of archaeological trench books. It offers a way to browse scanned trench book pages and metadata in a clean, user-friendly interface.
+**Trench Book Viewer** is a web application built by Caleb Richards to support the digital preservation and exploration of archaeological trench books. It offers a way to browse scanned trench book pages and metadata in a clean, user-friendly interface.
 
 **Key Features:**
 
-* A NestJS backend for serving book and image metadata
+* Backend endpoints for book and image metadata (part of the consolidated site API in `../api`)
 * JavaScript frontend with gesture support and interactive navigation
 * Mobile and desktop viewing compatibility
 * Easy configuration and deployment
+
+**Layout:** this folder now holds only the static frontend (`public/`) and the
+`crawl.js` data tool. The NestJS backend that used to live in `src/` was merged
+into the repo-wide API at `../api/src/trench-book/`, so one Node process serves
+the whole site. Apache serves `public/` (including the scans in
+`public/trench-books/`) directly and proxies `/api/*` to that process.
 
 ---
 
 ## Getting Started (local testing - to use on poggiocivitate.net see broad README.md)
 
-### 1. Install Dependencies
+### 1. Install and Start the Site API
 
 ```bash
+cd ../api
 npm install
+npm run build
+npm start
 ```
 
-### 2. Start the Server
+The API listens on `127.0.0.1:3001`. The trench book endpoints are
+`POST /trench-book/load` and `GET /trench-book/list-images`; on the live site
+Apache exposes them under `/api/`. The backend finds `public/OCdata.json` and
+the scans relative to the repo; set `TRENCH_DATA_DIR` if they live elsewhere.
 
-```bash
-# Production
-npm run start
+### 2. Serve the Frontend
 
-# Development (hot reload)
-npm run start:dev
-```
+`public/` is plain static files. For local testing serve the repo root with any
+static server (so `/api` can be proxied or stubbed), or just deploy: on the
+live server Apache already serves `reader/public/` and proxies `/api`.
 
-By default, the server runs on: `https://poggiocivitate.net/api` but can be 
-configured to run on by changing `local host` to you public ip adress -> `https://<YOUR_IP_ADDRESS>:3000`
-
-### 3. Set API Endpoint in Frontend
-
-In your `main.js` frontend file:
-
-```js
-const API_URL = 'https://<YOUR_IP_ADDRESS>:3000';
-```
-
-Replace `<YOUR_IP_ADDRESS>` accordingly.
-
-### 4. Open in Your Browser
-
-Visit:
-
-```text
-https://<YOUR_IP_ADDRESS>:3000
-```
-
-Replace `<YOUR_IP_ADDRESS>` with your machine’s IP (e.g., `192.168.1.42`).
-
-The frontend is served from the `public/` directory.
-
-### 5. Add Your Own Book Data
+### 3. Add Your Own Book Data
 
 * Place your trench book images inside the appropriate folder in `public/`
 * Update `OCdata.json` to include metadata for the new books/images
@@ -104,39 +89,22 @@ The frontend is served from the `public/` directory.
 
 * **Images or metadata not loading**
 
-  * Check your IP address in `main.js`
   * Confirm that image paths and `OCdata.json` entries match
+  * The scans are fetched relative to the page (`trench-books/...`), so make
+    sure the web server serves this `public/` folder
 
 * **API not responding**
 
-  * Ensure backend is running on the correct port
-  * Make sure no firewall is blocking local access (MACOS sometimes makes it very difficult for devices to communicate with eachother)
-
----
-
-## Testing
-
-Run tests for the backend API:
-
-```bash
-# Unit tests
-npm run test
-
-# End-to-end tests
-npm run test:e2e
-
-# Test coverage
-npm run test:cov
-```
+  * Ensure the site API (`../api`) is running on port 3001
+  * Check that Apache's `ProxyPass /api/trench-book` rule points at it
 
 ---
 
 ## Deployment Tips
 
-To deploy on a live server or classroom network:
-
-1. Change the IP and port to match your public host
-2. Serve via Nginx or Apache (recommended for static file caching, but will still work well using either of those options)
+See `serverCreation.txt` at the repo root for the Apache + ProxyPass setup on
+poggiocivitate.net. The short version: Apache serves this folder statically and
+proxies `/api/*` to the consolidated Node API on `127.0.0.1:3001`.
 
 ---
 

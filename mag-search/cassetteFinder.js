@@ -14,9 +14,14 @@ const API_BASE = "/api/cassetta"
 let defaultSite = "PC" //PC | VdM, prepended when the typed number omits a site
 let statusTimer = null //polling handle while the server rebuilds its index
 
-//session-only history of searches, newest first
-const historyEntries = []
-const HISTORY_MAX = 12
+//search history, newest first, persisted in localStorage so it survives
+//reloads. Re-finding recently searched objects is core to how the tool is
+//used in the mag, so this is essential (functional) data - no opt-in needed.
+const HISTORY_KEY = "magSearchHistory"
+const HISTORY_MAX = 200
+const HISTORY_PAGE_SIZE = 8
+let historyEntries = loadHistory()
+let historyPage = 0
 
 /*=============== input parsing ===============*/
 
@@ -100,9 +105,33 @@ function formatLocation(match) {
     return `${scaff} ${cass}`
 }
 
+function loadHistory() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(HISTORY_KEY))
+        if (Array.isArray(stored)) return stored
+    } catch (err) { /*corrupt or unavailable storage: start fresh*/ }
+    return []
+}
+
+function saveHistory() {
+    try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(historyEntries))
+    } catch (err) { /*private mode or quota: history stays session-only*/ }
+}
+
 function addToHistory(display, matches) {
-    historyEntries.unshift({ display: display, matches: matches })
-    if (historyEntries.length > HISTORY_MAX) historyEntries.pop()
+    historyEntries.unshift({ display: display, matches: matches, at: Date.now() })
+    if (historyEntries.length > HISTORY_MAX) historyEntries.length = HISTORY_MAX
+    saveHistory()
+    historyPage = 0 //a new search always shows on the first page
+    renderHistory()
+}
+
+function clearHistory() {
+    if (!confirm("Clear the entire search history?")) return
+    historyEntries = []
+    try { localStorage.removeItem(HISTORY_KEY) } catch (err) { /*ignore*/ }
+    historyPage = 0
     renderHistory()
 }
 
@@ -115,20 +144,76 @@ function renderHistory() {
     }
     card.style.display = "block"
     list.innerHTML = ""
-    historyEntries.forEach(function (entry) {
+
+    const pageCount = Math.ceil(historyEntries.length / HISTORY_PAGE_SIZE)
+    if (historyPage >= pageCount) historyPage = pageCount - 1
+    const start = historyPage * HISTORY_PAGE_SIZE
+    const pageEntries = historyEntries.slice(start, start + HISTORY_PAGE_SIZE)
+
+    pageEntries.forEach(function (entry) {
         const div = document.createElement("div")
         div.className = "history-entry"
         const outcome = entry.matches.length === 0
             ? `<span class="history-miss">not found</span>`
             : entry.matches.map(function (m) {
-                const moved = m.relocation ? ` <span class="history-moved">(relocated)</span>` : ""
+                const moved = m.relocation
+                    ? ` <span class="history-moved">(relocated: ${escapeHtml(describeRelocation(m))})</span>`
+                    : ""
                 return escapeHtml(formatLocation(m)) + moved
             }).join(" &nbsp;|&nbsp; ")
+        //the object link is a property of the object, so one per entry is enough
+        const linked = entry.matches.find(function (m) { return m.link })
+        const link = linked
+            ? ` <a class="history-link" href="${encodeURI(linked.link)}" target="_blank" rel="noopener noreferrer">Open Context</a>`
+            : ""
+        const when = entry.at
+            ? `<span class="history-time">${new Date(entry.at).toLocaleString()}</span>`
+            : ""
         div.innerHTML =
-            `<span class="history-input">${entry.display}</span>` +
-            `<span class="history-out">${outcome}</span>`
+            `<span class="history-input">${escapeHtml(entry.display)}${when}</span>` +
+            `<span class="history-out">${outcome}${link}</span>`
         list.appendChild(div)
     })
+
+    //pager only appears once the history spills past one page
+    const pager = document.getElementById("historyPager")
+    pager.style.display = pageCount > 1 ? "flex" : "none"
+    if (pageCount > 1) {
+        document.getElementById("historyPageLabel").textContent = `Page ${historyPage + 1} of ${pageCount}`
+        document.getElementById("historyPrev").disabled = historyPage === 0
+        document.getElementById("historyNext").disabled = historyPage === pageCount - 1
+    }
+}
+
+function turnHistoryPage(delta) {
+    historyPage += delta
+    renderHistory()
+}
+
+//plain-text export of the full history (not just the visible page)
+function exportHistory() {
+    const lines = [`Mag Object Finder - search history, exported ${new Date().toLocaleString()}`, ""]
+    historyEntries.forEach(function (entry) {
+        const when = entry.at ? new Date(entry.at).toLocaleString() : "unknown time"
+        lines.push(`[${when}] ${entry.display}`)
+        if (entry.matches.length === 0) {
+            lines.push("  Not found")
+        } else {
+            entry.matches.forEach(function (m) {
+                lines.push(`  Location: ${formatLocation(m)}`)
+                if (m.relocation) lines.push(`  Currently relocated: ${describeRelocation(m)}`)
+            })
+            const linked = entry.matches.find(function (m) { return m.link })
+            if (linked) lines.push(`  URL: ${linked.link}`)
+        }
+        lines.push("")
+    })
+    const blob = new Blob([lines.join("\n")], { type: "text/plain" })
+    const a = document.createElement("a")
+    a.href = URL.createObjectURL(blob)
+    a.download = `mag-search-history-${new Date().toISOString().slice(0, 10)}.txt`
+    a.click()
+    URL.revokeObjectURL(a.href)
 }
 
 /*=============== output rendering ===============*/
@@ -260,5 +345,10 @@ document.addEventListener("DOMContentLoaded", function () {
     wireToggle("siteToggle", function (v) { defaultSite = v })
     document.getElementById("searchform").addEventListener("submit", runSearch)
     document.getElementById("refreshBtn").addEventListener("click", requestRefresh)
+    document.getElementById("historyPrev").addEventListener("click", function () { turnHistoryPage(-1) })
+    document.getElementById("historyNext").addEventListener("click", function () { turnHistoryPage(1) })
+    document.getElementById("historyExport").addEventListener("click", exportHistory)
+    document.getElementById("historyClear").addEventListener("click", clearHistory)
+    renderHistory() //restore the stored history on page load
     refreshStatusLine()
 })

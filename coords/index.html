@@ -77,10 +77,20 @@
                 </form>
             </div>
 
-            <!--session history of converted points, hidden until there is at least one-->
+            <!--conversion history (saved on this device), hidden until there is at least one entry-->
             <div class="glass-card history-card" id="historyCard" style="display: none;">
                 <h3 class="card-title">Recent Conversions</h3>
                 <div id="historyList"></div>
+                <!--pager only appears when the history spills past one page-->
+                <div class="history-pager" id="historyPager" style="display: none;">
+                    <button type="button" id="historyPrev">&#8592; Newer</button>
+                    <span id="historyPageLabel"></span>
+                    <button type="button" id="historyNext">Older &#8594;</button>
+                </div>
+                <div class="history-actions">
+                    <button type="button" id="historyExport">Export as .txt</button>
+                    <button type="button" id="historyClear">Clear history</button>
+                </div>
             </div>
         </div>
 
