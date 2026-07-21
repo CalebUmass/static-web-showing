@@ -128,7 +128,7 @@ function reset(){
     }
 
 function returnHome(){
-    window.open("https://poggiocivitate.net", "_self");
+    window.open("https://poggiocivitate.net/projects/all/", "_self");
 }
 
 // The subSearch function appends any extra sub-filter categories to the URL
