@@ -61,7 +61,6 @@ searchSelectElement.addEventListener("change", function(){
 /*Gets searchSelect value, pulling up the corresponding dropdown and hides searchSelect*/
     x = searchSelectElement.value;
     currentPath.add(x);
-    console.log(currentPath);
 
         if (x != "inital"){
             searchSelectElement.style.visibility = "hidden";
@@ -155,7 +154,10 @@ function reset(){
     for (let i = 0; i < subFilterList.length; i++){
         document.getElementById(`${subFilterList[i]}`).style.visibility = "hidden";
     }
-    // document.getElementById("fragmentSelect").style.visibility = "hidden"
+
+    document.getElementById("fragmentSelect").style.visibility = "hidden"
+    document.getElementById("sexSelect").style.visibility = "hidden"
+
     // document.getElementById("conservation-material").style.visibility = "hidden"
     // document.getElementById("conservation-action").style.visibility = "hidden"
     // document.getElementById('searchButton').style.visibility = "hidden"
@@ -165,10 +167,9 @@ function reset(){
     // document.getElementById("side").style.visibility = "hidden"
     // document.getElementById("age-category").style.visibility = "hidden"
     // document.getElementById("skeletal-area").style.visibility = "hidden"
-    // document.getElementById("sexSelect").style.visibility = "hidden"
     // document.getElementById("resetButton").style.visibility = "hidden"
 
-    currentPath.reset()
+    currentPath.reset();
 }
 
 function returnHome(){
