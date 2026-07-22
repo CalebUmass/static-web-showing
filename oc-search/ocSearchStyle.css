@@ -173,7 +173,7 @@ h1 {
 
 }
 
-#resetButton {
+#clearButton {
     position: relative;
     display: block;
     margin: 0 auto;
@@ -191,7 +191,7 @@ h1 {
 }
 
 #homePage {
-    position: relative;
+    position: absolute;
     display: block;
     margin: 0 auto;
 
@@ -206,6 +206,13 @@ h1 {
     width: 100px;
 }
 
+#searchButton:hover,
+#clearButton:hover,
+#homePage:hover {
+    background-color: #5F9EA0;
+    border-color: #5F9EA0;
+    cursor: pointer;
+}
 
 @keyframes appear{
     0% {

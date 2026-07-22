@@ -35,8 +35,16 @@ for (let i = 0; i < selectsWithSubs.length; i++){
 
 /* To map corresponding selects to their child selects */
 var subsMap = new Map();
-subsMap.set("object-type", document.getElementById("objectTypeChildren").children);
+let objectTypeChildren = document.getElementById("objectTypeChildren").children;
+let objectTypeChildrenIds = new Array(objectTypeChildren.length);
 
+for (let i = 0; i < objectTypeChildren.length; i++){
+    objectTypeChildrenIds[i] = objectTypeChildren[i].id;
+}
+
+// For now doing this manually since there's only one with subs
+subsMap.set("object-type", objectTypeChildrenIds);
+addListenerToSelect("object-type", objectTypeChildrenIds)
 
 // We use this so many times it should definitely be a variable
 const searchSelectElement = document.getElementById("searchSelect");
@@ -61,6 +69,7 @@ let currentPath = {
     add(toAdd){
         this.list[this.nextIndex] = toAdd;
         this.nextIndex++;
+        console.log(this.list)
     },
 
     // Get element (assumes in bounds)
@@ -84,7 +93,7 @@ searchSelectElement.addEventListener("change", function(){
 
         /*General sub-filters that apply to every category, makes them visible*/
 
-            document.getElementById("resetButton").style.visibility = "visible";
+            document.getElementById("clearButton").style.visibility = "visible";
             document.getElementById('searchButton').style.visibility = "visible";
 
             if (x != "pcnum"){
@@ -152,9 +161,6 @@ function addListenerToSelect(parentID, childrenIDList) {
                 updatePath();
             }
         }
-
-        console.log("option with no sub-dropdown")
-
     });
 }
 
@@ -162,9 +168,15 @@ function addListenerToSelect(parentID, childrenIDList) {
 /*Fills in the link dependng on the dropdown and option selected*/
 function typeSearch(){
     searchType = searchSelectElement.value;
+    let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=`;
 
     if (selectsWithSubsIds.includes(searchType)){
-        let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=`;
+        
+        for (let i = 0; i < currentPath.nextIndex; i++){
+            link = link.concat(`24-${currentPath.get(i)}---`);
+        }
+        link = link.concat(`24-${document.getElementById(currentPath.get(currentPath.nextIndex - 1)).value}`);
+        console.log(`Added last (${currentPath.get(currentPath.nextIndex - 1)})`)
         
     } else {
         selectedType = document.getElementById(`${searchType}`).value;
@@ -173,14 +185,13 @@ function typeSearch(){
         console.log(currentPath.list);
         updatePath();
 
-        let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`;
-
-        /* Calls the subSearch function to look for any sub-filters that was inputted*/
-        let appendList = subSearch();
-        console.log(appendList);
-        for (let i = 0; i < appendList.length; i++){
-            link = link.concat(`${appendList[i]}`);
-        }
+        link = link.concat(`https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`);
+    }
+    /* Calls the subSearch function to look for any sub-filters that was inputted*/
+    let appendList = subSearch();
+    console.log(appendList);
+    for (let i = 0; i < appendList.length; i++){
+        link = link.concat(`${appendList[i]}`);
     }
     let finalLink = link.concat('&type=subjects#tab=3');
     return finalLink;
@@ -196,8 +207,7 @@ function openTab(){
     } 
 }
 
-function reset(){
-    console.log("aaaaaagahj")
+function clearSearch(){
     searchSelectElement.style.visibility = "visible";
     document.getElementById(`${searchSelectElement.value}`).style.visibility = "hidden";
     for (let i = 0; i < subFilterList.length; i++){
@@ -250,8 +260,8 @@ function subSearch(){
 function updatePath(){
     text = `Current Path: ${currentPath.get(0)}`;
     for (let i = 1; i < currentPath.nextIndex; i++){
-        text.concat(` : ${currentPath.get(i)}`);
+        text = text.concat(` : ${currentPath.get(i)}`);
     }
     console.log(text);
     pathTextBox.innerText = text;
-}
+} 
