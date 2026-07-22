@@ -87,7 +87,7 @@ searchSelectElement.addEventListener("change", function(){
 
     //pathTextBox.innerText 
 
-        if (x != "inital"){
+        if (x != ""){
             searchSelectElement.style.visibility = "hidden";
             document.getElementById(`${x}`).style.visibility = "visible";
 
@@ -176,7 +176,6 @@ function typeSearch(){
             link = link.concat(`24-${currentPath.get(i)}---`);
         }
         link = link.concat(`24-${document.getElementById(currentPath.get(currentPath.nextIndex - 1)).value}`);
-        console.log(`Added last (${currentPath.get(currentPath.nextIndex - 1)})`)
         
     } else {
         selectedType = document.getElementById(`${searchType}`).value;
@@ -209,8 +208,10 @@ function openTab(){
 
 function clearSearch(){
     searchSelectElement.style.visibility = "visible";
+    searchSelectElement.value = "";
     for (let i = 0; i < currentPath.nextIndex; i++){
         document.getElementById(`${currentPath.get(i)}`).style.visibility = "hidden";
+        document.getElementById(`${currentPath.get(i)}`).value = "";
     }
     for (let i = 0; i < subFilterList.length; i++){
         document.getElementById(`${subFilterList[i]}`).style.visibility = "hidden";

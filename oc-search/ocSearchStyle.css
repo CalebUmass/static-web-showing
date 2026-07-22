@@ -241,6 +241,12 @@ h1 {
     visibility: hidden;
 }
 
+.subSelect:focus,
+.subSelect:hover {
+    outline: none;
+    border: 3px solid #5F9EA0;
+}
+
 .radioSelect {
    display: inline-block;
 
