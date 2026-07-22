@@ -48,7 +48,7 @@
 <input  class="pcnum" id = "pcnum" placeholder="Type in the PC Number"/>
 
       
-<select class="select" id="object-type"> <!--Object Type-->
+<select class="hasSub" id="object-type"> <!--Object Type-->
   <option id="option" value="">Type Selection</option>
   <option id="option" value="architectural">Architectural</option>
   <option id="option" value="vessel">Vessel</option>
@@ -558,12 +558,146 @@
   <option id="option" value="scoring">Scoring</option> 
   <option id="option" value="folded">Folded</option> 
 </select>
-</form>
  
 
 
 
-<div> 
+<div id="objectTypeChildren"> <!-- Children of Object Type -->
+<select class="select" id="architectural">
+  <option id="option" value="">Architectural Type</option>
+  <option id="option" value="architecturalfrieze-plaque">Frieze Plaque</option>
+  <option id="option" value="architecturalakroterion">Akroterion</option>
+  <option id="option" value="architecturallateral-sima">Lateral Sima</option>
+  <option id="option" value="architecturalpan-tile">Pan Tile</option>
+  <option id="option" value="architecturalantefix">Antefix</option>
+  <option id="option" value="architecturalunspecified-misc">Unspecified / Misc.</option>
+  <option id="option" value="architecturalcover-tile">Cover Tile</option>
+  <option id="option" value="architecturalraking-sima">Raking Sima</option>
+  <option id="option" value="architecturalridge-pole-tile">Ridge Pole Tile</option>
+  <option id="option" value="architecturaltile-not-specified">Tile (not specified)</option>
+  <option id="option" value="architecturalwater-spout">Water Spout</option>
+  <option id="option" value="architecturalsima">Sima</option>
+  <option id="option" value="architecturalfunnel-umbuto">Funnel / Umbuto</option>
+  <option id="option" value="architecturalbrick">Brick</option>
+  <option id="option" value="architecturalplaster">Plaster</option>
+  <option id="option" value="architecturalchimney-cover-tile">Chimney Cover Tile</option>
+  <option id="option" value="architecturalsima-cavetto">Sima Cavetto</option>     
+</select>
+
+
+<select class="select" id="costume">
+  <option id="option" value="">Costume Type</option>
+  <option id="option" value="costume-accessoriesbead">Bead</option>
+  <option id="option" value="costume-accessoriesbrooch">Brooch</option>
+  <option id="option" value="costume-accessoriesbuckle-clasp">Buckle / Clasp</option>
+  <option id="option" value="costume-accessoriesbutton">Button</option>
+  <option id="option" value="costume-accessorieschain-links">Chain / Links</option>
+  <option id="option" value="costume-accessoriesfibula">Fibula</option>
+  <option id="option" value="costume-accessoriespendant">Pendant</option>
+  <option id="option" value="costume-accessoriesring">Ring</option>
+  <option id="option" value="costume-accessoriesseal">Seal</option>
+</select>
+
+
+<select class="select" id="fastener">
+  <option id="option" value="">Fastener Type</option>
+  <option id="option" value="fastenerdowel">Dowel</option>
+  <option id="option" value="fastenernail">Nail</option>
+  <option id="option" value="fastenernail-pin">Nail / Pin</option>
+  <option id="option" value="fastenernail-stud">Nail / Stud</option>
+  <option id="option" value="fastenernail-tack">Nail / Tack</option>
+  <option id="option" value="fastenerpeg">Peg</option>
+  <option id="option" value="fastenerpin">Pin</option>
+  <option id="option" value="fastenerpin-tack">Pin / Tack</option>
+  <option id="option" value="fastenerplug">Plug</option>
+  <option id="option" value="fastenerrivet">Rivet</option>
+  <option id="option" value="fastenerspike">Spike</option>
+  <option id="option" value="fastenerstud">Stud</option>
+  <option id="option" value="fastenertack">Tack</option>
+</select>
+
+
+<select class="select" id="ornament">
+  <option id="option" value="">Ornament Type</option>
+  <option id="option" value="ornamentfinial">Finial</option>
+  <option id="option" value="ornamentinlay-inset">Inlay / Inset</option>
+  <option id="option" value="ornamentplaque">Plaque</option>
+  <option id="option" value="ornamentunspecified-misc">Unspecified / Misc.</option>
+</select>
+
+
+<select class="select" id="production-material">
+  <option id="option" value="">Production Material</option>
+  <option id="option" value="production-materialingot">Ingot</option>
+  <option id="option" value="production-materialstamp">Stamp</option>
+  <option id="option" value="production-materialworked-antler">Worked Antler</option>
+  <option id="option" value="production-materialworked-bone">Worked Bone</option>
+  <option id="option" value="production-materialworked-horn">Worked Horn</option>
+  <option id="option" value="production-materialworked-ivory">Worked Ivory</option>
+  <option id="option" value="production-materialworked-stone">Worked Stone</option>
+  <option id="option" value="production-materialworked-wood">Worked Wood</option>
+</select>
+
+
+<select class="select" id="pyrotech-related">
+  <option id="option" value="">Pyrotech Object Type</option>
+  <option id="option" value="pyrotech-relatedbellows">Bellows</option>
+  <option id="option" value="pyrotech-relatedcrucible">Crucible</option>
+  <option id="option" value="pyrotech-relatedforno-oven">Forno / Oven</option>
+  <option id="option" value="pyrotech-relatedslag">Slag</option>
+  <option id="option" value="pyrotech-relatedwaster">Waster</option>
+</select>
+
+
+<select class="select" id="shaped-object">
+  <option id="option" value="">Shaped Object Type</option>
+  <option id="option" value="shaped-objectball-sphere">Ball / Sphere</option>
+  <option id="option" value="shaped-objectbar-rod-shaft">Bar / Rod / Shaft</option>
+  <option id="option" value="shaped-objectcoil-wire">Coil / Wire</option>
+  <option id="option" value="shaped-objectcylinder-tube">Cylinder / Tube</option>
+  <option id="option" value="shaped-objectdisc">Disc</option>
+  <option id="option" value="shaped-objectribbon-strip">Ribbon / Strip</option>
+  <option id="option" value="shaped-objectring">Ring</option>
+  <option id="option" value="shaped-objectsheet">Sheet</option>
+</select>
+
+
+<select class="select" id="textile-related">
+  <option id="option" value="">Textile Related Type</option>
+  <option id="option" value="textile-relatedloom-weight">Loom Weight</option>
+  <option id="option" value="textile-relatedneedle">Needle</option>
+  <option id="option" value="textile-relatedpin-needle">Pin / Needle</option>
+  <option id="option" value="textile-relatedrocchetto">Rocchetto</option>
+  <option id="option" value="textile-relatedspindle-whorl">Spindle Whorl</option>
+</select>
+
+
+<select class="select" id="tool-weapon">
+  <option id="option" value="">Tool / Weapon Type</option>
+  <option id="option" value="tool-weaponadze">Adze</option>
+  <option id="option" value="tool-weaponarrowhead">Arrowhead</option>
+  <option id="option" value="tool-weaponaxe">Axe</option>
+  <option id="option" value="tool-weaponblade">Blade</option>
+  <option id="option" value="tool-weaponcosmetic">Cosmetic</option>
+  <option id="option" value="tool-weaponfile">File</option>
+  <option id="option" value="tool-weapongrinding-stone">Grinding Stone</option>
+  <option id="option" value="tool-weaponhammer">Hammer</option>
+  <option id="option" value="tool-weaponhook">Hook</option>
+  <option id="option" value="tool-weaponpestle">Pestle</option>
+  <option id="option" value="tool-weaponsickle">Sickle</option>
+  <option id="option" value="tool-weaponsling-stone-bullet">Sling Stone/Bullet</option>
+  <option id="option" value="tool-weaponspearhead">Spearhead</option>
+  <option id="option" value="tool-weaponspoon">Spoon</option>
+  <option id="option" value="tool-weaponstamp">Stamp</option>
+  <option id="option" value="tool-weaponunspecified">Unspecified</option>
+  <option id="option" value="tool-weaponwedge">Wedge</option>
+  <option id="option" value="tool-weaponweight">Weight</option>
+</select>
+</form>
+
+
+
+
 <form id="subSelects"> <!--Subselects-->
 <select class="subSelect" id="preserved">
   <option id="option" value="">% Preserved</option>
@@ -746,11 +880,13 @@
     <label for="male">Male</label>
 </form>
 </div>
-</div>
 
-<button onclick="openTab()" id="searchButton">Search</button>
-<button onclick="reset()"id="resetButton">Search Reset</button>
-<button onclick="returnHome()" id="homePage">Home</button>
+<form onclick="click()">
+<button type="button" onclick="openTab()" id="searchButton">Search</button>
+<button type="button" onclick="reset()" id="resetButton">Clear</button>
+<button type="button" onclick="returnHome()" id="homePage">Home</button>
+</form>
+
 
 </div>
 

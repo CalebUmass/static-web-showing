@@ -21,6 +21,22 @@ for (let i = 0; i < radioList1.length; i++){                // Ok I tried to mak
     radioMap[`${radioList1[i]}`] = [`${radioList2[i]}`];    // No maps I suppose
 }
 
+/* Will add the custom listener function to anything in here (only Object Type at the moment) */
+const selectsWithSubs = Array.from(document.getElementsByClassName("hasSub"));
+const selectsWithSubsIds = new Array(selectsWithSubs.length);
+for (let i = 0; i < selectsWithSubs.length; i++){
+    selectsWithSubsIds[i] = selectsWithSubs[i].id;
+}
+
+function click(){
+    console.log("meow");
+}
+
+/* To map corresponding selects to their child selects */
+var subsMap = new Map();
+subsMap.set("object-type", document.getElementById("objectTypeChildren").children);
+
+
 // We use this so many times it should definitely be a variable
 const searchSelectElement = document.getElementById("searchSelect");
 
@@ -33,17 +49,6 @@ let currentPath = {
     nextIndex: 0,                   // To loop thru use this as length
     capacity: 10,                   // Size of array (change if needed)
     list: new Array(this.capacity),  // Size can be bigger/smaller just change it
-
-    // This should never have to be used, starts with more than enough space, uncomment if needed
-    // resize(){
-    //     temp = this.list.slice();
-    //     this.capacity = this.capacity * 2;
-    //     this.list = new Array(this.capacity);
-    //     for (let i = 0; i < temp.length; i++){
-    //         this.list[i] = temp[i];
-    //     }
-    //     this.size = temp.length;
-    // }
 
     // For use when reset button is clicked
     reset(){
@@ -128,22 +133,53 @@ function fetchByPC(){
 }
 
 
+/* Adds a listener to specified select menu to watch for specified selection */
+function addListenerToSelect(parentID, childrenIDList) {
+    document.getElementById(parentID).addEventListener("change", function(){
+
+        e = document.getElementById(parentID);
+        x = e.value;
+
+        // We know there will only be one match so break unnecessary
+        for (let child of childrenIDList) {
+            if (x == child){
+                e.style.visibility = "hidden";
+                
+                e = document.getElementById(x).style.visibility = "visible";
+
+                currentPath.add(x);
+                updatePath();
+            }
+        }
+
+        console.log("option with no sub-dropdown")
+
+    });
+}
+
+
 /*Fills in the link dependng on the dropdown and option selected*/
 function typeSearch(){
     searchType = searchSelectElement.value;
-    selectedType = document.getElementById(`${searchType}`).value;
 
-    currentPath.add(selectedType);
-    console.log(currentPath.list);
-    updatePath();
+    if (selectsWithSubsIds.includes(searchType)){
+        let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=`;
+        
+    } else {
+        selectedType = document.getElementById(`${searchType}`).value;
 
-    let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`;
+        currentPath.add(selectedType);
+        console.log(currentPath.list);
+        updatePath();
 
-    /* Calls the subSearch function to look for any sub-filters that was inputted*/
-    let appendList = subSearch();
-    console.log(appendList);
-    for (let i = 0; i < appendList.length; i++){
-        link = link.concat(`${appendList[i]}`);
+        let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`;
+
+        /* Calls the subSearch function to look for any sub-filters that was inputted*/
+        let appendList = subSearch();
+        console.log(appendList);
+        for (let i = 0; i < appendList.length; i++){
+            link = link.concat(`${appendList[i]}`);
+        }
     }
     let finalLink = link.concat('&type=subjects#tab=3');
     return finalLink;
@@ -160,6 +196,7 @@ function openTab(){
 }
 
 function reset(){
+    console.log("aaaaaagahj")
     searchSelectElement.style.visibility = "visible";
     document.getElementById(`${searchSelectElement.value}`).style.visibility = "hidden";
     for (let i = 0; i < subFilterList.length; i++){
