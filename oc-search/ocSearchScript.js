@@ -28,9 +28,10 @@ for (let i = 0; i < selectsWithSubs.length; i++){
     selectsWithSubsIds[i] = selectsWithSubs[i].id;
 }
 
-function click(){
-    console.log("meow");
-}
+//debug
+// function click(){
+//     console.log("meow");
+// }
 
 /* To map corresponding selects to their child selects */
 var subsMap = new Map();
