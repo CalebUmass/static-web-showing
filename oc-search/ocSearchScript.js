@@ -24,6 +24,8 @@ for (let i = 0; i < radioList1.length; i++){                // Ok I tried to mak
 // We use this so many times it should definitely be a variable
 const searchSelectElement = document.getElementById("searchSelect");
 
+/* Text box where path will appear */ 
+let pathTextBox = document.getElementById("pathText");
 
 /* ArrayList implementation for the created search path */
 let currentPath = {
@@ -53,6 +55,11 @@ let currentPath = {
     add(toAdd){
         this.list[this.nextIndex] = toAdd;
         this.nextIndex++;
+    },
+
+    // Get element (assumes in bounds)
+    get(i){
+        return this.list[i];
     }
 };
 
@@ -61,6 +68,9 @@ searchSelectElement.addEventListener("change", function(){
 /*Gets searchSelect value, pulling up the corresponding dropdown and hides searchSelect*/
     x = searchSelectElement.value;
     currentPath.add(x);
+    updatePath();
+
+    //pathTextBox.innerText 
 
         if (x != "inital"){
             searchSelectElement.style.visibility = "hidden";
@@ -125,6 +135,7 @@ function typeSearch(){
 
     currentPath.add(selectedType);
     console.log(currentPath.list);
+    updatePath();
 
     let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`;
 
@@ -170,6 +181,8 @@ function reset(){
     // document.getElementById("resetButton").style.visibility = "hidden"
 
     currentPath.reset();
+
+    pathTextBox.innerText = "Your search path will appear here!";
 }
 
 function returnHome(){
@@ -194,4 +207,13 @@ function subSearch(){
         }
     }
     return addTo;
+}
+
+function updatePath(){
+    text = `Current Path: ${currentPath.get(0)}`;
+    for (let i = 1; i < currentPath.nextIndex; i++){
+        text.concat(` : ${currentPath.get(i)}`);
+    }
+    console.log(text);
+    pathTextBox.innerText = text;
 }

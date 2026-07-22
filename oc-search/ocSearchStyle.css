@@ -29,8 +29,20 @@
     justify-content: center;
     align-items: center;
 }
+
 h1 {
     color: white;
+}
+
+#pathHeader {
+    color: white;
+    position: absolute;
+}
+
+#pathText {
+    color: white;
+    position: relative;
+    top: 40px;
 }
 
 @keyframes slideLeft {
