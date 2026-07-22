@@ -1,8 +1,9 @@
 //HTTP layer only; all real work happens in CassettaService.
-//Routes (behind the Apache proxy these appear at the site root):
-//  GET  /api/cassetta/find?number=PC%2019720072&site=PC
-//  GET  /api/cassetta/status
-//  POST /api/cassetta/refresh
+//Behind the Apache proxy (ProxyPass /api/cassetta -> 127.0.0.1:3001/cassetta)
+//these become:
+//  GET  /api/cassetta/find?number=PC%2019720072&site=PC   look up an object
+//  GET  /api/cassetta/status                              index age and size
+//  POST /api/cassetta/refresh                             ask for an early re-pull
 import { BadRequestException, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
 import { CassettaService } from './cassetta.service';
 

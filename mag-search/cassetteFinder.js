@@ -1,6 +1,6 @@
 /*
 Cassetta Finder, server-backed version.
-The index lives on the Lightsail server (cassetta_api.py), which owns the
+The index lives on the Lightsail server, which owns the
 service account and re-pulls the Drive folder when its copy goes stale.
 Each search here is one tiny GET; no Google APIs, no keys, no localStorage
 copy of the sheets on each device.
@@ -95,14 +95,18 @@ function wireToggle(groupId, onChange) {
 
 /*=============== history ===============*/
 
-//"Scaff. 03 Internal Mag Inventory" + "Cass. 55" -> "Scaff. 03 Cass. 55".
-//the spreadsheet titles carry a boilerplate suffix that is the same on every
-//sheet, so it says nothing and only crowds the result; the "cass." prefix is
-//added only when the tab name does not already carry one
+//"Research" + "Scaff. 03 Internal Mag Inventory" + "Cass. 55"
+//-> "Research: Scaff. 03 Cass. 55".
+//the boilerplate suffix says nothing and only crowds the result. The "cass."
+//prefix is added only to purely numeric tab names; a named tab in, say, the
+//museum inventory sheet is not a cassetta and passes through untouched. The
+//folder prefix comes from the recursive index (research vs conservation side)
+//and is absent for sheets sitting in the root folder
 function formatLocation(match) {
     const scaff = match.scaff.replace(/\s*internal mag inventory\s*/i, " ").trim()
-    const cass = /cass/i.test(match.cass) ? match.cass : `cass. ${match.cass}`
-    return `${scaff} ${cass}`
+    const cass = /^\d+$/.test(match.cass) ? `cass. ${match.cass}` : match.cass
+    const where = `${scaff} ${cass}`
+    return match.folder ? `${match.folder}: ${where}` : where
 }
 
 function loadHistory() {

@@ -22,6 +22,9 @@ import * as path from 'path';
 export interface CassettaMatch {
   scaff: string; //spreadsheet title, the scaffolding
   cass: string;  //tab title, the cassetta
+  //subfolder path the sheet was found in ("Research", "Conservation", ...);
+  //omitted for sheets sitting directly in the root folder, like the museum inventory.
+  folder?: string;
   //columns B to D, each omitted when the cell is empty so the index stays small
   link?: string;           //Open Context url, column B
   relocation?: string;     //the options field, column C
@@ -36,7 +39,7 @@ interface CassettaIndex {
 
 //paths resolve from the api/ working directory the service runs in
 const KEY_FILE = process.env.CASSETTA_SERVICE_ACCOUNT || path.resolve(process.cwd(), 'service_account.json');
-const FOLDER_ID = process.env.CASSETTA_FOLDER_ID || '1CWjwIGOu3AJHeweNKe-yZZYwDDeIKfuf';
+const FOLDER_ID = process.env.CASSETTA_FOLDER_ID || '1PkOD8JFhzqVh3qlpiI-DAvzNjuNdanKj';
 const CACHE_FILE = process.env.CASSETTA_CACHE_FILE || path.resolve(process.cwd(), 'data', 'cassetta_index.json');
 const TTL_HOURS = Number(process.env.CASSETTA_TTL_HOURS) || 12;
 const MIN_REFRESH_MINUTES = Number(process.env.CASSETTA_MIN_REFRESH_MIN) || 10;
@@ -175,19 +178,38 @@ export class CassettaService {
     const driveClient: drive_v3.Drive = drive({ version: 'v3', auth: gauth as any });
     const sheetsClient: sheets_v4.Sheets = sheets({ version: 'v4', auth: gauth as any });
 
-    //same query as the original python script
-    const q = `'${FOLDER_ID}' in parents and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false`;
-    const files: { id: string; name: string }[] = [];
-    let pageToken: string | undefined;
-    do {
-      const resp = await this.withBackoff(() =>
-        driveClient.files.list({ q, fields: 'nextPageToken, files(id, name)', pageSize: 1000, pageToken }),
-      );
-      for (const f of resp.data.files ?? []) {
-        if (f.id && f.name) files.push({ id: f.id, name: f.name });
-      }
-      pageToken = resp.data.nextPageToken ?? undefined;
-    } while (pageToken);
+    //walks the folder tree breadth first, collecting spreadsheets at every
+    //level and remembering which subfolder each came from. The visited set
+    //guards against a folder reachable twice; shortcuts are ignored since
+    //following them could leave the tree entirely
+    const files: { id: string; name: string; folder: string }[] = [];
+    const visited = new Set<string>();
+    const queue: { id: string; label: string }[] = [{ id: FOLDER_ID, label: '' }];
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (!current || visited.has(current.id)) continue;
+      visited.add(current.id);
+
+      const q = `'${current.id}' in parents and trashed=false and ` +
+        `(mimeType='application/vnd.google-apps.spreadsheet' or mimeType='application/vnd.google-apps.folder')`;
+      let pageToken: string | undefined;
+      do {
+        const resp = await this.withBackoff(() =>
+          driveClient.files.list({
+            q, fields: 'nextPageToken, files(id, name, mimeType)', pageSize: 1000, pageToken,
+          }),
+        );
+        for (const f of resp.data.files ?? []) {
+          if (!f.id || !f.name) continue;
+          if (f.mimeType === 'application/vnd.google-apps.folder') {
+            queue.push({ id: f.id, label: current.label ? `${current.label} / ${f.name}` : f.name });
+          } else {
+            files.push({ id: f.id, name: f.name, folder: current.label });
+          }
+        }
+        pageToken = resp.data.nextPageToken ?? undefined;
+      } while (pageToken);
+    }
 
     if (files.length === 0) throw new Error('no Google Sheets found in the folder');
 
@@ -217,6 +239,7 @@ export class CassettaService {
             continue;
           }
           const entry: CassettaMatch = { scaff: file.name, cass: tabs[i] };
+          if (file.folder) entry.folder = file.folder;
           const link = this.cleanCell(row[1]);
           const relocation = this.cleanCell(row[2]);
           const note = this.cleanCell(row[3]);

@@ -16,7 +16,7 @@ Run from the api directory so node finds node_modules:
     CASSETTA_FOLDER_ID=1CWjwIGOu3AJHeweNKe-yZZYwDDeIKfuf \
     node scripts/audit-sheets.js
 
-Also piping to a file is easier to read:
+Piping to a file is often easier to read:
     node scripts/audit-sheets.js > /tmp/audit.txt 2>&1
 */
 
@@ -59,19 +59,35 @@ async function main() {
   const driveClient = drive({ version: 'v3', auth: gauth });
   const sheetsClient = sheets({ version: 'v4', auth: gauth });
 
-  const q = `'${FOLDER_ID}' in parents and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false`;
+  const q0 = `mimeType='application/vnd.google-apps.spreadsheet' or mimeType='application/vnd.google-apps.folder'`;
+  //breadth first walk matching cassetta.service.ts: subfolders are followed,
+  //shortcuts are not, and each sheet remembers its folder path
   const files = [];
-  let pageToken;
-  do {
-    const resp = await driveClient.files.list({
-      q, fields: 'nextPageToken, files(id, name)', pageSize: 1000, pageToken,
-    });
-    files.push(...(resp.data.files || []));
-    pageToken = resp.data.nextPageToken || undefined;
-  } while (pageToken);
+  const visited = new Set();
+  const queue = [{ id: FOLDER_ID, label: '' }];
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (visited.has(current.id)) continue;
+    visited.add(current.id);
+    const q = `'${current.id}' in parents and trashed=false and (${q0})`;
+    let pageToken;
+    do {
+      const resp = await driveClient.files.list({
+        q, fields: 'nextPageToken, files(id, name, mimeType)', pageSize: 1000, pageToken,
+      });
+      for (const f of resp.data.files || []) {
+        if (f.mimeType === 'application/vnd.google-apps.folder') {
+          queue.push({ id: f.id, label: current.label ? `${current.label} / ${f.name}` : f.name });
+        } else {
+          files.push({ id: f.id, name: f.name, folder: current.label });
+        }
+      }
+      pageToken = resp.data.nextPageToken || undefined;
+    } while (pageToken);
+  }
 
   console.log(`SPREADSHEETS FOUND: ${files.length}`);
-  files.forEach((f) => console.log(`  - ${f.name}`));
+  files.forEach((f) => console.log(`  - ${f.folder ? f.folder + ' / ' : '(root) '}${f.name}`));
   console.log('');
 
   const headerGroups = new Map(); //header signature -> [{file, tab}]
@@ -98,13 +114,13 @@ async function main() {
       const tab = tabs[i];
       const rows = vr.values || [];
 
-      if (!/cass/i.test(tab)) oddTabs.push(`${file.name} :: ${tab}`);
+      if (!/cass/i.test(tab)) oddTabs.push(`${file.folder ? file.folder + " / " : ""}${file.name} :: ${tab}`);
 
       //row 1 is the header; the signature is what gets compared across tabs
       const header = (rows[0] || []).slice(0, 4).map(cleanCell);
       const sig = JSON.stringify(header);
       if (!headerGroups.has(sig)) headerGroups.set(sig, []);
-      headerGroups.get(sig).push(`${file.name} :: ${tab}`);
+      headerGroups.get(sig).push(`${file.folder ? file.folder + " / " : ""}${file.name} :: ${tab}`);
 
       rows.slice(1).forEach((row, idx) => {
         const raw = cleanCell(row[0]);
@@ -122,7 +138,7 @@ async function main() {
         if (/^https?:\/\//i.test(cleanCell(row[1]))) withLink++;
         if (cleanCell(row[2]) !== '') withRelocation++;
         if (!seen.has(key)) seen.set(key, []);
-        seen.get(key).push(`${file.name} :: ${tab}`);
+        seen.get(key).push(`${file.folder ? file.folder + " / " : ""}${file.name} :: ${tab}`);
       });
     });
   }
