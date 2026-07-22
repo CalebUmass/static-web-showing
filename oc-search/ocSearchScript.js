@@ -8,22 +8,29 @@ document.addEventListener("keyup", function(event){
 
 /* An array and dictionary of all sub-filter ids, to fetch their value if needed and append them to the link*/
 
-var subFilter = document.getElementsByClassName("subSelect")
-var subFilterList = Array.from(subFilter).map(element => element.id)
+// subSelects
+const subFilter = document.getElementsByClassName("subSelect");
+var subFilterList = Array.from(subFilter).map(element => element.id);
 
-var radioInput = document.querySelectorAll('input[type="radio"]');
+// radioInput
+const radioInput = document.querySelectorAll('input[type="radio"]');
 var radioList1 = Array.from(radioInput).map(element => element.id);
 var radioList2 = Array.from(radioInput).map(element => element.value);
-var radioDict = new Object();
-for (let i = 0; i < radioList1.length; i++){
-    radioDict[`${radioList1[i]}`] = `${radioList2[i]}`
+var radioMap = new Object();                                // This could just be a map????
+for (let i = 0; i < radioList1.length; i++){                // Ok I tried to make it a map and it broke
+    radioMap[`${radioList1[i]}`] = [`${radioList2[i]}`];    // No maps I suppose
 }
 
-/* ArrayList implementation */
+// We use this so many times it should definitely be a variable
+const searchSelectElement = document.getElementById("searchSelect");
+
+
+/* ArrayList implementation for the created search path */
 let currentPath = {
-    list: new Array(10),
-    size: 0,
-    capacity: this.list.length,
+    
+    nextIndex: 0,                   // To loop thru use this as length
+    capacity: 10,                   // Size of array (change if needed)
+    list: new Array(this.capacity)  // Size can be bigger/smaller just change it
 
     // This should never have to be used, starts with more than enough space, uncomment if needed
     // resize(){
@@ -35,37 +42,37 @@ let currentPath = {
     //     }
     //     this.size = temp.length;
     // }
-}
+};
 
 /* Event listener for selecting what to search by */
-document.getElementById("searchSelect").addEventListener("change", function(){
+searchSelectElement.addEventListener("change", function(){
 /*Gets searchSelect value, pulling up the corresponding dropdown and hides searchSelect*/
-    x = document.getElementById("searchSelect").value
+    x = searchSelectElement.value;
         if (x != "inital"){
-        document.getElementById("searchSelect").style.visibility = "hidden"
-        document.getElementById(`${x}`).style.visibility = "visible"
+        searchSelectElement.style.visibility = "hidden";
+        document.getElementById(`${x}`).style.visibility = "visible";
 
     /*General sub-filters that apply to every category, makes them visible*/
 
-        document.getElementById("resetButton").style.visibility = "visible"
-        document.getElementById('searchButton').style.visibility = "visible"
+        document.getElementById("resetButton").style.visibility = "visible";
+        document.getElementById('searchButton').style.visibility = "visible";
 
         if (x != "pcnum"){
-            document.getElementById("fragmentSelect").style.visibility = "visible"
-            document.getElementById("conservation-material").style.visibility = "visible"
-            document.getElementById("conservation-action").style.visibility = "visible"
+            document.getElementById("fragmentSelect").style.visibility = "visible";
+            document.getElementById("conservation-material").style.visibility = "visible";
+            document.getElementById("conservation-action").style.visibility = "visible";
         }
 
         /*Sub-filters that apply only to biologicalFilters*/
-        let biologicalFilters = ['taxon', 'element', 'common-name']
-        if (biologicalFilters.includes(document.getElementById("searchSelect").value)){
-            document.getElementById("preserved").style.visibility = "visible"
-            document.getElementById("proximal-fused").style.visibility = "visible"
-            document.getElementById("distal-fused").style.visibility = "visible"
-            document.getElementById("side").style.visibility = "visible"
-            document.getElementById("age-category").style.visibility = "visible"
-            document.getElementById("skeletal-area").style.visibility = "visible"
-            document.getElementById("sexSelect").style.visibility = "visible"
+        let biologicalFilters = ['taxon', 'element', 'common-name'];
+        if (biologicalFilters.includes(searchSelectElement.value)){
+            document.getElementById("preserved").style.visibility = "visible";
+            document.getElementById("proximal-fused").style.visibility = "visible";
+            document.getElementById("distal-fused").style.visibility = "visible";
+            document.getElementById("side").style.visibility = "visible";
+            document.getElementById("age-category").style.visibility = "visible";
+            document.getElementById("skeletal-area").style.visibility = "visible";
+            document.getElementById("sexSelect").style.visibility = "visible";
         }
     }
 });
@@ -76,20 +83,20 @@ function fetchByPC(){
     pcNumber = document.getElementById("pcnum").value;
     if (pcNumber.includes("PC") && pcNumber.includes(" ")){
         let URL = (`https://opencontext.org/query/?q=${pcNumber}&type=subjects#tab=3`);
-        return URL
+        return URL;
     } else {
         if (pcNumber.includes("PC") == false && pcNumber.includes(" ")){
             let URL = (`https://opencontext.org/query/?q=PC${pcNumber}&type=subjects#tab=3`);
-            return URL
+            return URL;
         } else {
             if (pcNumber.includes("PC") && pcNumber.includes(" ") == false){
-                justNum = pcNumber.slice(2, 10)
+                justNum = pcNumber.slice(2, 10);
                 let URL = (`https://opencontext.org/query/?q=PC-${justNum}&type=subjects#tab=3`);
-                return URL
+                return URL;
             } else {
                 if (pcNumber.includes("PC") == false && pcNumber.includes(" ") == false){
                 let URL = (`https://opencontext.org/query/?q=PC-${pcNumber}&type=subjects#tab=3`); 
-                return URL
+                return URL;
                 }
             }
         }
@@ -99,18 +106,18 @@ function fetchByPC(){
 
 /*Fills in the link dependng on the dropdown and option selected*/
 function typeSearch(){
-    searchType = document.getElementById("searchSelect").value
-    selectedType = document.getElementById(`${searchType}`).value
-    let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`
+    searchType = searchSelectElement.value;
+    selectedType = document.getElementById(`${searchType}`).value;
+    let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`;
 
     /* Calls the subSearch function to look for any sub-filters that was inputted*/
-    let appendList = subSearch()
-    console.log(appendList)
+    let appendList = subSearch();
+    console.log(appendList);
     for (let i = 0; i < appendList.length; i++){
-        link = link.concat(`${appendList[i]}`)
+        link = link.concat(`${appendList[i]}`);
     }
-    let finalLink = link.concat('&type=subjects#tab=3')
-    return finalLink
+    let finalLink = link.concat('&type=subjects#tab=3');
+    return finalLink;
 }
 
 /* Button functions */
@@ -124,10 +131,10 @@ function openTab(){
 }
 
 function reset(){
-    document.getElementById("searchSelect").style.visibility = "visible" 
-    document.getElementById(`${document.getElementById("searchSelect").value}`).style.visibility = "hidden"
+    searchSelectElement.style.visibility = "visible";
+    document.getElementById(`${searchSelectElement.value}`).style.visibility = "hidden";
     for (let i = 0; i < subFilterList.length; i++){
-        document.getElementById(`${subFilterList[i]}`).style.visibility = "hidden"
+        document.getElementById(`${subFilterList[i]}`).style.visibility = "hidden";
     }
     // document.getElementById("fragmentSelect").style.visibility = "hidden"
     // document.getElementById("conservation-material").style.visibility = "hidden"
@@ -152,17 +159,17 @@ function returnHome(){
 function subSearch(){
     let addTo = [];
     for (let i = 0; i < subFilterList.length; i++){
-        x = document.getElementById(`${subFilterList[i]}`).value
+        x = document.getElementById(`${subFilterList[i]}`).value;
         if (x){
-            console.log("a")
+            console.log("a");
             addTo.push(`&prop=24-${subFilterList[i]}---24-${x}`);
         }
     }
-    radioOptions = Object.keys(radioDict)
+    radioOptions = Object.keys(radioMap);
     for (let ind = 0; ind < radioOptions.length; ind++){
         if (document.getElementById(`${radioOptions[ind]}`).checked){
-            addTo.push(`&prop=24-${radioDict[radioOptions[ind]]}---24-${radioOptions[ind]}`);
+            addTo.push(`&prop=24-${radioMap[radioOptions[ind]]}---24-${radioOptions[ind]}`);
         }
     }
-    return addTo
+    return addTo;
 }
