@@ -30,7 +30,7 @@ let currentPath = {
     
     nextIndex: 0,                   // To loop thru use this as length
     capacity: 10,                   // Size of array (change if needed)
-    list: new Array(this.capacity)  // Size can be bigger/smaller just change it
+    list: new Array(this.capacity),  // Size can be bigger/smaller just change it
 
     // This should never have to be used, starts with more than enough space, uncomment if needed
     // resize(){
@@ -42,39 +42,54 @@ let currentPath = {
     //     }
     //     this.size = temp.length;
     // }
+
+    // For use when reset button is clicked
+    reset(){
+        this.nextIndex = 0;
+        this.list = new Array(this.capacity);
+    },
+
+    // Add new element (assumes sufficient capacity)
+    add(toAdd){
+        this.list[this.nextIndex] = toAdd;
+        this.nextIndex++;
+    }
 };
 
 /* Event listener for selecting what to search by */
 searchSelectElement.addEventListener("change", function(){
 /*Gets searchSelect value, pulling up the corresponding dropdown and hides searchSelect*/
     x = searchSelectElement.value;
+    currentPath.add(x);
+    console.log(currentPath);
+
         if (x != "inital"){
-        searchSelectElement.style.visibility = "hidden";
-        document.getElementById(`${x}`).style.visibility = "visible";
+            searchSelectElement.style.visibility = "hidden";
+            document.getElementById(`${x}`).style.visibility = "visible";
 
-    /*General sub-filters that apply to every category, makes them visible*/
+        /*General sub-filters that apply to every category, makes them visible*/
 
-        document.getElementById("resetButton").style.visibility = "visible";
-        document.getElementById('searchButton').style.visibility = "visible";
+            document.getElementById("resetButton").style.visibility = "visible";
+            document.getElementById('searchButton').style.visibility = "visible";
 
-        if (x != "pcnum"){
-            document.getElementById("fragmentSelect").style.visibility = "visible";
-            document.getElementById("conservation-material").style.visibility = "visible";
-            document.getElementById("conservation-action").style.visibility = "visible";
+            if (x != "pcnum"){
+                document.getElementById("fragmentSelect").style.visibility = "visible";
+                document.getElementById("conservation-material").style.visibility = "visible";
+                document.getElementById("conservation-action").style.visibility = "visible";
+            }
+
+            /*Sub-filters that apply only to biologicalFilters*/
+            let biologicalFilters = ['taxon', 'element', 'common-name'];
+            if (biologicalFilters.includes(searchSelectElement.value)){
+                document.getElementById("preserved").style.visibility = "visible";
+                document.getElementById("proximal-fused").style.visibility = "visible";
+                document.getElementById("distal-fused").style.visibility = "visible";
+                document.getElementById("side").style.visibility = "visible";
+                document.getElementById("age-category").style.visibility = "visible";
+                document.getElementById("skeletal-area").style.visibility = "visible";
+                document.getElementById("sexSelect").style.visibility = "visible";
+            }
         }
-
-        /*Sub-filters that apply only to biologicalFilters*/
-        let biologicalFilters = ['taxon', 'element', 'common-name'];
-        if (biologicalFilters.includes(searchSelectElement.value)){
-            document.getElementById("preserved").style.visibility = "visible";
-            document.getElementById("proximal-fused").style.visibility = "visible";
-            document.getElementById("distal-fused").style.visibility = "visible";
-            document.getElementById("side").style.visibility = "visible";
-            document.getElementById("age-category").style.visibility = "visible";
-            document.getElementById("skeletal-area").style.visibility = "visible";
-            document.getElementById("sexSelect").style.visibility = "visible";
-        }
-    }
 });
 
 
@@ -108,6 +123,10 @@ function fetchByPC(){
 function typeSearch(){
     searchType = searchSelectElement.value;
     selectedType = document.getElementById(`${searchType}`).value;
+
+    currentPath.add(selectedType);
+    console.log(currentPath.list);
+
     let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`;
 
     /* Calls the subSearch function to look for any sub-filters that was inputted*/
@@ -148,6 +167,8 @@ function reset(){
     // document.getElementById("skeletal-area").style.visibility = "hidden"
     // document.getElementById("sexSelect").style.visibility = "hidden"
     // document.getElementById("resetButton").style.visibility = "hidden"
+
+    currentPath.reset()
 }
 
 function returnHome(){
