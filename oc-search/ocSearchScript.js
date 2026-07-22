@@ -19,6 +19,24 @@ for (let i = 0; i < radioList1.length; i++){
     radioDict[`${radioList1[i]}`] = `${radioList2[i]}`
 }
 
+/* ArrayList implementation */
+let currentPath = {
+    list: new Array(10),
+    size: 0,
+    capacity: this.list.length,
+
+    // This should never have to be used, starts with more than enough space, uncomment if needed
+    // resize(){
+    //     temp = this.list.slice();
+    //     this.capacity = this.capacity * 2;
+    //     this.list = new Array(this.capacity);
+    //     for (let i = 0; i < temp.length; i++){
+    //         this.list[i] = temp[i];
+    //     }
+    //     this.size = temp.length;
+    // }
+}
+
 /* Event listener for selecting what to search by */
 document.getElementById("searchSelect").addEventListener("change", function(){
 /*Gets searchSelect value, pulling up the corresponding dropdown and hides searchSelect*/
@@ -39,7 +57,7 @@ document.getElementById("searchSelect").addEventListener("change", function(){
         }
 
         /*Sub-filters that apply only to biologicalFilters*/
-        var biologicalFilters = ['taxon', 'element', 'common-name']
+        let biologicalFilters = ['taxon', 'element', 'common-name']
         if (biologicalFilters.includes(document.getElementById("searchSelect").value)){
             document.getElementById("preserved").style.visibility = "visible"
             document.getElementById("proximal-fused").style.visibility = "visible"
@@ -57,20 +75,20 @@ document.getElementById("searchSelect").addEventListener("change", function(){
 function fetchByPC(){
     pcNumber = document.getElementById("pcnum").value;
     if (pcNumber.includes("PC") && pcNumber.includes(" ")){
-        var URL = (`https://opencontext.org/query/?q=${pcNumber}&type=subjects#tab=3`);
+        let URL = (`https://opencontext.org/query/?q=${pcNumber}&type=subjects#tab=3`);
         return URL
     } else {
         if (pcNumber.includes("PC") == false && pcNumber.includes(" ")){
-            var URL = (`https://opencontext.org/query/?q=PC${pcNumber}&type=subjects#tab=3`);
+            let URL = (`https://opencontext.org/query/?q=PC${pcNumber}&type=subjects#tab=3`);
             return URL
         } else {
             if (pcNumber.includes("PC") && pcNumber.includes(" ") == false){
                 justNum = pcNumber.slice(2, 10)
-                var URL = (`https://opencontext.org/query/?q=PC-${justNum}&type=subjects#tab=3`);
+                let URL = (`https://opencontext.org/query/?q=PC-${justNum}&type=subjects#tab=3`);
                 return URL
             } else {
                 if (pcNumber.includes("PC") == false && pcNumber.includes(" ") == false){
-                var URL = (`https://opencontext.org/query/?q=PC-${pcNumber}&type=subjects#tab=3`); 
+                let URL = (`https://opencontext.org/query/?q=PC-${pcNumber}&type=subjects#tab=3`); 
                 return URL
                 }
             }
@@ -86,7 +104,7 @@ function typeSearch(){
     let link = `https://opencontext.org/query/?proj=24-murlo&project-map=True&prop=24-${searchType}---24-${selectedType}`
 
     /* Calls the subSearch function to look for any sub-filters that was inputted*/
-    var appendList = subSearch()
+    let appendList = subSearch()
     console.log(appendList)
     for (let i = 0; i < appendList.length; i++){
         link = link.concat(`${appendList[i]}`)
@@ -132,7 +150,7 @@ function returnHome(){
 // The subSearch function appends any extra sub-filter categories to the URL
 
 function subSearch(){
-    var addTo = [];
+    let addTo = [];
     for (let i = 0; i < subFilterList.length; i++){
         x = document.getElementById(`${subFilterList[i]}`).value
         if (x){
