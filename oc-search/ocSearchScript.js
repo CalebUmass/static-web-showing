@@ -205,9 +205,11 @@ function typeSearch(){
 
         // Fetch and add final value to path, update text to display final path
         let last = document.getElementById(currentPath[currentPath.length - 1]).value
-        link = link.concat(`24-${last}`);
-        currentPath.push(document.getElementById(currentPath[currentPath.length - 1]).value)
-        updatePath();
+        if (last != ""){
+            link = link.concat(`24-${last}`);
+            currentPath.push(last)
+            updatePath();
+        }
         
     // One or two selects deep
     } else {
@@ -215,8 +217,12 @@ function typeSearch(){
         selectedType = document.getElementById(`${searchType}`).value;
 
         // Add and update path
-        currentPath.push(selectedType);
-        updatePath();
+        if (selectedType != ""){
+            currentPath.push(selectedType);
+            updatePath();
+        }
+
+
 
         link = link.concat(`24-${searchType}---24-${selectedType}`);
     }
@@ -315,8 +321,10 @@ function updatePath(){
     text = `Current Path: ${currentPath[0]}`;
 
     // Add deeper filters
-    for (let i = 1; i < currentPath.length; i++){
-        text = text.concat(` :: ${currentPath[i]}`);
+    if (currentPath.length > 1){
+        for (let i = 1; i < currentPath.length; i++){
+            text = text.concat(` :: ${currentPath[i]}`);
+        }
     }
 
     // Display text
