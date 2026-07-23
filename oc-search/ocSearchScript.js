@@ -55,9 +55,9 @@ let pathTextBox = document.getElementById("pathText");
 /* ArrayList implementation for the created search path */
 let currentPath = {
     
-    nextIndex: 0,                   // To loop thru use this as length
-    capacity: 10,                   // Size of array (change if needed)
-    list: new Array(this.capacity),  // Size can be bigger/smaller just change it
+    nextIndex: 0,                       // To loop thru use this as length
+    capacity: 10,                       // Size of array (change if needed)
+    list: new Array(this.capacity),     // Size can be bigger/smaller just change it
 
     // For use when reset button is clicked
     reset(){

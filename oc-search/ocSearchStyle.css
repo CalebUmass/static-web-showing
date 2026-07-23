@@ -59,8 +59,8 @@ h1 {
 
 #content {
     position: absolute;
-    top: 2vw;
-    left:70vw;
+    top: 0vw;
+    left:60vw;
     align-self: center;
 }
 
@@ -192,7 +192,7 @@ h1 {
 
 #homePage {
     position: absolute;
-    display: block;
+    display: absolute;
     margin: 0 auto;
 
     color: white;
@@ -200,8 +200,8 @@ h1 {
     border: 2px solid orange;
     border-radius: 20px;
 
-    top: -40px;
-    left: -1050px;
+    top: 50px;
+    left: 100px;
 
     width: 100px;
 }
