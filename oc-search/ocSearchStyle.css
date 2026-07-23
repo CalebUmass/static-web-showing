@@ -43,6 +43,8 @@ h1 {
     color: white;
     position: relative;
     top: 40px;
+    text-align: center;
+    padding: 10px;
 }
 
 @keyframes slideLeft {

@@ -51,8 +51,7 @@ const searchSelectElement = document.getElementById("searchSelect");
 let pathTextBox = document.getElementById("pathText");
 
 
-// Very simplified ArrayList implementation to serve as the container for the user's path
-// NOTE: Yes JS arrays are dynamic, but having the add() move the spot automatically is very convenient!
+// Stores the ID strings of the path the user has created
 let currentPath = [];
 
 
