@@ -52,31 +52,8 @@ let pathTextBox = document.getElementById("pathText");
 
 
 // Very simplified ArrayList implementation to serve as the container for the user's path
-// NOTE. I DID NOT KNOW ARRAYS ARENT FIXED LENGTH IN JAVASCRIPT. SO THIS CAN LOWKEY. JUST BE AN ARRAY.
-let currentPath = {
-    
-    nextIndex: 0,                           // To loop thru use this as length
-    capacity:  5,                           // Size of array (change if needed, but 5 sshould always be enough)
-    list:      new Array(this.capacity),    // Size can be bigger/smaller just change it
-
-    // For use when reset button is clicked (clears list)
-    reset(){
-        this.nextIndex = 0;
-        this.list = new Array(this.capacity);
-    },
-
-    // Add new element (assumes sufficient capacity)
-    add(toAdd){
-        this.list[this.nextIndex] = toAdd;
-        this.nextIndex++;
-        console.log(this.list)
-    },
-
-    // Get element (assumes in bounds)
-    get(i){
-        return this.list[i];
-    }
-};
+// NOTE: Yes JS arrays are dynamic, but having the add() move the spot automatically is very convenient!
+let currentPath = [];
 
 
 
@@ -100,7 +77,7 @@ document.addEventListener("keyup", function(event){
 searchSelectElement.addEventListener("change", function(){
 
     x = searchSelectElement.value;  // Fetch user-selected value
-    currentPath.add(x);             // Update path with value
+    currentPath.push(x);             // Update path with value
     updatePath();                   // Update text box to display value
 
         if (x != ""){ // "" represents the initial value, and means we should not process it
@@ -144,11 +121,10 @@ searchSelectElement.addEventListener("change", function(){
 /**
  * Helper function for hasSub selects. Adds a a listener to the parent to detect and open any
  * child dropdowns according to selection. IDs must be strings.
- * @param {String} parentID 
- * The ID of the parent element. Listener will be added to this element.
- * @param {Iterable<String>} childrenIDList 
- * An iterable containing all values of the parent that should open a corresponding dropdown.
- * The value field of the option in the parent should be exactly the id of the corresponding dropdown.
+ * @param {String} parentID The ID of the parent element. Listener will be added to this element.
+ * @param {Iterable<String>} childrenIDList An iterable containing all values of the parent that should open 
+ * a corresponding dropdown. The value field of the option in the parent should be exactly the id of the 
+ * corresponding dropdown.
  */
 function addListenerToSelect(parentID, childrenIDList) {
     document.getElementById(parentID).addEventListener("change", function(){
@@ -163,7 +139,7 @@ function addListenerToSelect(parentID, childrenIDList) {
                 
                 e = document.getElementById(x).style.visibility = "visible";
 
-                currentPath.add(x);
+                currentPath.push(x);
                 updatePath();
             }
         }
@@ -224,14 +200,14 @@ function typeSearch(){
     // More than two searches deep 
     if (selectsWithSubsIds.includes(searchType)){
         
-        for (let i = 0; i < currentPath.nextIndex; i++){    // Add all values from the path to link
-            link = link.concat(`24-${currentPath.get(i)}---`);
+        for (let i = 0; i < currentPath.length; i++){    // Add all values from the path to link
+            link = link.concat(`24-${currentPath[i]}---`);
         }
 
         // Fetch and add final value to path, update text to display final path
-        let last = document.getElementById(currentPath.get(currentPath.nextIndex - 1)).value
+        let last = document.getElementById(currentPath[currentPath.length - 1]).value
         link = link.concat(`24-${last}`);
-        currentPath.add(document.getElementById(currentPath.get(currentPath.nextIndex - 1)).value)
+        currentPath.push(document.getElementById(currentPath[currentPath.length - 1]).value)
         updatePath();
         
     // One or two selects deep
@@ -240,7 +216,7 @@ function typeSearch(){
         selectedType = document.getElementById(`${searchType}`).value;
 
         // Add and update path
-        currentPath.add(selectedType);
+        currentPath.push(selectedType);
         updatePath();
 
         link = link.concat(`24-${searchType}---24-${selectedType}`);
@@ -278,10 +254,10 @@ function clearSearch(){
     searchSelectElement.style.visibility = "visible";
     searchSelectElement.value = "";
 
-    // Clear all select options thta were modified
-    for (let i = 0; i < currentPath.nextIndex; i++){
-        document.getElementById(`${currentPath.get(i)}`).style.visibility = "hidden";
-        document.getElementById(`${currentPath.get(i)}`).value = "";
+    // Clear all select options that were modified
+    for (let i = 0; i < currentPath.length; i++){
+        document.getElementById(`${currentPath[i]}`).style.visibility = "hidden";
+        document.getElementById(`${currentPath[i]}`).value = "";
     }
 
     // Hide all subfilters
@@ -294,7 +270,7 @@ function clearSearch(){
     document.getElementById("sexSelect").style.visibility = "hidden"
 
     // Reset path
-    currentPath.reset();
+    currentPath = new Array();
 
     // Display default path value
     pathTextBox.innerText = "Your search path will appear here!";
@@ -336,11 +312,11 @@ function subSearch(){
  */
 function updatePath(){
     // Initial path text
-    text = `Current Path: ${currentPath.get(0)}`;
+    text = `Current Path: ${currentPath[0]}`;
 
     // Add deeper filters
-    for (let i = 1; i < currentPath.nextIndex; i++){
-        text = text.concat(` : ${currentPath.get(i)}`);
+    for (let i = 1; i < currentPath.length; i++){
+        text = text.concat(` :: ${currentPath[i]}`);
     }
 
     // Display text
