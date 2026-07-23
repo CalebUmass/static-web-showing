@@ -22,9 +22,9 @@
 
 
 
-<div id="content">
-<form id="selects"> 
-<select class="selectPrime" id="searchSelect"> <!--Initial Select-->
+<div id="content">  <!--All the stuff to be drawn goes here!-->
+<form id="selects">  <!--Contains every dropdown menu-->
+<select class="selectPrime" id="searchSelect">  <!--Initial Select Menu-->
   <option id="option" value="">What would you like to search by?</option>
   <option id="option" value="pcnum">PC Number</option>
   <option id="option" value="object-type">Object Type</option>
@@ -510,7 +510,7 @@
 </select>
 
 
-<select class="select" id="chronology">
+<select class="select" id="chronology">  <!--Chronology-->
   <option id="option" value="">Chronology</option>
   <option id="option" value="securely-archaic">Securely Archaic</option>
   <option id="option" value="securely-orientalizing">Securely Orientalizing</option>
@@ -522,14 +522,14 @@
 </select>
 
 
-<select class="select" id="record-type">
+<select class="select" id="record-type">  <!--Record Type-->
   <option id="option" value="">Record Type</option>
   <option id="option" value="small-find">Small Find</option>
   <option id="option" value="supplemental-find">Supplemental Find</option>
 </select>
 
 
-<select class="select" id="vessel-part-present">
+<select class="select" id="vessel-part-present">  <!--Vessel Part-->
   <option id="option" value="">Vessel Part Present</option>
   <option id="option" value="body-sherd-1">Body Sherd</option>
   <option id="option" value="base-2">Base</option> 
@@ -544,7 +544,7 @@
 </select>
 
 
-<select class="select" id="modification">
+<select class="select" id="modification">  <!--Modifications-->
   <option id="option" value="">Modification</option>
   <option id="option" value="other-20">Other</option>
   <option id="option" value="cut-295">Cut</option> 
@@ -562,8 +562,8 @@
 
 
 
-<div id="objectTypeChildren"> <!-- Children of Object Type -->
-<select class="select" id="architectural">
+<div id="objectTypeChildren"> <!--CHILD SELECTS of object-type-->
+<select class="select" id="architectural">  <!--Architectural-->
   <option id="option" value="">Architectural Type</option>
   <option id="option" value="architecturalfrieze-plaque">Frieze Plaque</option>
   <option id="option" value="architecturalakroterion">Akroterion</option>
@@ -585,7 +585,7 @@
 </select>
 
 
-<select class="select" id="costume">
+<select class="select" id="costume">  <!--Costume-->
   <option id="option" value="">Costume Type</option>
   <option id="option" value="costume-accessoriesbead">Bead</option>
   <option id="option" value="costume-accessoriesbrooch">Brooch</option>
@@ -599,7 +599,7 @@
 </select>
 
 
-<select class="select" id="fastener">
+<select class="select" id="fastener">  <!--Fastener-->
   <option id="option" value="">Fastener Type</option>
   <option id="option" value="fastenerdowel">Dowel</option>
   <option id="option" value="fastenernail">Nail</option>
@@ -617,7 +617,7 @@
 </select>
 
 
-<select class="select" id="ornament">
+<select class="select" id="ornament">  <!--Ornament-->
   <option id="option" value="">Ornament Type</option>
   <option id="option" value="ornamentfinial">Finial</option>
   <option id="option" value="ornamentinlay-inset">Inlay / Inset</option>
@@ -626,7 +626,7 @@
 </select>
 
 
-<select class="select" id="production-material">
+<select class="select" id="production-material">  <!--Production Material-->
   <option id="option" value="">Production Material</option>
   <option id="option" value="production-materialingot">Ingot</option>
   <option id="option" value="production-materialstamp">Stamp</option>
@@ -639,7 +639,7 @@
 </select>
 
 
-<select class="select" id="pyrotech-related">
+<select class="select" id="pyrotech-related">  <!--Pyrotech-->
   <option id="option" value="">Pyrotech Object Type</option>
   <option id="option" value="pyrotech-relatedbellows">Bellows</option>
   <option id="option" value="pyrotech-relatedcrucible">Crucible</option>
@@ -649,7 +649,7 @@
 </select>
 
 
-<select class="select" id="shaped-object">
+<select class="select" id="shaped-object">  <!--Shaped Object-->
   <option id="option" value="">Shaped Object Type</option>
   <option id="option" value="shaped-objectball-sphere">Ball / Sphere</option>
   <option id="option" value="shaped-objectbar-rod-shaft">Bar / Rod / Shaft</option>
@@ -662,7 +662,7 @@
 </select>
 
 
-<select class="select" id="textile-related">
+<select class="select" id="textile-related">  <!--Textile Related-->
   <option id="option" value="">Textile Related Type</option>
   <option id="option" value="textile-relatedloom-weight">Loom Weight</option>
   <option id="option" value="textile-relatedneedle">Needle</option>
@@ -672,7 +672,7 @@
 </select>
 
 
-<select class="select" id="tool-weapon">
+<select class="select" id="tool-weapon">  <!--Tool/Weapon-->
   <option id="option" value="">Tool / Weapon Type</option>
   <option id="option" value="tool-weaponadze">Adze</option>
   <option id="option" value="tool-weaponarrowhead">Arrowhead</option>
@@ -698,8 +698,8 @@
 
 
 
-<form id="subSelects"> <!--Subselects-->
-<select class="subSelect" id="preserved">
+<form id="subSelects"> <!--Subselects (appearing options below main selects)-->
+<select class="subSelect" id="preserved">  <!--% Preserved-->
   <option id="option" value="">% Preserved</option>
   <option id="option" value="less-than-25-preserved">Less than 25% preserved</option> 
   <option id="option" value="25-preserved">25% preserved</option> 
@@ -709,7 +709,7 @@
 </select>
 
 
-<select class="subSelect" id="proximal-fused">
+<select class="subSelect" id="proximal-fused">  <!--Proximal Fused?-->
   <option id="option" value="">Proximal Fused?</option>
   <option id="option" value="fused">Fused</option>
   <option id="option" value="unfused">Unfused</option>
@@ -717,7 +717,7 @@
 </select>
 
 
-<select class="subSelect" id="distal-fused">
+<select class="subSelect" id="distal-fused">  <!--Distal Fused?-->
   <option id="option" value="">Distal Fused?</option>
   <option id="option" value="fused">Fused</option>
   <option id="option" value="unfused">Unfused</option>
@@ -725,7 +725,7 @@
 </select>
 
 
-<select class="subSelect" id="side">
+<select class="subSelect" id="side">  <!--Side-->
   <option id="option" value="">Side</option>
   <option id="option" value="left">Left</option>
   <option id="option" value="right">Right</option>
@@ -733,7 +733,7 @@
 </select>
 
 
-<select class="subSelect" id="age-category">
+<select class="subSelect" id="age-category">  <!--Age Category-->
   <option id="option" value="">Age Category</option>
   <option id="option" value="hongomeadow-stage-v-18-24-months-1">Hongo/Meadow Stage V: 18-24 months</option>
   <option id="option" value="perinate">Perinate</option>
@@ -772,7 +772,7 @@
 </select>
 
 
-<select class="subSelect" id="skeletal-area">
+<select class="subSelect" id="skeletal-area">  <!--Skeletal Area-->
   <option id="option" value="">Skeletal Area</option>
   <option id="option" value="head">Head</option>
   <option id="option" value="feet">Feet</option>
@@ -784,7 +784,7 @@
 </select>
 
 
-<select class="subSelect" id="conservation-action">
+<select class="subSelect" id="conservation-action">  <!--Conservation Action-->
   <option id="option" value="">Conservation Action</option>
   <option id="option" value="cleaned">Cleaned</option>
   <option id="option" value="adhered">Adhered</option>
@@ -811,7 +811,7 @@
 </select>
 
 
-<select class="subSelect" id="conservation-material">
+<select class="subSelect" id="conservation-material">  <!--Conservation Material-->
   <option id="option" value="">Conservation Material</option>
   <option id="option" value="acetone">Acetone</option>
   <option id="option" value="alcohol">Alcohol</option>
@@ -862,8 +862,8 @@
 </form>
 
 
-<div class="radioSelect"> <!--Radio selects-->
-<form id="fragmentSelect">
+<div class="radioSelect">  <!--Radio selects (single-selects below main selects)-->
+<form id="fragmentSelect">  <!--Fragment-->
   <label for="fragmentSelect">Fragment Noted(?)</label>
   <input type="radio" name="fragment-noted" id="true" value="fragment-noted">
     <label for="true">True</label>
@@ -872,7 +872,7 @@
 </form>
 
 
-<form id="sexSelect">
+<form id="sexSelect">  <!--Sex-->
   <label for="sexSelect">Sex</label>
   <input type="radio" name="sex" id="female" value="sex">
     <label for="female">Female</label>
@@ -883,13 +883,13 @@
 </div>
 
 
-<form>
+<form>  <!--Buttons!-->
 <button type="button" onclick="openTab()" id="searchButton">Search</button>
 <button type="button" onclick="clearSearch()" id="clearButton">Clear</button>
 <button type="button" onclick="returnHome()" id="homePage">Home</button>
 </form>
 
-
+<!--JavaScript script association-->
 <script src="ocSearchScript.js"></script>
 
 </body>
