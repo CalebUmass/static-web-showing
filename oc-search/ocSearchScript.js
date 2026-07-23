@@ -262,6 +262,7 @@ function clearSearch(){
     // Hide all subfilters
     for (let i = 0; i < subFilterList.length; i++){
         document.getElementById(`${subFilterList[i]}`).style.visibility = "hidden";
+        document.getElementById(`${subFilterList[i]}`).value = "";
     }
 
     // Hide radio selects
