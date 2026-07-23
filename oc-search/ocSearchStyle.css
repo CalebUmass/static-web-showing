@@ -60,7 +60,7 @@ h1 {
 #content {
     position: absolute;
     top: 0vw;
-    left:60vw;
+    left:70vw;
     align-self: center;
 }
 
@@ -201,7 +201,7 @@ h1 {
     border-radius: 20px;
 
     top: 50px;
-    left: 100px;
+    left: -1000px;
 
     width: 100px;
 }
