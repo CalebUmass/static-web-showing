@@ -242,7 +242,7 @@ html {
 
 #refreshBtn {
     margin-top: 8px;
-    padding: 5px 18px;
+    padding: 18px 18px;
     font-family: "DM Serif Display", serif;
     font-size: 13px;
     color: #166b53;
@@ -477,6 +477,7 @@ html {
 
 #objectLinks {
     align-self: center;
+    padding: auto;
 }
 
 /*Copy Button*/
@@ -496,8 +497,7 @@ html {
 .copy-btn:hover {
     background-color: #88a2a0;
 }
-/*
-unused for now, do later
+
 .magmap-btn {
     align-self: center;
     padding: 5px 18px;
@@ -510,10 +510,10 @@ unused for now, do later
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-/*
+
 .magmap-btn:hover {
     background-color: #88a2a0;
-}*/
+}
 
 /*#output is a column, so the side by side pair needs its own row wrapper*/
 .result-row {
