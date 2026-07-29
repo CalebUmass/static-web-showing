@@ -25,10 +25,11 @@ export interface CassettaMatch {
   //subfolder path the sheet was found in ("Research", "Conservation", ...);
   //omitted for sheets sitting directly in the root folder, like the museum inventory.
   folder?: string;
-  //columns B to D, each omitted when the cell is empty so the index stays small
+  //columns B to E, each omitted when the cell is empty so the index stays small
   link?: string;           //Open Context url, column B
   relocation?: string;     //the options field, column C
   relocationNote?: string; //free text used when column C says Other, column D
+  img?: string;            //url to object thumbnail, column E
 }
 
 interface CassettaIndex {
@@ -225,7 +226,7 @@ export class CassettaService {
       if (tabs.length === 0) continue;
 
       //single quotes inside a tab name double up in A1 notation
-      const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:D`);
+      const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:E`);
       const batch = await this.withBackoff(() =>
         sheetsClient.spreadsheets.values.batchGet({ spreadsheetId: file.id, ranges }),
       );
@@ -243,10 +244,13 @@ export class CassettaService {
           const link = this.cleanCell(row[1]);
           const relocation = this.cleanCell(row[2]);
           const note = this.cleanCell(row[3]);
+          const img = this.cleanCell(row[4]);
           //only http links go in, so a stray value cannot become a javascript: href
           if (/^https?:\/\//i.test(link)) entry.link = link;
           if (relocation) entry.relocation = relocation;
           if (note) entry.relocationNote = note;
+          //same check for the thumbnail, which ends up in an img src
+          if (/^https?:\/\//i.test(img)) entry.img = img;
           (entries[key] ??= []).push(entry);
         }
       });
