@@ -559,6 +559,22 @@ unused for now, do later
     background-color: #88a2a0;
 }
 
+.mag-map {
+    display: flex;
+    min-width: 80vw;
+    min-height: 50vw;
+    overflow: hidden;
+}
+
+#magMapImage {
+    aspect-ratio: auto;
+    height: auto;
+    min-width: 80vw;
+    max-width: 80vw;
+    min-height: 50vw;
+    max-height: 50vw;
+}
+
 /*=======================
    Narrow screens
 =======================*/

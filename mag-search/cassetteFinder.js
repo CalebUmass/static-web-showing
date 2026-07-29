@@ -387,7 +387,7 @@ function switchToInput() {
 
 // Displays mag map when corresponding button is clicked
 function showMap() {
-    document.getElementById("magmap").style.display = "block";
+    document.getElementById("magMap").style.display = "flex";
     document.getElementById("magmapbtn").style.display = "none";
 }
 
