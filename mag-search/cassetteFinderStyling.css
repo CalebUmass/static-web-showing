@@ -543,6 +543,7 @@ html {
 
 /*New Search Button*/
 #newsearch {
+    align-self: center;
     padding: 12px 28px;
     border-radius: 30px;
     border: 2px solid #166b53;
@@ -561,16 +562,15 @@ html {
 
 .mag-map {
     display: flex;
-    min-width: 80vw;
-    min-height: 50vw;
-    overflow: hidden;
+    min-width: 70vw;
+    height: auto;
 }
 
 #magMapImage {
     aspect-ratio: auto;
     height: auto;
-    min-width: 80vw;
-    max-width: 80vw;
+    min-width: 70vw;
+    max-width: 70vw;
     min-height: 50vw;
     max-height: 50vw;
 }
