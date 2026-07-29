@@ -284,7 +284,8 @@ function escapeHtml(text) {
 
 //placeholders shown when a row carries no image url, or when the url it does
 //carry fails to load. Replace these names with the real files once they exist
-const FALLBACK_IMAGES = ["TEMP1", "TEMP2", "TEMP3", "TEMP4"]
+const FALLBACK_IMAGES = ["/mag-search/images/noimg_cat.PNG", "/mag-search/images/noimg_cowboy.PNG", 
+                         "/mag-search/images/noimg_gorgon.PNG", "/mag-search/images/noimg_sphinx.PNG"];
 
 function randomFallbackImage() {
     return FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]
@@ -360,7 +361,6 @@ function switchToInput() {
     document.getElementById("catNumber").focus()
 }
 
-//Hello this is an ellie thing hi hi hi (TEMP MESSAGE CHANGE THIS LOL)
 // Displays mag map when corresponding button is clicked
 function showMap() {
     document.getElementById("magmap").style.display = "block";
