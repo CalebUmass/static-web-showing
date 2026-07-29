@@ -496,8 +496,8 @@ html {
 .copy-btn:hover {
     background-color: #88a2a0;
 }
-
-/*Mag Map Button*/
+/*
+unused for now, do later
 .magmap-btn {
     align-self: center;
     padding: 5px 18px;
@@ -510,9 +510,35 @@ html {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
+/*
 .magmap-btn:hover {
     background-color: #88a2a0;
+}*/
+
+/*#output is a column, so the side by side pair needs its own row wrapper*/
+.result-row {
+    display: flex;
+    align-items: flex-start; /*each card keeps its own height*/
+    justify-content: center;
+    gap: 30px;
+    max-width: 100%;
+}
+
+.thumb-card {
+    width: 300px;
+    padding: 24px;
+    text-align: center;
+    flex-shrink: 0; /*stops the card being squeezed by a tall location card*/
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#objectThumb {
+    display: block;
+    width: 100%;
+    height: auto; /*keeps the aspect ratio whatever Open Context sends*/
+    border-radius: 16px;
 }
 
 /*New Search Button*/
@@ -551,5 +577,12 @@ html {
 
     #inputbox {
         width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .result-row {
+        flex-direction: column;
+        align-items: center;
     }
 }

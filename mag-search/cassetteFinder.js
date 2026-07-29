@@ -287,6 +287,7 @@ function escapeHtml(text) {
 const FALLBACK_IMAGES = ["/mag-search/images/noimg_cat.PNG", "/mag-search/images/noimg_cowboy.PNG", 
                          "/mag-search/images/noimg_gorgon.PNG", "/mag-search/images/noimg_sphinx.PNG"];
 
+// Selects random image from available placeholders
 function randomFallbackImage() {
     return FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]
 }
@@ -301,7 +302,7 @@ function thumbnailFor(match) {
 //gone or the request fails. Clearing onerror first stops an endless loop if
 //the placeholder itself fails to load
 function useFallbackImage(imgEl) {
-    imgEl.onerror = function () { useFallbackImage(this) }
+    imgEl.onerror = null
     imgEl.src = randomFallbackImage()
 }
 
@@ -317,6 +318,7 @@ function describeRelocation(m) {
 function renderResult(display, matches) {
     const found = matches.length > 0
     document.getElementById("foundCard").style.display = found ? "flex" : "none"
+    document.getElementById("thumbCard").style.display = found ? "flex" : "none"
     document.getElementById("notFoundCard").style.display = found ? "none" : "flex"
 
     if (found) {
@@ -347,7 +349,22 @@ function renderResult(display, matches) {
             ? `<a class="object-link" href="${encodeURI(linked.link)}" target="_blank" rel="noopener noreferrer">View in Open Context</a>`
             : ""
 
-        document.getElementById("objectImage")
+        // Find first instance of image in a match in same way as link
+        const imageMatch = matches.find(function (m) { return m.img })
+        const imageURL = thumbnailFor(imageMatch)
+        
+        // Attaching error handler in case something bad!
+        useFallbackImage(document.getElementById("objectThumb"))
+
+        // Find url frm selected match
+        document.getElementById("objectThumb").src = imageURL
+
+        // Setting alt text to somehting helpful
+        if (FALLBACK_IMAGES.includes(imageURL)){
+            document.getElementById("objectThumb").alt = `No image found for ${document.getElementById("foundCatNumber").text}. Placeholder image inserted.`
+        } else {
+            document.getElementById("objectThumb").alt = `Image of ${document.getElementById("foundCatNumber").text} with link ${imageURL}`
+        }
 
     } else {
         document.getElementById("missingCatNumber").textContent = display
