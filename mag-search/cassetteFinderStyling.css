@@ -477,6 +477,7 @@ html {
 /*Buttons appearing below search result*/
 .output-btns {
     display: flex;
+    align-self: center;
 }
 
 /*Copy Button*/

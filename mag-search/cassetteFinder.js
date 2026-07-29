@@ -284,8 +284,8 @@ function escapeHtml(text) {
 
 //placeholders shown when a row carries no image url, or when the url it does
 //carry fails to load
-const FALLBACK_IMAGES = ["/mag-search/images/noimg_cat.PNG", "/mag-search/images/noimg_cowboy.PNG", 
-                         "/mag-search/images/noimg_gorgon.PNG", "/mag-search/images/noimg_sphinx.PNG"];
+const FALLBACK_IMAGES = ["../images/noimg_cat.PNG", "../images/noimg_cowboy.PNG", 
+                         "../images/noimg_gorgon.PNG", "../images/noimg_sphinx.PNG"];
 
 // Selects random image from available placeholders
 function randomFallbackImage() {
@@ -295,14 +295,14 @@ function randomFallbackImage() {
 //the src to use for a match: the sheet's column E url when there is one,
 //otherwise a placeholder picked at random
 function thumbnailFor(match) {
-    return match.img || randomFallbackImage()
+    return match ? match.img : randomFallbackImage()
 }
 
 //covers the other way an image goes missing: the url exists but the file is
 //gone or the request fails. Clearing onerror first stops an endless loop if
 //the placeholder itself fails to load
 function useFallbackImage(imgEl) {
-    imgEl.onerror = null
+    imgEl.onerror = imgEl.onerror = function () { useFallbackImage(this) }
     imgEl.src = randomFallbackImage()
 }
 
@@ -320,6 +320,7 @@ function renderResult(display, matches) {
     document.getElementById("foundCard").style.display = found ? "flex" : "none"
     document.getElementById("thumbCard").style.display = found ? "flex" : "none"
     document.getElementById("notFoundCard").style.display = found ? "none" : "flex"
+    
 
     if (found) {
         document.getElementById("foundCatNumber").textContent = display
@@ -339,7 +340,9 @@ function renderResult(display, matches) {
                 return `<strong>Currently relocated:</strong> ${escapeHtml(describeRelocation(m))}`
             }).join("<br>")
         } else {
+            console.log("bboins")
             notice.style.display = "none"
+            console.log("good")
         }
 
         //the database link is a property of the object, so the first match that
@@ -350,7 +353,7 @@ function renderResult(display, matches) {
             : ""
 
         // Find first instance of image in a match in same way as link
-        const imageMatch = matches.find(function (m) { return m.img })
+        const imageMatch = matches.find(function (m) { return m.img })//error
         const imageURL = thumbnailFor(imageMatch)
         
         // Attaching error handler in case something bad!
@@ -371,6 +374,7 @@ function renderResult(display, matches) {
     }
 
     document.getElementById("input").style.display = "none"
+    console.log("good")
     document.getElementById("output").style.display = "flex"
 }
 
