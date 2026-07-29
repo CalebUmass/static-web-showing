@@ -85,7 +85,17 @@
                     <!--only shown when the sheet records a temporary move-->
                     <div id="relocationNotice" style="display: none;"></div>
                     <div id="objectLinks"></div>
-                    <button type="button" class="copy-btn" onclick="copyText('locationDisplay', this)">Copy</button>
+
+                    <!--butt(on)s-->
+                    <div class="output-btns">
+                        <button type="button" class="copy-btn" onclick="copyText('locationDisplay', this)">Copy</button>
+                        <!-- hello ellie mag map things-->
+                        <button type="button" id="magmapbtn" class="magmap-btn">View Mag Map</button> <!--Toggles mag map visibility when clicked-->
+                    </div>
+
+                    <!--mag map image-->
+                    <img id="magmap" src="https://i.imgur.com/wPDRylf.png" alt="Mag Map image">
+            
                 </div>
             </div>
 
@@ -100,7 +110,10 @@
             </div>
 
             <button id="newsearch" onclick="switchToInput()">New Search</button>
+            
         </div>
+
+
     </div>
 
     <script src="cassetteFinder.js"></script>

@@ -459,6 +459,11 @@ html {
     background-color: #88a2a0;
 }
 
+/*Buttons appearing below search result*/
+.output-btns {
+    display: flex;
+}
+
 /*Copy Button*/
 .copy-btn {
     align-self: center;
@@ -474,6 +479,24 @@ html {
 }
 
 .copy-btn:hover {
+    background-color: #88a2a0;
+}
+
+/*Mag Map Button*/
+.magmap-btn {
+    align-self: center;
+    padding: 5px 18px;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 2px solid #166b53;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.magmap-btn:hover {
     background-color: #88a2a0;
 }
 

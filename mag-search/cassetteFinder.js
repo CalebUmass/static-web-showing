@@ -278,6 +278,13 @@ function switchToInput() {
     document.getElementById("catNumber").focus()
 }
 
+//Hello this is an ellie thing hi hi hi (TEMP MESSAGE CHANGE THIS LOL)
+// Displays mag map when corresponding button is clicked
+function showMap() {
+    document.getElementById("magmap").style.display = "block";
+    document.getElementById("magmapbtn").style.display = "none";
+}
+
 /*=============== main search handler ===============*/
 
 async function runSearch(event) {
