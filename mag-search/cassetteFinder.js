@@ -391,10 +391,18 @@ function showMap() {
     document.getElementById("magmapbtn").style.display = "none";
 }
 
+// Hides map and reveals button
+function hideMap() {
+    document.getElementById("magMap").style.display = "none";
+    document.getElementById("magmapbtn").style.display = "revert"
+}
+
 /*=============== main search handler ===============*/
 
 async function runSearch(event) {
     event.preventDefault()
+
+    hideMap()
 
     const field = document.getElementById("catNumber")
     const display = parseCatalogNumber(field.value)
