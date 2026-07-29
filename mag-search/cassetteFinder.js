@@ -280,6 +280,34 @@ function escapeHtml(text) {
 
 //column C is an options field; when it says Other the real destination is the
 //free text in column D
+/*=============== thumbnails ===============*/
+
+//placeholders shown when a row carries no image url, or when the url it does
+//carry fails to load. Replace these names with the real files once they exist
+const FALLBACK_IMAGES = ["TEMP1", "TEMP2", "TEMP3", "TEMP4"]
+
+function randomFallbackImage() {
+    return FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]
+}
+
+//the src to use for a match: the sheet's column E url when there is one,
+//otherwise a placeholder picked at random
+function thumbnailFor(match) {
+    return match.img || randomFallbackImage()
+}
+
+//covers the other way an image goes missing: the url exists but the file is
+//gone or the request fails. Clearing onerror first stops an endless loop if
+//the placeholder itself fails to load
+function useFallbackImage(imgEl) {
+    imgEl.onerror = null
+    imgEl.src = randomFallbackImage()
+}
+
+//NOTE, for Ellie who adds the image to the page: renderResult below already has
+//the matches array, so the src is thumbnailFor(matches[0]). Wire the dead link
+//case with imgEl.onerror = function () { useFallbackImage(this) }
+
 function describeRelocation(m) {
     if (/other/i.test(m.relocation) && m.relocationNote) return m.relocationNote
     return m.relocationNote ? `${m.relocation} (${m.relocationNote})` : m.relocation

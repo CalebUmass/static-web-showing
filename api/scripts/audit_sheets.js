@@ -13,11 +13,11 @@ one index build.
 Run from the api directory so node finds node_modules:
     cd /var/www/html/api
     CASSETTA_SERVICE_ACCOUNT=/var/lib/dig-map-api/service_account.json \
-    CASSETTA_FOLDER_ID=1CWjwIGOu3AJHeweNKe-yZZYwDDeIKfuf \
-    node scripts/audit-sheets.js
+    CASSETTA_FOLDER_ID=1PkOD8JFhzqVh3qlpiI-DAvzNjuNdanKj \
+    node scripts/audit_sheets.js
 
 Piping to a file is often easier to read:
-    node scripts/audit-sheets.js > /tmp/audit.txt 2>&1
+    node scripts/audit_sheets.js > /tmp/audit.txt 2>&1
 */
 
 const path = require('path');
@@ -99,6 +99,7 @@ async function main() {
   let totalSkipped = 0;
   let withLink = 0;
   let withRelocation = 0;
+  let withImg = 0;
 
   for (const file of files) {
     const meta = await sheetsClient.spreadsheets.get({
@@ -107,7 +108,7 @@ async function main() {
     const tabs = (meta.data.sheets || []).map((s) => s.properties.title);
     if (tabs.length === 0) continue;
 
-    const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:D`);
+    const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:E`);
     const batch = await sheetsClient.spreadsheets.values.batchGet({ spreadsheetId: file.id, ranges });
 
     (batch.data.valueRanges || []).forEach((vr, i) => {
@@ -117,7 +118,7 @@ async function main() {
       if (!/cass/i.test(tab)) oddTabs.push(`${file.folder ? file.folder + " / " : ""}${file.name} :: ${tab}`);
 
       //row 1 is the header; the signature is what gets compared across tabs
-      const header = (rows[0] || []).slice(0, 4).map(cleanCell);
+      const header = (rows[0] || []).slice(0, 5).map(cleanCell);
       const sig = JSON.stringify(header);
       if (!headerGroups.has(sig)) headerGroups.set(sig, []);
       headerGroups.get(sig).push(`${file.folder ? file.folder + " / " : ""}${file.name} :: ${tab}`);
@@ -137,13 +138,14 @@ async function main() {
         totalKeys++;
         if (/^https?:\/\//i.test(cleanCell(row[1]))) withLink++;
         if (cleanCell(row[2]) !== '') withRelocation++;
+        if (/^https?:\/\//i.test(cleanCell(row[4]))) withImg++;
         if (!seen.has(key)) seen.set(key, []);
         seen.get(key).push(`${file.folder ? file.folder + " / " : ""}${file.name} :: ${tab}`);
       });
     });
   }
 
-  console.log('=== HEADER SIGNATURES (row 1, columns A-D) ===');
+  console.log('=== HEADER SIGNATURES (row 1, columns A-E) ===');
   const sorted = [...headerGroups.entries()].sort((a, b) => b[1].length - a[1].length);
   sorted.forEach(([sig, where], n) => {
     console.log(`\n[${n === 0 ? 'MOST COMMON' : 'DIFFERS'}] ${where.length} tab(s)`);
@@ -175,6 +177,7 @@ async function main() {
   console.log(`  distinct catalog numbers:        ${seen.size}`);
   console.log(`  with an Open Context link:       ${withLink}`);
   console.log(`  with a relocation recorded:      ${withRelocation}`);
+  console.log(`  with a thumbnail url:            ${withImg}`);
 }
 
 main().catch((err) => {
