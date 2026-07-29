@@ -468,15 +468,14 @@ html {
     border: 2px solid #166b53;
     border-radius: 30px;
     transition: background-color 0.3s ease;
+    align-self: center;
 }
 
 .object-link:hover {
     background-color: #88a2a0;
 }
 
-/*Buttons appearing below search result*/
-.output-btns {
-    display: flex;
+#objectLinks {
     align-self: center;
 }
 
