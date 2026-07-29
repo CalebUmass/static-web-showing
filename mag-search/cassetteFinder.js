@@ -283,7 +283,7 @@ function escapeHtml(text) {
 /*=============== thumbnails ===============*/
 
 //placeholders shown when a row carries no image url, or when the url it does
-//carry fails to load. Replace these names with the real files once they exist
+//carry fails to load
 const FALLBACK_IMAGES = ["/mag-search/images/noimg_cat.PNG", "/mag-search/images/noimg_cowboy.PNG", 
                          "/mag-search/images/noimg_gorgon.PNG", "/mag-search/images/noimg_sphinx.PNG"];
 
@@ -301,7 +301,7 @@ function thumbnailFor(match) {
 //gone or the request fails. Clearing onerror first stops an endless loop if
 //the placeholder itself fails to load
 function useFallbackImage(imgEl) {
-    imgEl.onerror = null
+    imgEl.onerror = function () { useFallbackImage(this) }
     imgEl.src = randomFallbackImage()
 }
 
@@ -346,6 +346,9 @@ function renderResult(display, matches) {
         document.getElementById("objectLinks").innerHTML = linked
             ? `<a class="object-link" href="${encodeURI(linked.link)}" target="_blank" rel="noopener noreferrer">View in Open Context</a>`
             : ""
+
+        document.getElementById("objectImage")
+
     } else {
         document.getElementById("missingCatNumber").textContent = display
     }
