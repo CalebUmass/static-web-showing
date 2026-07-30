@@ -340,9 +340,7 @@ function renderResult(display, matches) {
                 return `<strong>Currently relocated:</strong> ${escapeHtml(describeRelocation(m))}`
             }).join("<br>")
         } else {
-            console.log("bboins")
             notice.style.display = "none"
-            console.log("good")
         }
 
         //the database link is a property of the object, so the first match that
@@ -374,7 +372,6 @@ function renderResult(display, matches) {
     }
 
     document.getElementById("input").style.display = "none"
-    console.log("good")
     document.getElementById("output").style.display = "flex"
 }
 
@@ -386,15 +383,19 @@ function switchToInput() {
 }
 
 // Displays mag map when corresponding button is clicked
-function showMap() {
-    document.getElementById("magMap").style.display = "flex";
-    document.getElementById("magmapbtn").style.display = "none";
+function toggleMap() {
+    if (document.getElementById("magMap").style.display == "flex"){
+        document.getElementById("magMap").style.display = "none";
+        document.getElementById("magmapbtn").innerText = "View Mag Map";
+    } else {
+        document.getElementById("magMap").style.display = "flex";
+        document.getElementById("magmapbtn").innerText = "Hide Mag Map";
+    }
 }
 
-// Hides map and reveals button
-function hideMap() {
+// Hides magmap
+function hideMap(){
     document.getElementById("magMap").style.display = "none";
-    document.getElementById("magmapbtn").style.display = "revert"
 }
 
 /*=============== main search handler ===============*/

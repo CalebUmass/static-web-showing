@@ -477,13 +477,14 @@ html {
 
 #objectLinks {
     align-self: center;
-    padding: auto;
+    margin: auto;
 }
 
 /*Copy Button*/
 .copy-btn {
     align-self: center;
     padding: 5px 18px;
+    margin: 6px 2px;
     font-family: "DM Serif Display", serif;
     font-size: 14px;
     color: #166b53;
@@ -501,6 +502,7 @@ html {
 .magmap-btn {
     align-self: center;
     padding: 5px 18px;
+    margin: 6px 2px;
     font-family: "DM Serif Display", serif;
     font-size: 14px;
     color: #166b53;
@@ -522,6 +524,7 @@ html {
     justify-content: center;
     gap: 30px;
     max-width: 100%;
+    margin-bottom: 5vh;
 }
 
 .thumb-card {
@@ -543,7 +546,9 @@ html {
 
 /*New Search Button*/
 #newsearch {
-    align-self: center;
+    display: flex;
+    width: auto;
+    margin: 0 auto;
     padding: 12px 28px;
     border-radius: 30px;
     border: 2px solid #166b53;
@@ -562,17 +567,35 @@ html {
 
 .mag-map {
     display: flex;
-    min-width: 70vw;
-    height: auto;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+#magMapFrame {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background-color: #d5d8cb;
+    aspect-ratio: auto;
+    height: 45vw;
+    width: 65vw;
+    border-radius: 16px;
 }
 
 #magMapImage {
     aspect-ratio: auto;
     height: auto;
-    min-width: 70vw;
-    max-width: 70vw;
-    min-height: 50vw;
-    max-height: 50vw;
+    width: 60vw;
+
+    border-style: solid;
+    border-radius: 16px;
+    border-color: #d5d8cb;
 }
 
 /*=======================

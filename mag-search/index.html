@@ -89,7 +89,7 @@
 
                     <div id="objectLinks"></div>
                     <button type="button" class="copy-btn" onclick="copyText('locationDisplay', this)">Copy</button>
-                    <button type="button" id="magmapbtn" class="magmap-btn" onclick="showMap()">View Mag Map</button> <!--Toggles mag map visibility when clicked-->
+                    <button type="button" id="magmapbtn" class="magmap-btn" onclick="toggleMap()">View Mag Map</button> <!--Toggles mag map visibility when clicked-->
                     
             
                 </div>
@@ -104,7 +104,9 @@
             <!-- hello ellie mag map things-->
 
             <div class="glass-card mag-map" id="magMap" style="display: none; min-height: 50vw;">
+              <div id="magMapFrame">
                 <img id="magMapImage" src="https://i.imgur.com/wPDRylf.png" alt="Mag Map image" width="2800" height="1877">
+              </div>
             </div>
             <!--not found result-->
             <div class="glass-card result-card" id="notFoundCard" style="display: none;">
