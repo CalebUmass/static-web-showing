@@ -382,9 +382,11 @@ html {
     overflow-y: auto; /*scrolls if the results are taller than the screen*/
 }
 
-/*single result card, centered like one column of the converter output*/
+/*single result card, centered like one column of the converter output.
+  widened for the labelled locations ("Conservation: Scaff. 09 Cass. 281 / E2"),
+  which would otherwise wrap awkwardly at 420px*/
 .result-card {
-    width: 420px;
+    width: 520px;
     max-width: 92vw;
     padding: 30px 24px;
     text-align: center;
@@ -416,6 +418,19 @@ html {
     font-size: 26px;
     line-height: 1.6;
     margin-bottom: 10px;
+}
+
+/*divider between locations when an object is listed in more than one place.
+  rust, like the relocation notice, a double listing usually signals
+  a data error or a broken object rather than something routine. Sized in em
+  so it stays proportionate in the big result card and the small history rows*/
+.also-found {
+    display: inline-block;
+    font-size: 0.55em;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #8a3b2e;
+    margin: 4px 0;
 }
 
 .notfound-text {

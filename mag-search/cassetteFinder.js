@@ -95,14 +95,65 @@ function wireToggle(groupId, onChange) {
 
 /*=============== history ===============*/
 
-//"Scaff. 03 Internal Mag Inventory" + "Cass. 55" -> "Scaff. 03 Cass. 55".
-//the spreadsheet titles carry a boilerplate suffix that is the same on every
-//sheet, so it says nothing and only crowds the result; the "cass." prefix is
-//added only when the tab name does not already carry one
+//shortens a raw Drive folder path to the mag name people say.
+//only the deepest folder matters since scaffale numbers are unique across
+//mags, so a future "Conservation / (EMPTY) Vescovado di Murlo" sheet reads
+//as just "Vescovado di Murlo" with no chain. "(EMPTY)" is a placeholder
+//marker on the folder, not information. Examples:
+//  "Catalog / Research Mag Scaffale"  -> "Research"
+//  "Conservation Mag Scaffale"        -> "Conservation"
+//  ".. / (EMPTY) Vescovado di Murlo"  -> "Vescovado di Murlo"
+function cleanFolderLabel(folderPath) {
+    if (!folderPath) return ""
+    const last = folderPath.split("/").pop()
+    return last
+        .replace(/\(empty\)/ig, "")
+        .replace(/mag scaffale/ig, "")
+        .replace(/catalog/ig, "")
+        .replace(/\s+/g, " ")
+        .trim()
+}
+
+//the short label in front of the colon. Folder name when there is one;
+//root sheets like "Scaff. Museo" lend their own name ("Museo") instead
+function locationLabel(match) {
+    const fromFolder = cleanFolderLabel(match.folder)
+    if (fromFolder) return fromFolder
+    const named = cleanScaff(match.scaff).match(/^scaff\.?\s+(\D.*)$/i)
+    return named ? named[1].trim() : ""
+}
+
+function cleanScaff(scaff) {
+    return scaff.replace(/internal mag inventory/i, "").replace(/\s+/g, " ").trim()
+}
+
+//normalizes the tab name: numeric tabs gain the "Cass." people expect,
+//and a "Cass." glued onto words rather than a number ("Cass. Suspected
+//in Museo") is sheet-naming noise and comes off. Examples:
+//  "55"                     -> "Cass. 55"
+//  "281 / E2"               -> "Cass. 281 / E2"
+//  "Cass. 281 / E2"         -> "Cass. 281 / E2"
+//  "Cass. Suspected in Museo" -> "Suspected in Museo"
+function cleanCass(cass) {
+    const t = cass.trim()
+    if (/^\d/.test(t)) return `Cass. ${t}`
+    const m = t.match(/^cass\.?\s*(.+)$/i)
+    if (m) return /^\d/.test(m[1]) ? `Cass. ${m[1].trim()}` : m[1].trim()
+    return t
+}
+
+//puts the pieces together, dropping the scaffolding part when it only
+//repeats the label ("Scaff. Museo" under the label "Museo" says nothing):
+//  "Conservation: Scaff. 09 Cass. 281 / E2"
+//  "Museo: Suspected in Museo"
+//  "Research: Scaff. 02 Cass. 25"
 function formatLocation(match) {
-    const scaff = match.scaff.replace(/\s*internal mag inventory\s*/i, " ").trim()
-    const cass = /cass/i.test(match.cass) ? match.cass : `cass. ${match.cass}`
-    return `${scaff} ${cass}`
+    const label = locationLabel(match)
+    const scaff = cleanScaff(match.scaff)
+    const scaffRemainder = scaff.replace(/^scaff\.?\s*/i, "").trim()
+    const scaffPart = label && scaffRemainder.toLowerCase() === label.toLowerCase() ? "" : scaff
+    const where = [scaffPart, cleanCass(match.cass)].filter(Boolean).join(" ")
+    return label ? `${label}: ${where}` : where
 }
 
 function loadHistory() {
@@ -160,7 +211,7 @@ function renderHistory() {
                     ? ` <span class="history-moved">(relocated: ${escapeHtml(describeRelocation(m))})</span>`
                     : ""
                 return escapeHtml(formatLocation(m)) + moved
-            }).join(" &nbsp;|&nbsp; ")
+            }).join(`<br><span class="also-found">also found</span><br>`)
         //the object link is a property of the object, so one per entry is enough
         const linked = entry.matches.find(function (m) { return m.link })
         const link = linked
@@ -199,7 +250,8 @@ function exportHistory() {
         if (entry.matches.length === 0) {
             lines.push("  Not found")
         } else {
-            entry.matches.forEach(function (m) {
+            entry.matches.forEach(function (m, i) {
+                if (i > 0) lines.push("  ALSO FOUND")
                 lines.push(`  Location: ${formatLocation(m)}`)
                 if (m.relocation) lines.push(`  Currently relocated: ${describeRelocation(m)}`)
             })
@@ -228,6 +280,34 @@ function escapeHtml(text) {
 
 //column C is an options field; when it says Other the real destination is the
 //free text in column D
+/*=============== thumbnails ===============*/
+
+//placeholders shown when a row carries no image url, or when the url it does
+//carry fails to load. Replace these names with the real files once they exist
+const FALLBACK_IMAGES = ["TEMP1", "TEMP2", "TEMP3", "TEMP4"]
+
+function randomFallbackImage() {
+    return FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]
+}
+
+//the src to use for a match: the sheet's column E url when there is one,
+//otherwise a placeholder picked at random
+function thumbnailFor(match) {
+    return match.img || randomFallbackImage()
+}
+
+//covers the other way an image goes missing: the url exists but the file is
+//gone or the request fails. Clearing onerror first stops an endless loop if
+//the placeholder itself fails to load
+function useFallbackImage(imgEl) {
+    imgEl.onerror = null
+    imgEl.src = randomFallbackImage()
+}
+
+//NOTE, for Ellie who adds the image to the page: renderResult below already has
+//the matches array, so the src is thumbnailFor(matches[0]). Wire the dead link
+//case with imgEl.onerror = function () { useFallbackImage(this) }
+
 function describeRelocation(m) {
     if (/other/i.test(m.relocation) && m.relocationNote) return m.relocationNote
     return m.relocationNote ? `${m.relocation} (${m.relocationNote})` : m.relocation
@@ -240,9 +320,11 @@ function renderResult(display, matches) {
 
     if (found) {
         document.getElementById("foundCatNumber").textContent = display
-        //the shelf location stays alone in this element so Copy yields just that
+        //multiple locations usually mean a data error 
+        //each goes on its own line with a divider
         document.getElementById("locationDisplay").innerHTML =
-            matches.map(function (m) { return `<strong>${escapeHtml(formatLocation(m))}</strong>` }).join("<br>")
+            matches.map(function (m) { return `<strong>${escapeHtml(formatLocation(m))}</strong>` })
+                .join(`<br><span class="also-found">also found</span><br>`)
 
         //a temporary move means the shelf location above is where it belongs,
         //not where it currently is, so it needs to be hard to miss
@@ -349,6 +431,14 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("historyNext").addEventListener("click", function () { turnHistoryPage(1) })
     document.getElementById("historyExport").addEventListener("click", exportHistory)
     document.getElementById("historyClear").addEventListener("click", clearHistory)
+    //on the results page "back" means back to the search, same as New Search;
+    //only from the search page does it leave for the projects page
+    document.getElementById("backArrow").addEventListener("click", function (e) {
+        if (document.getElementById("output").style.display !== "none") {
+            e.preventDefault()
+            switchToInput()
+        }
+    })
     renderHistory() //restore the stored history on page load
     refreshStatusLine()
 })
