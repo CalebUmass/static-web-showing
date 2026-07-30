@@ -288,8 +288,10 @@ function escapeHtml(text) {
 /*=============== thumbnails ===============*/
 
 //placeholders shown when a row carries no image url, or when the url it does
-//carry fails to load. Replace these names with the real files once they exist
-const FALLBACK_IMAGES = ["TEMP1", "TEMP2", "TEMP3", "TEMP4"]
+//carry fails to load
+const FALLBACK_IMAGES = ["../images/noimg_cat.PNG", "../images/noimg_cowboy.PNG", 
+                         "../images/noimg_gorgon.PNG", "../images/noimg_sphinx.PNG"];
+
 
 function randomFallbackImage() {
     return FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]
@@ -321,6 +323,7 @@ function describeRelocation(m) {
 function renderResult(display, matches) {
     const found = matches.length > 0
     document.getElementById("foundCard").style.display = found ? "flex" : "none"
+    document.getElementById("thumbCard").style.display = found ? "flex" : "none"
     document.getElementById("notFoundCard").style.display = found ? "none" : "flex"
 
     if (found) {
@@ -356,6 +359,25 @@ function renderResult(display, matches) {
         document.getElementById("objectLinks").innerHTML = linked
             ? `<a class="object-link" href="${encodeURI(linked.link)}" target="_blank" rel="noopener noreferrer">View in Open Context</a>`
             : ""
+            
+        // Find first instance of image in a match in same way as link
+        const imageMatch = matches.find(function (m) { return m.img })//error
+        const imageURL = thumbnailFor(imageMatch)
+        
+        // Attaching error handler in case something bad!
+        useFallbackImage(document.getElementById("objectThumb"))
+
+        // Find url frm selected match
+        document.getElementById("objectThumb").src = imageURL
+
+        // Setting alt text to somehting helpful
+        if (FALLBACK_IMAGES.includes(imageURL)){
+            document.getElementById("objectThumb").alt = `No image found for ${document.getElementById("foundCatNumber").text}. Placeholder image inserted.`
+        } else {
+            document.getElementById("objectThumb").alt = `Image of ${document.getElementById("foundCatNumber").text} with link ${imageURL}`
+        }
+
+
     } else {
         document.getElementById("missingCatNumber").textContent = display
     }
@@ -371,11 +393,29 @@ function switchToInput() {
     document.getElementById("catNumber").focus()
 }
 
+// Displays mag map when corresponding button is clicked
+function toggleMap() {
+    if (document.getElementById("magMap").style.display == "flex"){
+        document.getElementById("magMap").style.display = "none";
+        document.getElementById("magmapbtn").innerText = "View Mag Map";
+    } else {
+        document.getElementById("magMap").style.display = "flex";
+        document.getElementById("magmapbtn").innerText = "Hide Mag Map";
+    }
+}
+
+// Hides magmap
+function hideMap(){
+    document.getElementById("magMap").style.display = "none";
+}
+
+
+
 /*=============== main search handler ===============*/
 
 async function runSearch(event) {
     event.preventDefault()
-
+    hideMap()
     const field = document.getElementById("catNumber")
     const display = parseCatalogNumber(field.value)
     if (!display) {

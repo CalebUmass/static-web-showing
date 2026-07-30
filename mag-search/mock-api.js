@@ -82,7 +82,7 @@ const FAKE_DATA = {
             cass: 'Cass. 281 / E2',
             folder: 'Conservation Mag Scaffale',
             relocation: 'Other',
-            relocationNote: 'On loan to the conservation lab until August',
+            relocationNote: 'On loan in America until next season',
             link: 'https://opencontext.org/subjects/example-4',
             img: SAMPLE_IMG,
         },
