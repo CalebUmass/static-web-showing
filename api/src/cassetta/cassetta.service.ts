@@ -57,8 +57,8 @@ const NUMBER_PATTERN = /^(PC|VDM)?\s*(\d{4})\s*(\d{4})$/i;
 //logical columns, with every spelling seen across the inventory sheets.
 //  So columns are located by name, never by position.
 //Compared after normalizeHeader, so:
-//  case, trailing colons, curly quotes and
-//doubled spaces do not need listing here.
+//  case, trailing colons, curly quotes,  doubled spaces 
+// do not need listing here.
 const COLUMN_ALIASES: Record<string, string[]> = {
   number: ['object number', 'pc number', 'vdm number', 'catalog number'],
   link: ['open context link', 'open context', 'oc link'],
@@ -66,7 +66,7 @@ const COLUMN_ALIASES: Record<string, string[]> = {
   relocationNote: ['if "other" - new location'],
   returnTo: ['return to'],
   notes: ['notes', 'note', 'comments', 'comment'],
-  //notes and img are both deliberately absent from FALLBACK_INDEX below: the image column does not
+  //notes and images missing from FALLBACK_INDEX below: the image column doesnt
   //exist in any sheet yet, so it must be labelled with one of these to be
   //read at all.
   img: ['image', 'image link', 'image url', 'thumbnail', 'thumbnail link',
