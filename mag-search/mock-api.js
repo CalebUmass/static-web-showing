@@ -93,7 +93,7 @@ const FAKE_DATA = {
     //broken url, to check the onerror fallback rather than the missing one
     PC19850003: [
         {
-            scaff: 'Scaff. 11 Internal Mag Inventory',
+            scaff: 'Scaff. 10 Internal Mag Inventory',
             cass: 'Cass. 300',
             folder: 'Conservation Mag Scaffale',
             img: '/this-image-does-not-exist.jpg',
