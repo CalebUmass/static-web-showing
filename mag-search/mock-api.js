@@ -1,7 +1,9 @@
 /*
 Local development server for the Object Finder.
 
-Node only, no npm install needed.
+Serves the files in this folder and fakes the cassetta API, so the page can be
+worked on with no credentials, no internet, and no connection to the live
+server. Node only, no npm install needed.
 
     cd mag-search
     node mock-api.js
@@ -13,7 +15,8 @@ sheets: an object with a thumbnail, one without, one listed in two places, one
 that is relocated, and one that does not exist at all. Catalog numbers to try
 are printed at startup.
 
-Not used in production and not deployed.
+Not used in production and not deployed; delete nothing on the server if this
+file is missing there.
 */
 
 const http = require('http');
@@ -82,7 +85,7 @@ const FAKE_DATA = {
             cass: 'Cass. 281 / E2',
             folder: 'Conservation Mag Scaffale',
             relocation: 'Other',
-            relocationNote: 'On loan in America until next season',
+            relocationNote: 'On loan to the conservation lab until August',
             link: 'https://opencontext.org/subjects/example-4',
             img: SAMPLE_IMG,
         },
@@ -170,6 +173,28 @@ const server = http.createServer((req, res) => {
 
     if (route === '/api/cassetta/refresh') {
         return sendJson(res, 202, { started: true });
+    }
+
+    //the placeholder thumbnails live in the repo's shared images folder, one
+    //level up from this one, and the page reaches them as ../images/...
+    if (route.startsWith('/images/')) {
+        const shared = path.join(ROOT, '..');
+        const imgFile = path.join(shared, decodeURIComponent(route).replace(/^\/+/, ''));
+        if (!imgFile.startsWith(shared)) {
+            res.writeHead(403);
+            return res.end('forbidden');
+        }
+        return fs.readFile(imgFile, (err, data) => {
+            if (err) {
+                res.writeHead(404, { 'Content-Type': 'text/plain' });
+                return res.end(`not found: ${route}. Placeholder images belong in the shared images folder.`);
+            }
+            res.writeHead(200, {
+                'Content-Type': MIME[path.extname(imgFile).toLowerCase()] || 'application/octet-stream',
+                'Cache-Control': 'no-store',
+            });
+            res.end(data);
+        });
     }
 
     //everything else is a static file from this folder

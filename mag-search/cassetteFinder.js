@@ -111,6 +111,8 @@ function cleanFolderLabel(folderPath) {
         .replace(/mag scaffale/ig, "")
         .replace(/catalog/ig, "")
         .replace(/\s+/g, " ")
+        //the research folder is literally named "Catalog - Research Mag
+        //Scaffale", so trimming the boilerplate leaves the hyphen stranded
         .replace(/^[\s\-\u2013\u2014:,]+/, "")
         .replace(/[\s\-\u2013\u2014:,]+$/, "")
         .trim()
@@ -292,7 +294,7 @@ function escapeHtml(text) {
 const FALLBACK_IMAGES = ["../images/noimg_cat.PNG", "../images/noimg_cowboy.PNG", 
                          "../images/noimg_gorgon.PNG", "../images/noimg_sphinx.PNG"];
 
-
+// Selects random image from available placeholders
 function randomFallbackImage() {
     return FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]
 }
@@ -300,18 +302,25 @@ function randomFallbackImage() {
 //the src to use for a match: the sheet's column E url when there is one,
 //otherwise a placeholder picked at random
 function thumbnailFor(match) {
-    return match.img || randomFallbackImage()
+    //handles both call shapes: matches.find(m => m.img) returns undefined when
+    //no location has an image, and matches[0] may simply not carry one
+    return (match && match.img) || randomFallbackImage()
 }
 
 //covers the other way an image goes missing: the url exists but the file is
 //gone or the request fails. Clearing onerror first stops an endless loop if
 //the placeholder itself fails to load
 function useFallbackImage(imgEl) {
-    imgEl.onerror = null
-    imgEl.src = randomFallbackImage()
+    imgEl.onerror = function () {
+        //disarm before swapping the src: a placeholder that also fails to load
+        //would otherwise retrigger this handler and loop forever, hammering the
+        //server with requests
+        imgEl.onerror = null
+        imgEl.src = randomFallbackImage()
+    }
 }
 
-//NOTE, for Ellie: renderResult below already has
+//NOTE, for Ellie who adds the image to the page: renderResult below already has
 //the matches array, so the src is thumbnailFor(matches[0]). Wire the dead link
 //case with imgEl.onerror = function () { useFallbackImage(this) }
 
@@ -325,6 +334,7 @@ function renderResult(display, matches) {
     document.getElementById("foundCard").style.display = found ? "flex" : "none"
     document.getElementById("thumbCard").style.display = found ? "flex" : "none"
     document.getElementById("notFoundCard").style.display = found ? "none" : "flex"
+    
 
     if (found) {
         document.getElementById("foundCatNumber").textContent = display
@@ -333,7 +343,8 @@ function renderResult(display, matches) {
         document.getElementById("locationDisplay").innerHTML =
             matches.map(function (m) {
                 //"Return to:" records the cassetta an object belongs in while it
-                //sits somewhere else, so it's a 'quiet' line rather than a warning
+                //sits somewhere else, which is the opposite of the relocation
+                //columns, so it reads as a quiet second line rather than a warning
                 const home = m.returnTo
                     ? `<span class="return-to">belongs in ${escapeHtml(m.returnTo)}</span>`
                     : ""
@@ -359,7 +370,7 @@ function renderResult(display, matches) {
         document.getElementById("objectLinks").innerHTML = linked
             ? `<a class="object-link" href="${encodeURI(linked.link)}" target="_blank" rel="noopener noreferrer">View in Open Context</a>`
             : ""
-            
+
         // Find first instance of image in a match in same way as link
         const imageMatch = matches.find(function (m) { return m.img })//error
         const imageURL = thumbnailFor(imageMatch)
@@ -372,11 +383,10 @@ function renderResult(display, matches) {
 
         // Setting alt text to somehting helpful
         if (FALLBACK_IMAGES.includes(imageURL)){
-            document.getElementById("objectThumb").alt = `No image found for ${document.getElementById("foundCatNumber").text}. Placeholder image inserted.`
+            document.getElementById("objectThumb").alt = `No image found for ${document.getElementById("foundCatNumber").textContent}. Placeholder image inserted.`
         } else {
-            document.getElementById("objectThumb").alt = `Image of ${document.getElementById("foundCatNumber").text} with link ${imageURL}`
+            document.getElementById("objectThumb").alt = `Image of ${document.getElementById("foundCatNumber").textContent} with link ${imageURL}`
         }
-
 
     } else {
         document.getElementById("missingCatNumber").textContent = display
@@ -409,13 +419,13 @@ function hideMap(){
     document.getElementById("magMap").style.display = "none";
 }
 
-
-
 /*=============== main search handler ===============*/
 
 async function runSearch(event) {
     event.preventDefault()
+
     hideMap()
+
     const field = document.getElementById("catNumber")
     const display = parseCatalogNumber(field.value)
     if (!display) {
