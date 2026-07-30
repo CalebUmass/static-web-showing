@@ -617,16 +617,24 @@ html {
     .magmap-hit { animation: none; }
 }
 
-/*explains an empty map: museum objects and Scaff. 16 have no area drawn yet*/
+/*heading above the map, explaining an empty or unusual highlight:
+  Shaped like the other card
+  titles so the map card reads the same as the result cards*/
 .magmap-note {
-    margin-top: 12px;
-    font-size: 16px;
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.3;
     color: #166b53;
     text-align: center;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(22, 107, 83, 0.35);
 }
 
 .mag-map {
     display: flex;
+    /*column so the heading stacks above the map instead of beside it*/
+    flex-direction: column;
 
     align-items: center;
     justify-content: center;
@@ -656,6 +664,24 @@ html {
     border-style: solid;
     border-radius: 16px;
     border-color: #d5d8cb;
+}
+
+/*=======================
+   Scrollbars
+=======================*/
+
+/*opening the map makes the results taller than the screen, and a scrollbar
+  running down the glass cards looks bad. Scrolling still works by wheel,
+  trackpad, touch and keyboard; only the bar itself is hidden*/
+.pages,
+.pages div {
+    scrollbar-width: none; /*firefox*/
+    -ms-overflow-style: none; /*old edge*/
+}
+
+.pages::-webkit-scrollbar,
+.pages div::-webkit-scrollbar {
+    display: none; /*chrome, safari, new edge*/
 }
 
 /*=======================

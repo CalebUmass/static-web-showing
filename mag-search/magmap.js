@@ -16,7 +16,6 @@ below.
 */
 
 //extracted from magmap.PNG by colour and checked against the drawing.
-//Scaff. 16 is deliberately absent: it is the (Temp) scaffolding and so a search for it highlights nothing
 const MAG_MAP_AREAS = {
     "1": [0.43357, 0.00000, 0.04536, 0.06500],
     "2": [0.43357, 0.07672, 0.04536, 0.07672],
@@ -73,17 +72,19 @@ function magMapOverlay(img) {
     return svg
 }
 
-//short line under the map explaining an empty highlight, created here so the
-//page markup does not need an element reserved for it
+//heading above the map explaining an empty or unusual highlight, created here
+//so the page markup does not need an element reserved for it
 function magMapNote(text) {
     const frame = document.getElementById("magMapFrame")
     if (!frame) return
+    const card = frame.parentElement
     let note = document.getElementById("magMapNote")
     if (!note) {
-        note = document.createElement("p")
+        note = document.createElement("h3")
         note.id = "magMapNote"
         note.className = "magmap-note"
-        frame.parentElement.appendChild(note)
+        //inserted before the frame so it reads as the card heading
+        card.insertBefore(note, frame)
     }
     note.textContent = text || ""
     note.style.display = text ? "block" : "none"

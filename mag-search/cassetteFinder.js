@@ -423,6 +423,7 @@ function toggleMap() {
 // Hides magmap
 function hideMap(){
     document.getElementById("magMap").style.display = "none";
+    document.getElementById("magmapbtn").innerText = "View Mag Map";
 }
 
 /*=============== main search handler ===============*/
