@@ -9,8 +9,11 @@ Node only, no npm install needed.
 then open http://localhost:8000
 
 The fake data below covers the cases that are awkward to find in the real
+sheets: an object with a thumbnail, one without, one listed in two places, one
+that is relocated, and one that does not exist at all. Catalog numbers to try
+are printed at startup.
 
-Not used in production and not deployed
+Not used in production and not deployed.
 */
 
 const http = require('http');
@@ -20,7 +23,8 @@ const path = require('path');
 const PORT = Number(process.env.PORT) || 8000;
 const ROOT = __dirname;
 
-//stands in for an Open Context thumbnail. Served by this file to work offline
+//stands in for an Open Context thumbnail. Served by this file so the success
+//path works offline; the real column E holds an https url instead
 const SAMPLE_IMG = '/mock-thumb.svg';
 
 //keys match what the real API produces: uppercase, no spaces
@@ -30,7 +34,7 @@ const FAKE_DATA = {
         {
             scaff: 'Scaff. 03 Internal Mag Inventory',
             cass: 'Cass. 55',
-            folder: 'Catalog / Research Mag Scaffale',
+            folder: 'Catalog - Research Mag Scaffale',
             link: 'https://opencontext.org/subjects/example-1',
             img: SAMPLE_IMG,
         },
@@ -40,8 +44,20 @@ const FAKE_DATA = {
         {
             scaff: 'Scaff. 02 Internal Mag Inventory',
             cass: 'Cass. 25',
-            folder: 'Catalog / Research Mag Scaffale',
+            folder: 'Catalog - Research Mag Scaffale',
             link: 'https://opencontext.org/subjects/example-2',
+        },
+    ],
+    //a Scaff. 00 fun box: sitting in the box now, belongs in Cass. 204. Also
+    //carries a note, which the api returns but nothing displays yet
+    PC19710056: [
+        {
+            scaff: 'Scaff. 00 Internal Mag Inventory',
+            cass: 'Tonys Fun Box 25 (but not 26)',
+            folder: 'Catalog - Research Mag Scaffale',
+            link: 'https://opencontext.org/subjects/example-6',
+            returnTo: 'Cass. 204',
+            notes: 'Not found',
         },
     ],
     //listed in two places, so the ALSO FOUND divider appears. Only the second
@@ -55,7 +71,7 @@ const FAKE_DATA = {
         {
             scaff: 'Scaff. 06 Internal Mag Inventory',
             cass: 'Cass. 181',
-            folder: 'Catalog / Research Mag Scaffale',
+            folder: 'Catalog - Research Mag Scaffale',
             img: SAMPLE_IMG,
         },
     ],
@@ -185,6 +201,7 @@ server.listen(PORT, () => {
     console.log('    PC 19880101   found in two places, only the second has an image');
     console.log('    PC 20090211   found, relocated, has a thumbnail');
     console.log('    PC 19850003   found, image url is broken, tests the fallback');
+    console.log('    PC 19710056   found in a fun box, belongs in Cass. 204');
     console.log('    PC 99999999   not found');
     console.log('\n  ctrl-c to stop\n');
 });

@@ -67,7 +67,7 @@ html {
     left: 0;
     width: 100%;
     height: 100vh;
-    background-image: url('./bg.JPG');
+    background-image: url('./images/bg.JPG');
     background-size: cover;
     background-position: center;
     z-index: -1; /*sits behind the glass cardss*/
@@ -242,7 +242,7 @@ html {
 
 #refreshBtn {
     margin-top: 8px;
-    padding: 5px 18px;
+    padding: 18px 18px;
     font-family: "DM Serif Display", serif;
     font-size: 13px;
     color: #166b53;
@@ -433,6 +433,16 @@ html {
     margin: 4px 0;
 }
 
+/*where an object belongs while it sits somewhere else. Green rather than rust,
+  since this is ordinary information and not a problem to flag. Sized in em so
+  it stays proportionate in the large result card*/
+.return-to {
+    display: block;
+    font-size: 0.6em;
+    color: #166b53;
+    margin-top: 2px;
+}
+
 .notfound-text {
     color: #2b2b2b;
     font-size: 18px;
@@ -468,16 +478,23 @@ html {
     border: 2px solid #166b53;
     border-radius: 30px;
     transition: background-color 0.3s ease;
+    align-self: center;
 }
 
 .object-link:hover {
     background-color: #88a2a0;
 }
 
+#objectLinks {
+    align-self: center;
+    margin: auto;
+}
+
 /*Copy Button*/
 .copy-btn {
     align-self: center;
     padding: 5px 18px;
+    margin: 6px 2px;
     font-family: "DM Serif Display", serif;
     font-size: 14px;
     color: #166b53;
@@ -492,8 +509,56 @@ html {
     background-color: #88a2a0;
 }
 
+.magmap-btn {
+    align-self: center;
+    padding: 5px 18px;
+    margin: 6px 2px;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 2px solid #166b53;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.magmap-btn:hover {
+    background-color: #88a2a0;
+}
+
+/*#output is a column, so the side by side pair needs its own row wrapper*/
+.result-row {
+    display: flex;
+    align-items: flex-start; /*each card keeps its own height*/
+    justify-content: center;
+    gap: 30px;
+    max-width: 100%;
+    margin-bottom: 5vh;
+}
+
+.thumb-card {
+    width: 300px;
+    padding: 24px;
+    text-align: center;
+    flex-shrink: 0; /*stops the card being squeezed by a tall location card*/
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#objectThumb {
+    display: block;
+    width: 100%;
+    height: auto; /*keeps the aspect ratio whatever Open Context sends*/
+    border-radius: 16px;
+}
+
 /*New Search Button*/
 #newsearch {
+    display: flex;
+    width: auto;
+    margin: 0 auto;
     padding: 12px 28px;
     border-radius: 30px;
     border: 2px solid #166b53;
@@ -508,6 +573,39 @@ html {
 
 #newsearch:hover {
     background-color: #88a2a0;
+}
+
+.mag-map {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+#magMapFrame {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background-color: #d5d8cb;
+    aspect-ratio: auto;
+    height: 45vw;
+    width: 65vw;
+    border-radius: 16px;
+}
+
+#magMapImage {
+    aspect-ratio: auto;
+    height: auto;
+    width: 60vw;
+
+    border-style: solid;
+    border-radius: 16px;
+    border-color: #d5d8cb;
 }
 
 /*=======================
@@ -528,5 +626,12 @@ html {
 
     #inputbox {
         width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .result-row {
+        flex-direction: column;
+        align-items: center;
     }
 }

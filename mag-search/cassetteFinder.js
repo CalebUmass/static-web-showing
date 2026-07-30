@@ -111,6 +111,8 @@ function cleanFolderLabel(folderPath) {
         .replace(/mag scaffale/ig, "")
         .replace(/catalog/ig, "")
         .replace(/\s+/g, " ")
+        .replace(/^[\s\-\u2013\u2014:,]+/, "")
+        .replace(/[\s\-\u2013\u2014:,]+$/, "")
         .trim()
 }
 
@@ -209,7 +211,9 @@ function renderHistory() {
             : entry.matches.map(function (m) {
                 const moved = m.relocation
                     ? ` <span class="history-moved">(relocated: ${escapeHtml(describeRelocation(m))})</span>`
-                    : ""
+                    : m.returnTo
+                        ? ` <span class="history-link">(belongs in ${escapeHtml(m.returnTo)})</span>`
+                        : ""
                 return escapeHtml(formatLocation(m)) + moved
             }).join(`<br><span class="also-found">also found</span><br>`)
         //the object link is a property of the object, so one per entry is enough
@@ -253,6 +257,7 @@ function exportHistory() {
             entry.matches.forEach(function (m, i) {
                 if (i > 0) lines.push("  ALSO FOUND")
                 lines.push(`  Location: ${formatLocation(m)}`)
+                if (m.returnTo) lines.push(`  Belongs in: ${m.returnTo}`)
                 if (m.relocation) lines.push(`  Currently relocated: ${describeRelocation(m)}`)
             })
             const linked = entry.matches.find(function (m) { return m.link })
@@ -304,7 +309,7 @@ function useFallbackImage(imgEl) {
     imgEl.src = randomFallbackImage()
 }
 
-//NOTE, for Ellie who adds the image to the page: renderResult below already has
+//NOTE, for Ellie: renderResult below already has
 //the matches array, so the src is thumbnailFor(matches[0]). Wire the dead link
 //case with imgEl.onerror = function () { useFallbackImage(this) }
 
@@ -323,8 +328,14 @@ function renderResult(display, matches) {
         //multiple locations usually mean a data error 
         //each goes on its own line with a divider
         document.getElementById("locationDisplay").innerHTML =
-            matches.map(function (m) { return `<strong>${escapeHtml(formatLocation(m))}</strong>` })
-                .join(`<br><span class="also-found">also found</span><br>`)
+            matches.map(function (m) {
+                //"Return to:" records the cassetta an object belongs in while it
+                //sits somewhere else, so it's a 'quiet' line rather than a warning
+                const home = m.returnTo
+                    ? `<span class="return-to">belongs in ${escapeHtml(m.returnTo)}</span>`
+                    : ""
+                return `<strong>${escapeHtml(formatLocation(m))}</strong>${home}`
+            }).join(`<br><span class="also-found">also found</span><br>`)
 
         //a temporary move means the shelf location above is where it belongs,
         //not where it currently is, so it needs to be hard to miss

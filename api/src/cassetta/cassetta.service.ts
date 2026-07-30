@@ -28,8 +28,10 @@ export interface CassettaMatch {
   //columns B to E, each omitted when the cell is empty so the index stays small
   link?: string;           //Open Context url, column B
   relocation?: string;     //the options field, column C
-  relocationNote?: string; //free text used when column C says Other, column D
-  img?: string;            //url to object thumbnail, column E
+  relocationNote?: string; //free text used when the relocation column says Other
+  returnTo?: string;       //"Return to:" column, used by the Scaff. 00 fun boxes
+  notes?: string;          //free text notes column, carried through unused for now
+  img?: string;            //url to object thumbnail
 }
 
 interface CassettaIndex {
@@ -51,6 +53,42 @@ const SCOPES = [
 ];
 
 const NUMBER_PATTERN = /^(PC|VDM)?\s*(\d{4})\s*(\d{4})$/i;
+
+//logical columns, with every spelling seen across the inventory sheets.
+//  So columns are located by name, never by position.
+//Compared after normalizeHeader, so:
+//  case, trailing colons, curly quotes and
+//doubled spaces do not need listing here.
+const COLUMN_ALIASES: Record<string, string[]> = {
+  number: ['object number', 'pc number', 'vdm number', 'catalog number'],
+  link: ['open context link', 'open context', 'oc link'],
+  relocation: ['in case of relocation - new location'],
+  relocationNote: ['if "other" - new location'],
+  returnTo: ['return to'],
+  notes: ['notes', 'note', 'comments', 'comment'],
+  //notes and img are both deliberately absent from FALLBACK_INDEX below: the image column does not
+  //exist in any sheet yet, so it must be labelled with one of these to be
+  //read at all.
+  img: ['image', 'image link', 'image url', 'thumbnail', 'thumbnail link',
+        'thumbnail url', 'open context image', 'photo'],
+};
+
+//the layout 265 of the 293 tabs use. Consulted only when the header cell at
+//that index exists but is empty, which means the label was never typed and the
+//column still holds what the majority layout says it holds. A column carrying
+//some other label is something else and stays unread a column with no header
+//cell at all also stays unread, and shows up in the audit script instead
+const FALLBACK_INDEX: Record<string, number> = {
+  number: 0,
+  link: 1,
+  relocation: 2,
+  relocationNote: 3,
+};
+
+interface ColumnMap {
+  index: Record<string, number | undefined>;
+  usedFallback: string[];
+}
 
 @Injectable()
 export class CassettaService {
@@ -83,6 +121,46 @@ export class CassettaService {
   private cleanCell(value: unknown): string {
     if (value === undefined || value === null) return '';
     return String(value).replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  //header labels vary by case, trailing colon, quote style and spacing, so they
+  //get flattened before being compared to the alias lists
+  private normalizeHeader(value: unknown): string {
+    return this.cleanCell(value)
+      .toLowerCase()
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201c\u201d]/g, '"')
+      .replace(/[:\s]+$/, '');
+  }
+
+  //works out which column holds what for one tab, by name first and by the
+  //majority position only where a label is blank
+  private mapColumns(headerRow: unknown[]): ColumnMap {
+    const norm = (headerRow ?? []).map((h) => this.normalizeHeader(h));
+    const index: Record<string, number | undefined> = {};
+    const usedFallback: string[] = [];
+
+    for (const field of Object.keys(COLUMN_ALIASES)) {
+      const aliases = COLUMN_ALIASES[field];
+      const found = norm.findIndex((h) => h !== '' && aliases.includes(h));
+      if (found >= 0) index[field] = found;
+    }
+
+    for (const field of Object.keys(FALLBACK_INDEX)) {
+      const idx = FALLBACK_INDEX[field];
+      if (index[field] === undefined && idx < norm.length && norm[idx] === '') {
+        index[field] = idx;
+        usedFallback.push(field);
+      }
+    }
+
+    return { index, usedFallback };
+  }
+
+  //reads one cell by logical column, empty when the tab has no such column
+  private cellAt(row: unknown[], index: number | undefined): string {
+    if (index === undefined || index < 0 || index >= row.length) return '';
+    return this.cleanCell(row[index]);
   }
 
   //turns a column A cell into the same canonical key a typed search produces,
@@ -216,6 +294,7 @@ export class CassettaService {
 
     const entries: Record<string, CassettaMatch[]> = {};
     let skipped = 0; //cells that were not catalog numbers, logged as a sanity check
+    let fallbackTabs = 0; //tabs where a blank column label was filled in by position
     for (const file of files) {
       const meta = await this.withBackoff(() =>
         sheetsClient.spreadsheets.get({ spreadsheetId: file.id, fields: 'sheets.properties.title' }),
@@ -226,14 +305,23 @@ export class CassettaService {
       if (tabs.length === 0) continue;
 
       //single quotes inside a tab name double up in A1 notation
-      const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:E`);
+      const ranges = tabs.map((t) => `'${t.replace(/'/g, "''")}'!A:H`);
       const batch = await this.withBackoff(() =>
         sheetsClient.spreadsheets.values.batchGet({ spreadsheetId: file.id, ranges }),
       );
 
       (batch.data.valueRanges ?? []).forEach((vr, i) => {
-        for (const row of vr.values ?? []) {
-          const key = this.cellKey(row[0]);
+        const rows = vr.values ?? [];
+        if (rows.length === 0) return;
+
+        //row 1 carries the labels in every tab seen so far. It is still passed
+        //to cellKey below rather than skipped outright, so a tab that starts
+        //straight into data does not lose its first object
+        const cols = this.mapColumns(rows[0]);
+        if (cols.usedFallback.length > 0) fallbackTabs++;
+
+        for (const row of rows) {
+          const key = this.cellKey(row[cols.index.number ?? 0]);
           //skips header rows, blanks and anything that is not a catalog number
           if (!key) {
             skipped++;
@@ -241,16 +329,23 @@ export class CassettaService {
           }
           const entry: CassettaMatch = { scaff: file.name, cass: tabs[i] };
           if (file.folder) entry.folder = file.folder;
-          const link = this.cleanCell(row[1]);
-          const relocation = this.cleanCell(row[2]);
-          const note = this.cleanCell(row[3]);
-          const img = this.cleanCell(row[4]);
+
+          const link = this.cellAt(row, cols.index.link);
+          const relocation = this.cellAt(row, cols.index.relocation);
+          const note = this.cellAt(row, cols.index.relocationNote);
+          const returnTo = this.cellAt(row, cols.index.returnTo);
+          const notes = this.cellAt(row, cols.index.notes);
+          const img = this.cellAt(row, cols.index.img);
+
           //only http links go in, so a stray value cannot become a javascript: href
           if (/^https?:\/\//i.test(link)) entry.link = link;
           if (relocation) entry.relocation = relocation;
           if (note) entry.relocationNote = note;
+          if (returnTo) entry.returnTo = returnTo;
+          if (notes) entry.notes = notes;
           //same check for the thumbnail, which ends up in an img src
           if (/^https?:\/\//i.test(img)) entry.img = img;
+
           (entries[key] ??= []).push(entry);
         }
       });
@@ -258,7 +353,10 @@ export class CassettaService {
 
     //a skipped count in the thousands would mean a sheet uses a format cellKey
     //does not recognise, rather than just header rows and blank cells
-    this.logger.log(`index built: ${Object.keys(entries).length} objects, ${files.length} sheets, ${skipped} cells skipped`);
+    this.logger.log(
+      `index built: ${Object.keys(entries).length} objects, ${files.length} sheets, ` +
+      `${skipped} cells skipped, ${fallbackTabs} tabs with an unlabelled column`,
+    );
     return { builtAt: Date.now(), sheetCount: files.length, entries };
   }
 
