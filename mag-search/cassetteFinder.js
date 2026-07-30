@@ -390,6 +390,10 @@ function renderResult(display, matches) {
             document.getElementById("objectThumb").alt = `Image of ${document.getElementById("foundCatNumber").textContent} with link ${imageURL}`
         }
 
+        //highlight the shelf on the mag map. Guarded so the page still works
+        //if magmap.js has not been added to index.html yet
+        if (typeof drawMagMap === "function") drawMagMap(matches)
+
     } else {
         document.getElementById("missingCatNumber").textContent = display
     }

@@ -67,6 +67,9 @@ html {
     left: 0;
     width: 100%;
     height: 100vh;
+    /*urls in a css file resolve against the css file, not against index.html.
+      this file sits beside the images folder, so images/bg.JPG is correct and
+      ../images/bg.JPG would point outside mag-search*/
     background-image: url('images/bg.JPG');
     background-size: cover;
     background-position: center;
@@ -573,6 +576,53 @@ html {
 
 #newsearch:hover {
     background-color: #88a2a0;
+}
+
+/*=======================
+   Mag map overlay
+=======================*/
+
+/*wraps the map image so the svg can sit exactly on it. The frame around it is
+  wider than the image, so positioning against the frame would misalign*/
+.magmap-wrap {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+}
+
+.magmap-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /*the map stays clickable through the overlay*/
+}
+
+/*the highlighted shelf. Green rather than rust: finding the object is the
+  good outcome, not a problem to flag*/
+.magmap-hit {
+    fill: rgba(22, 107, 83, 0.3);
+    stroke: #166b53;
+    animation: magmap-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes magmap-pulse {
+    0%, 100% { fill-opacity: 1; }
+    50% { fill-opacity: 0.35; }
+}
+
+/*a pulsing box is unpleasant for anyone sensitive to motion*/
+@media (prefers-reduced-motion: reduce) {
+    .magmap-hit { animation: none; }
+}
+
+/*explains an empty map: museum objects and Scaff. 16 have no area drawn yet*/
+.magmap-note {
+    margin-top: 12px;
+    font-size: 16px;
+    color: #166b53;
+    text-align: center;
 }
 
 .mag-map {
