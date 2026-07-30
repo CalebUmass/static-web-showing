@@ -175,28 +175,6 @@ const server = http.createServer((req, res) => {
         return sendJson(res, 202, { started: true });
     }
 
-    //the placeholder thumbnails live in the repo's shared images folder, one
-    //level up from this one, and the page reaches them as ../images/...
-    if (route.startsWith('/images/')) {
-        const shared = path.join(ROOT, '..');
-        const imgFile = path.join(shared, decodeURIComponent(route).replace(/^\/+/, ''));
-        if (!imgFile.startsWith(shared)) {
-            res.writeHead(403);
-            return res.end('forbidden');
-        }
-        return fs.readFile(imgFile, (err, data) => {
-            if (err) {
-                res.writeHead(404, { 'Content-Type': 'text/plain' });
-                return res.end(`not found: ${route}. Placeholder images belong in the shared images folder.`);
-            }
-            res.writeHead(200, {
-                'Content-Type': MIME[path.extname(imgFile).toLowerCase()] || 'application/octet-stream',
-                'Cache-Control': 'no-store',
-            });
-            res.end(data);
-        });
-    }
-
     //everything else is a static file from this folder
     const rel = route === '/' ? 'index.html' : decodeURIComponent(route).replace(/^\/+/, '');
     const file = path.join(ROOT, rel);

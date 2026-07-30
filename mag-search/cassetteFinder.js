@@ -291,8 +291,10 @@ function escapeHtml(text) {
 
 //placeholders shown when a row carries no image url, or when the url it does
 //carry fails to load
-const FALLBACK_IMAGES = ["../images/noimg_cat.PNG", "../images/noimg_cowboy.PNG", 
-                         "../images/noimg_gorgon.PNG", "../images/noimg_sphinx.PNG"];
+//paths are relative to index.html, and the images folder sits beside it, so no
+//leading ../ here: that would look outside mag-search entirely
+const FALLBACK_IMAGES = ["images/noimg_cat.PNG", "images/noimg_cowboy.PNG",
+                         "images/noimg_gorgon.PNG", "images/noimg_sphinx.PNG"];
 
 // Selects random image from available placeholders
 function randomFallbackImage() {
