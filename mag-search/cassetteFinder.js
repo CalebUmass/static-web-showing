@@ -111,6 +111,10 @@ function cleanFolderLabel(folderPath) {
         .replace(/mag scaffale/ig, "")
         .replace(/catalog/ig, "")
         .replace(/\s+/g, " ")
+        //the research folder is literally named "Catalog - Research Mag
+        //Scaffale", so trimming the boilerplate leaves the hyphen stranded
+        .replace(/^[\s\-\u2013\u2014:,]+/, "")
+        .replace(/[\s\-\u2013\u2014:,]+$/, "")
         .trim()
 }
 
@@ -209,7 +213,9 @@ function renderHistory() {
             : entry.matches.map(function (m) {
                 const moved = m.relocation
                     ? ` <span class="history-moved">(relocated: ${escapeHtml(describeRelocation(m))})</span>`
-                    : ""
+                    : m.returnTo
+                        ? ` <span class="history-link">(belongs in ${escapeHtml(m.returnTo)})</span>`
+                        : ""
                 return escapeHtml(formatLocation(m)) + moved
             }).join(`<br><span class="also-found">also found</span><br>`)
         //the object link is a property of the object, so one per entry is enough
@@ -221,7 +227,7 @@ function renderHistory() {
             ? `<span class="history-time">${new Date(entry.at).toLocaleString()}</span>`
             : ""
         div.innerHTML =
-            `<span class="history-input">${escapeHtml(entry.display)}${when}</span>` +
+            `<span class="history-input"><span class="history-number">${escapeHtml(entry.display)}</span>${when}</span>` +
             `<span class="history-out">${outcome}${link}</span>`
         list.appendChild(div)
     })
@@ -253,6 +259,7 @@ function exportHistory() {
             entry.matches.forEach(function (m, i) {
                 if (i > 0) lines.push("  ALSO FOUND")
                 lines.push(`  Location: ${formatLocation(m)}`)
+                if (m.returnTo) lines.push(`  Belongs in: ${m.returnTo}`)
                 if (m.relocation) lines.push(`  Currently relocated: ${describeRelocation(m)}`)
             })
             const linked = entry.matches.find(function (m) { return m.link })
@@ -283,9 +290,13 @@ function escapeHtml(text) {
 /*=============== thumbnails ===============*/
 
 //placeholders shown when a row carries no image url, or when the url it does
-//carry fails to load. Replace these names with the real files once they exist
-const FALLBACK_IMAGES = ["TEMP1", "TEMP2", "TEMP3", "TEMP4"]
+//carry fails to load
+//paths are relative to index.html, and the images folder sits beside it, so no
+//leading ../ here: that would look outside mag-search entirely
+const FALLBACK_IMAGES = ["images/noimg_cat.PNG", "images/noimg_cowboy.PNG",
+                         "images/noimg_gorgon.PNG", "images/noimg_sphinx.PNG"];
 
+// Selects random image from available placeholders
 function randomFallbackImage() {
     return FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]
 }
@@ -293,15 +304,22 @@ function randomFallbackImage() {
 //the src to use for a match: the sheet's column E url when there is one,
 //otherwise a placeholder picked at random
 function thumbnailFor(match) {
-    return match.img || randomFallbackImage()
+    //handles both call shapes: matches.find(m => m.img) returns undefined when
+    //no location has an image, and matches[0] may simply not carry one
+    return (match && match.img) || randomFallbackImage()
 }
 
 //covers the other way an image goes missing: the url exists but the file is
 //gone or the request fails. Clearing onerror first stops an endless loop if
 //the placeholder itself fails to load
 function useFallbackImage(imgEl) {
-    imgEl.onerror = null
-    imgEl.src = randomFallbackImage()
+    imgEl.onerror = function () {
+        //disarm before swapping the src: a placeholder that also fails to load
+        //would otherwise retrigger this handler and loop forever, hammering the
+        //server with requests
+        imgEl.onerror = null
+        imgEl.src = randomFallbackImage()
+    }
 }
 
 //NOTE, for Ellie who adds the image to the page: renderResult below already has
@@ -316,15 +334,24 @@ function describeRelocation(m) {
 function renderResult(display, matches) {
     const found = matches.length > 0
     document.getElementById("foundCard").style.display = found ? "flex" : "none"
+    document.getElementById("thumbCard").style.display = found ? "flex" : "none"
     document.getElementById("notFoundCard").style.display = found ? "none" : "flex"
+    
 
     if (found) {
         document.getElementById("foundCatNumber").textContent = display
         //multiple locations usually mean a data error 
         //each goes on its own line with a divider
         document.getElementById("locationDisplay").innerHTML =
-            matches.map(function (m) { return `<strong>${escapeHtml(formatLocation(m))}</strong>` })
-                .join(`<br><span class="also-found">also found</span><br>`)
+            matches.map(function (m) {
+                //"Return to:" records the cassetta an object belongs in while it
+                //sits somewhere else, which is the opposite of the relocation
+                //columns, so it reads as a quiet second line rather than a warning
+                const home = m.returnTo
+                    ? `<span class="return-to">belongs in ${escapeHtml(m.returnTo)}</span>`
+                    : ""
+                return `<strong>${escapeHtml(formatLocation(m))}</strong>${home}`
+            }).join(`<br><span class="also-found">also found</span><br>`)
 
         //a temporary move means the shelf location above is where it belongs,
         //not where it currently is, so it needs to be hard to miss
@@ -345,6 +372,28 @@ function renderResult(display, matches) {
         document.getElementById("objectLinks").innerHTML = linked
             ? `<a class="object-link" href="${encodeURI(linked.link)}" target="_blank" rel="noopener noreferrer">View in Open Context</a>`
             : ""
+
+        // Find first instance of image in a match in same way as link
+        const imageMatch = matches.find(function (m) { return m.img })//error
+        const imageURL = thumbnailFor(imageMatch)
+        
+        // Attaching error handler in case something bad!
+        useFallbackImage(document.getElementById("objectThumb"))
+
+        // Find url frm selected match
+        document.getElementById("objectThumb").src = imageURL
+
+        // Setting alt text to somehting helpful
+        if (FALLBACK_IMAGES.includes(imageURL)){
+            document.getElementById("objectThumb").alt = `No image found for ${document.getElementById("foundCatNumber").textContent}. Placeholder image inserted.`
+        } else {
+            document.getElementById("objectThumb").alt = `Image of ${document.getElementById("foundCatNumber").textContent} with link ${imageURL}`
+        }
+
+        //highlight the shelf on the mag map. Guarded so the page still works
+        //if magmap.js has not been added to index.html yet
+        if (typeof drawMagMap === "function") drawMagMap(matches)
+
     } else {
         document.getElementById("missingCatNumber").textContent = display
     }
@@ -360,10 +409,29 @@ function switchToInput() {
     document.getElementById("catNumber").focus()
 }
 
+// Displays mag map when corresponding button is clicked
+function toggleMap() {
+    if (document.getElementById("magMap").style.display == "flex"){
+        document.getElementById("magMap").style.display = "none";
+        document.getElementById("magmapbtn").innerText = "View Mag Map";
+    } else {
+        document.getElementById("magMap").style.display = "flex";
+        document.getElementById("magmapbtn").innerText = "Hide Mag Map";
+    }
+}
+
+// Hides magmap
+function hideMap(){
+    document.getElementById("magMap").style.display = "none";
+    document.getElementById("magmapbtn").innerText = "View Mag Map";
+}
+
 /*=============== main search handler ===============*/
 
 async function runSearch(event) {
     event.preventDefault()
+
+    hideMap()
 
     const field = document.getElementById("catNumber")
     const display = parseCatalogNumber(field.value)

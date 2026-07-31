@@ -1,0 +1,803 @@
+/*
+  theme.css - shared across the 2D drawing gallery and the 3D model viewer.
+
+  Both sites are records of the same excavation, so they share paper, ink,
+  rules and type. What separates them is one variable: --accent. The drawing
+  archive takes the pigment of the terracottas it documents; the model viewer
+  takes the patina of the metal it scans. Everything else is common.
+
+  A gallery sets its own accent by defining --accent-light and --accent-dark
+  in its own stylesheet, loaded after this one.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Spectral:wght@500;600&display=swap');
+
+:root {
+  /*surfaces and ink, light*/
+  --paper: #e6e2d8;
+  --sheet: #f4f2ec;
+  --sheet-sunk: #ded9cd;
+  --ink: #211e19;
+  --ink-soft: #6b6357;
+  --ink-faint: #948b7b;
+  --rule: #c9c2b3;
+  --rule-strong: #a79e8c;
+  --shadow: 0 1px 2px rgba(33, 30, 25, 0.06), 0 6px 20px rgba(33, 30, 25, 0.06);
+
+  /*accent, overridden per gallery*/
+  --accent-light: #9e4a24;
+  --accent-dark: #d4794c;
+  --accent: var(--accent-light);
+  --accent-wash: color-mix(in srgb, var(--accent) 12%, transparent);
+
+  /*type*/
+  --font-display: 'Spectral', Georgia, serif;
+  --font-ui: 'Archivo', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /*rhythm*/
+  --step: 0.5rem;
+  --radius: 3px;
+  --rail-width: 268px;
+  --header-height: 58px;
+  --speed: 160ms;
+}
+
+[data-theme='dark'] {
+  --paper: #191713;
+  --sheet: #221f1a;
+  --sheet-sunk: #131109;
+  --ink: #e8e3d8;
+  --ink-soft: #9c9484;
+  --ink-faint: #6f6858;
+  --rule: #3a352d;
+  --rule-strong: #57503f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.3);
+  --accent: var(--accent-dark);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:where(a, button, input, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/*
+  The register line. Catalogue values across both sites are set in mono:
+  years, record ids, counts, tag names. It is the one typographic rule that
+  makes a page here recognisable, and it carries meaning rather than mood.
+*/
+.reg {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* --- site header ------------------------------------------------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-header__inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--step) * 2);
+  padding: 0 calc(var(--step) * 3);
+}
+
+.site-header__brand {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--step) * 1.5);
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.site-header__site {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.site-header__section {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-left: 1px solid var(--rule-strong);
+  padding-left: calc(var(--step) * 1.5);
+}
+
+.site-header__nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--step);
+}
+
+/*
+  The sibling link. Each gallery points at the other one by name, so the two
+  read as two drawers of one cabinet rather than two unrelated sites.
+*/
+.site-header__sibling {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--step) * 0.75);
+  padding: calc(var(--step) * 0.75) calc(var(--step) * 1.5);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink-soft);
+  transition: color var(--speed), border-color var(--speed);
+}
+
+.site-header__sibling:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.site-header__sibling svg {
+  width: 13px;
+  height: 13px;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  transition: color var(--speed), border-color var(--speed);
+}
+
+.icon-button:hover {
+  color: var(--ink);
+  border-color: var(--rule);
+}
+
+.icon-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.theme-toggle .icon-moon {
+  display: none;
+}
+
+[data-theme='dark'] .theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-theme='dark'] .theme-toggle .icon-moon {
+  display: block;
+}
+
+/* --- tag pills --------------------------------------------------------- */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--step) * 0.75);
+  padding: 3px 9px;
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  transition: color var(--speed), border-color var(--speed),
+    background-color var(--speed);
+}
+
+button.tag:hover {
+  color: var(--ink);
+  border-color: var(--ink-faint);
+}
+
+.tag[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+.tag__count {
+  font-size: 0.62rem;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag--empty {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* --- buttons ----------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--step);
+  padding: calc(var(--step) * 1.1) calc(var(--step) * 2);
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color var(--speed), border-color var(--speed),
+    background-color var(--speed);
+}
+
+.button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.button--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+.button--primary:hover {
+  background: color-mix(in srgb, var(--accent) 84%, var(--ink));
+  border-color: transparent;
+  color: var(--paper);
+}
+
+/* --- text inputs ------------------------------------------------------- */
+
+.field {
+  width: 100%;
+  padding: calc(var(--step) * 1.1) calc(var(--step) * 1.5);
+  background: var(--sheet);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-ui);
+  font-size: 0.86rem;
+  color: var(--ink);
+}
+
+.field::placeholder {
+  color: var(--ink-faint);
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+/* --- modal ------------------------------------------------------------- */
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--step) * 3);
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
+.modal__panel {
+  width: min(560px, 100%);
+  max-height: 84vh;
+  overflow-y: auto;
+  padding: calc(var(--step) * 4);
+  background: var(--sheet);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.modal__panel h2 {
+  font-size: 1.3rem;
+  margin-bottom: calc(var(--step) * 2);
+}
+
+.modal__panel dt {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: calc(var(--step) * 2.5);
+}
+
+.modal__panel dd {
+  margin: calc(var(--step) * 0.5) 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.modal__close {
+  float: right;
+  margin: calc(var(--step) * -1) calc(var(--step) * -1) 0 0;
+}
+
+/* --- utility ----------------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =======================================================================
+   Page furniture shared by both galleries: the rail, the toolbar, the
+   register line and the card grid. Each gallery styles only what is unique
+   to it on top of this.
+   ===================================================================== */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: calc(var(--step) * 2);
+  top: calc(var(--step) * 2);
+  z-index: 300;
+  padding: var(--step) calc(var(--step) * 2);
+  background: var(--sheet);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+/* --- layout ------------------------------------------------------------ */
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--rail-width) minmax(0, 1fr);
+  align-items: start;
+  gap: calc(var(--step) * 5);
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: calc(var(--step) * 5) calc(var(--step) * 4) calc(var(--step) * 10);
+}
+
+.content {
+  min-width: 0;
+}
+
+.page-head h1 {
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+}
+
+.page-head__blurb {
+  max-width: 52ch;
+  margin: var(--step) 0 0;
+  color: var(--ink-soft);
+}
+
+/* --- filter rail ------------------------------------------------------- */
+
+.rail {
+  position: sticky;
+  top: calc(var(--header-height) + var(--step) * 3);
+  max-height: calc(100vh - var(--header-height) - var(--step) * 6);
+  overflow-y: auto;
+  padding-right: calc(var(--step) * 1.5);
+}
+
+.rail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--step);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.rail__reset {
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.rail__reset:hover {
+  color: var(--accent);
+}
+
+.rail__group {
+  border-bottom: 1px solid var(--rule);
+  padding: calc(var(--step) * 1.5) 0;
+}
+
+.rail__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.rail__summary::-webkit-details-marker {
+  display: none;
+}
+
+/*a plus that becomes a minus, drawn rather than typed*/
+.rail__marker {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  flex: none;
+}
+
+.rail__marker::before,
+.rail__marker::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 1px;
+  background: var(--ink-faint);
+  transition: transform var(--speed);
+}
+
+.rail__marker::after {
+  transform: rotate(90deg);
+}
+
+[open] > .rail__summary .rail__marker::after {
+  transform: rotate(0deg);
+}
+
+.rail__hint {
+  margin: calc(var(--step) * 0.75) 0 0;
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+}
+
+.rail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--step) * 0.75);
+  margin-top: calc(var(--step) * 1.5);
+}
+
+.rail__range {
+  display: flex;
+  align-items: center;
+  gap: var(--step);
+  margin-top: calc(var(--step) * 1.5);
+}
+
+.rail__range-dash {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+}
+
+.rail__check {
+  display: flex;
+  align-items: center;
+  gap: var(--step);
+  margin-top: calc(var(--step) * 1.5);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.rail__check input {
+  accent-color: var(--accent);
+}
+
+.field--compact {
+  padding: calc(var(--step) * 0.75) var(--step);
+  font-size: 0.8rem;
+}
+
+/* --- toolbar ----------------------------------------------------------- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--step);
+  margin: calc(var(--step) * 4) 0 calc(var(--step) * 2);
+}
+
+.toolbar__search {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.toolbar__sort {
+  flex: none;
+}
+
+.toolbar__rail-toggle {
+  display: none;
+}
+
+.toolbar__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  background: var(--accent);
+  border-radius: 999px;
+  color: var(--paper);
+  font-size: 0.62rem;
+}
+
+.register {
+  margin: 0 0 calc(var(--step) * 3);
+  padding-bottom: calc(var(--step) * 1.5);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-faint);
+}
+
+.register__count {
+  color: var(--accent);
+}
+
+/* --- grid -------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: calc(var(--step) * 3);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--speed), box-shadow var(--speed),
+    transform var(--speed);
+}
+
+.card:hover {
+  border-color: var(--rule-strong);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+/*
+  Aspect ratios here run from 1:2 to 5:1. Cropping to a uniform square would
+  cut the ends off a section drawing, so tiles are a fixed height and the
+  drawing sits inside them on the sheet, the way it would on a plan chest.
+*/
+.card__plate {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 210px;
+  padding: calc(var(--step) * 1.5);
+  background: var(--sheet-sunk);
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  cursor: zoom-in;
+}
+
+.card__plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/*panoramic sheets get the width they need instead of shrinking to a stamp*/
+.card--wide {
+  grid-column: span 2;
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--step);
+  padding: calc(var(--step) * 1.75) calc(var(--step) * 2)
+    calc(var(--step) * 2);
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.card__meta {
+  display: flex;
+  gap: var(--step);
+  align-items: baseline;
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--step) * 0.6);
+  margin-top: calc(var(--step) * 0.5);
+}
+
+.card__tags .tag {
+  font-size: 0.63rem;
+  padding: 2px 7px;
+}
+
+.empty {
+  padding: calc(var(--step) * 8) 0;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.link-button {
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- narrow screens ---------------------------------------------------- */
+
+.rail-scrim[hidden] {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    padding: calc(var(--step) * 3) calc(var(--step) * 2.5)
+      calc(var(--step) * 8);
+  }
+
+  .toolbar__rail-toggle {
+    display: inline-flex;
+  }
+
+  .rail {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 120;
+    width: min(320px, 86vw);
+    max-height: none;
+    padding: calc(var(--step) * 3);
+    background: var(--sheet);
+    border-left: 1px solid var(--rule-strong);
+    transform: translateX(100%);
+    transition: transform var(--speed) ease-out;
+  }
+
+  .rail.is-open {
+    transform: translateX(0);
+  }
+
+  .rail-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    background: color-mix(in srgb, var(--ink) 40%, transparent);
+  }
+
+  .card--wide {
+    grid-column: span 1;
+  }
+
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: calc(var(--step) * 2);
+  }
+
+  .card__plate {
+    height: 150px;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .toolbar__search {
+    order: 3;
+    flex: 1 0 100%;
+  }
+}

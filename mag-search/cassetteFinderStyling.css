@@ -67,7 +67,10 @@ html {
     left: 0;
     width: 100%;
     height: 100vh;
-    background-image: url('./bg.JPG');
+    /*urls in a css file resolve against the css file, not against index.html.
+      this file sits beside the images folder, so images/bg.JPG is correct and
+      ../images/bg.JPG would point outside mag-search*/
+    background-image: url('images/bg.JPG');
     background-size: cover;
     background-position: center;
     z-index: -1; /*sits behind the glass cardss*/
@@ -242,7 +245,7 @@ html {
 
 #refreshBtn {
     margin-top: 8px;
-    padding: 5px 18px;
+    padding: 18px 18px;
     font-family: "DM Serif Display", serif;
     font-size: 13px;
     color: #166b53;
@@ -280,11 +283,21 @@ html {
     border-bottom: none;
 }
 
+/*flex now. float moved the date to the right
+  visually but left it next to the catalog number in the text flow, so
+  double clicking "########" ran on into the "M" of "M/DD/YYY" and copied "########M"*/
 .history-input {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
     font-family: "DM Serif Display", serif;
     font-size: 16px;
     color: #166b53;
+}
+
+.history-number {
+    word-break: break-word;
 }
 
 .history-out {
@@ -302,7 +315,7 @@ html {
 
 /*timestamp beside the searched number*/
 .history-time {
-    float: right;
+    flex-shrink: 0; /*the date keeps its width, the number wraps instead*/
     font-family: "Cormorant Infant", serif;
     font-size: 13px;
     color: rgba(43, 43, 43, 0.65);
@@ -433,6 +446,16 @@ html {
     margin: 4px 0;
 }
 
+/*where an object belongs while it sits somewhere else. Green rather than rust,
+  since this is ordinary information and not a problem to flag. Sized in em so
+  it stays proportionate in the large result card*/
+.return-to {
+    display: block;
+    font-size: 0.6em;
+    color: #166b53;
+    margin-top: 2px;
+}
+
 .notfound-text {
     color: #2b2b2b;
     font-size: 18px;
@@ -468,16 +491,23 @@ html {
     border: 2px solid #166b53;
     border-radius: 30px;
     transition: background-color 0.3s ease;
+    align-self: center;
 }
 
 .object-link:hover {
     background-color: #88a2a0;
 }
 
+#objectLinks {
+    align-self: center;
+    margin: auto;
+}
+
 /*Copy Button*/
 .copy-btn {
     align-self: center;
     padding: 5px 18px;
+    margin: 6px 2px;
     font-family: "DM Serif Display", serif;
     font-size: 14px;
     color: #166b53;
@@ -492,8 +522,56 @@ html {
     background-color: #88a2a0;
 }
 
+.magmap-btn {
+    align-self: center;
+    padding: 5px 18px;
+    margin: 6px 2px;
+    font-family: "DM Serif Display", serif;
+    font-size: 14px;
+    color: #166b53;
+    background-color: #d5d8cb;
+    border: 2px solid #166b53;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.magmap-btn:hover {
+    background-color: #88a2a0;
+}
+
+/*#output is a column, so the side by side pair needs its own row wrapper*/
+.result-row {
+    display: flex;
+    align-items: flex-start; /*each card keeps its own height*/
+    justify-content: center;
+    gap: 30px;
+    max-width: 100%;
+    margin-bottom: 5vh;
+}
+
+.thumb-card {
+    width: 300px;
+    padding: 24px;
+    text-align: center;
+    flex-shrink: 0; /*stops the card being squeezed by a tall location card*/
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#objectThumb {
+    display: block;
+    width: 100%;
+    height: auto; /*keeps the aspect ratio whatever Open Context sends*/
+    border-radius: 16px;
+}
+
 /*New Search Button*/
 #newsearch {
+    display: flex;
+    width: auto;
+    margin: 0 auto;
     padding: 12px 28px;
     border-radius: 30px;
     border: 2px solid #166b53;
@@ -508,6 +586,112 @@ html {
 
 #newsearch:hover {
     background-color: #88a2a0;
+}
+
+/*=======================
+   Mag map overlay
+=======================*/
+
+/*wraps the map image so the svg can sit exactly on it. The frame around it is
+  wider than the image, so positioning against the frame would misalign*/
+.magmap-wrap {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+}
+
+.magmap-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /*the map stays clickable through the overlay*/
+}
+
+/*the highlighted shelf. Green rather than rust: finding the object is the
+  good outcome, not a problem to flag*/
+.magmap-hit {
+    fill: rgba(22, 107, 83, 0.3);
+    stroke: #166b53;
+    animation: magmap-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes magmap-pulse {
+    0%, 100% { fill-opacity: 1; }
+    50% { fill-opacity: 0.35; }
+}
+
+/*a pulsing box is unpleasant for anyone sensitive to motion*/
+@media (prefers-reduced-motion: reduce) {
+    .magmap-hit { animation: none; }
+}
+
+/*heading above the map, explaining an empty or unusual highlight: museum
+  objects and Scaff. 16 have no area drawn yet. Shaped like the other card
+  titles so the map card reads the same as the result cards*/
+.magmap-note {
+    font-family: "DM Serif Display", serif;
+    font-size: 22px;
+    line-height: 1.3;
+    color: #166b53;
+    text-align: center;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(22, 107, 83, 0.35);
+}
+
+.mag-map {
+    display: flex;
+    /*column so the heading stacks above the map instead of beside it*/
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+#magMapFrame {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background-color: #d5d8cb;
+    aspect-ratio: auto;
+    height: 45vw;
+    width: 65vw;
+    border-radius: 16px;
+}
+
+#magMapImage {
+    aspect-ratio: auto;
+    height: auto;
+    width: 60vw;
+
+    border-style: solid;
+    border-radius: 16px;
+    border-color: #d5d8cb;
+}
+
+/*=======================
+   Scrollbars
+=======================*/
+
+/*opening the map makes the results taller than the screen, and a scrollbar
+  running down the glass cards looks bad. Scrolling still works by wheel,
+  trackpad, touch and keyboard; only the bar itself is hidden*/
+.pages,
+.pages div {
+    scrollbar-width: none; /*firefox*/
+    -ms-overflow-style: none; /*old edge*/
+}
+
+.pages::-webkit-scrollbar,
+.pages div::-webkit-scrollbar {
+    display: none; /*chrome, safari, new edge*/
 }
 
 /*=======================
@@ -528,5 +712,12 @@ html {
 
     #inputbox {
         width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .result-row {
+        flex-direction: column;
+        align-items: center;
     }
 }

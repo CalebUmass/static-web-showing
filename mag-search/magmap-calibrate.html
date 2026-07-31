@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Mag Map calibration</title>
+    <style>
+        /*deliberately plain: this is a workshop tool, not part of the site*/
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #eceee6;
+            color: #2b2b2b;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        p.hint {
+            margin: 0 0 16px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        #stage {
+            position: relative;
+            display: inline-block;
+            line-height: 0;
+            border: 1px solid #999;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        #stage img {
+            display: block;
+            max-width: 62vw;
+            height: auto;
+        }
+
+        #svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+
+        rect.area {
+            fill: rgba(22, 107, 83, 0.25);
+            stroke: #166b53;
+            stroke-width: 6;
+        }
+
+        rect.area.sel {
+            fill: rgba(200, 40, 40, 0.3);
+            stroke: #c02020;
+        }
+
+        rect.draft {
+            fill: rgba(0, 0, 0, 0.15);
+            stroke: #333;
+            stroke-dasharray: 12 8;
+            stroke-width: 5;
+        }
+
+        .side {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 340px;
+            font-family: ui-monospace, monospace;
+            font-size: 12px;
+            padding: 8px;
+        }
+
+        button {
+            padding: 6px 14px;
+            margin: 0 6px 8px 0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        ul {
+            max-height: 200px;
+            overflow: auto;
+            padding-left: 18px;
+            font-size: 13px;
+        }
+
+        li {
+            cursor: pointer;
+            padding: 1px 0;
+        }
+
+        li.sel {
+            font-weight: bold;
+            color: #c02020;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Mag Map calibration</h1>
+    <p class="hint">
+        Drag a box over a shelf to add it, then type its name. Click a box or a name in
+        the list to select it, and press Delete to remove it. Coordinates come out
+        normalized, so they keep working if the map is re-exported at another size.
+        Paste the output over MAG_MAP_AREAS in magmap.js.
+    </p>
+
+    <div class="row">
+        <div id="stage">
+            <img id="map" src="images/magmap.PNG" alt="Mag map">
+            <svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+
+        <div class="side">
+            <div>
+                <button id="loadBtn">Load a different image</button>
+                <input type="file" id="file" accept="image/*" style="display:none">
+                <button id="delBtn">Delete selected</button>
+                <button id="copyBtn">Copy output</button>
+            </div>
+            <ul id="list"></ul>
+            <textarea id="out" spellcheck="false"></textarea>
+        </div>
+    </div>
+
+    <script>
+        //existing areas, so the tool starts from what magmap.js already knows.
+        //replace this block wholesale if the plan changes completely
+        let areas = {
+            "1": [0.43357, 0.00000, 0.04536, 0.06500],
+            "2": [0.43357, 0.07672, 0.04536, 0.07672],
+            "3": [0.43357, 0.16569, 0.04536, 0.18434],
+            "4": [0.43357, 0.36281, 0.04536, 0.19552],
+            "5": [0.56286, 0.68087, 0.06929, 0.07405],
+            "6": [0.64071, 0.68141, 0.19714, 0.07352],
+            "7": [0.84679, 0.68141, 0.06036, 0.07352],
+            "8": [0.77357, 0.00000, 0.15000, 0.05967],
+            "9": [0.00000, 0.08364, 0.04643, 0.28556],
+            "10": [0.38429, 0.00586, 0.04107, 0.23388],
+            "11": [0.85643, 0.14225, 0.12786, 0.07139],
+            "12": [0.38429, 0.25200, 0.04107, 0.22376],
+            "13": [0.06357, 0.50240, 0.18714, 0.08418],
+            "14": [0.00000, 0.48215, 0.04643, 0.10442],
+            "15": [0.05679, 0.00000, 0.08571, 0.06127],
+            "Back Table": [0.16643, 0.00000, 0.15607, 0.05168],
+            "Table 1": [0.11393, 0.38679, 0.21607, 0.08578],
+            "Table 2": [0.12071, 0.24880, 0.21607, 0.08578],
+            "Table 3": [0.13000, 0.10975, 0.21607, 0.08578],
+            "Front Table": [0.06357, 0.50240, 0.18714, 0.08418],
+        };
+
+        const img = document.getElementById("map");
+        const svg = document.getElementById("svg");
+        const SVGNS = "http://www.w3.org/2000/svg";
+        let selected = null;
+        let drag = null;
+
+        function sizeSvg() {
+            //viewBox in natural pixels keeps stroke widths sane at any zoom
+            const w = img.naturalWidth || 2800;
+            const h = img.naturalHeight || 1877;
+            svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+            svg.setAttribute("preserveAspectRatio", "none");
+            return [w, h];
+        }
+
+        function render() {
+            const [w, h] = sizeSvg();
+            svg.innerHTML = "";
+            Object.keys(areas).forEach(function (name) {
+                const a = areas[name];
+                const r = document.createElementNS(SVGNS, "rect");
+                r.setAttribute("x", a[0] * w);
+                r.setAttribute("y", a[1] * h);
+                r.setAttribute("width", a[2] * w);
+                r.setAttribute("height", a[3] * h);
+                r.setAttribute("class", "area" + (name === selected ? " sel" : ""));
+                r.addEventListener("mousedown", function (e) {
+                    e.stopPropagation();
+                    selected = name;
+                    render();
+                });
+                svg.appendChild(r);
+
+                const t = document.createElementNS(SVGNS, "text");
+                t.setAttribute("x", a[0] * w + 10);
+                t.setAttribute("y", a[1] * h + Math.min(60, a[3] * h - 8));
+                t.setAttribute("font-size", Math.max(28, w * 0.016));
+                t.setAttribute("fill", "#0d4a39");
+                t.textContent = name;
+                svg.appendChild(t);
+            });
+            renderList();
+            renderOut();
+        }
+
+        function renderList() {
+            const ul = document.getElementById("list");
+            ul.innerHTML = "";
+            Object.keys(areas).forEach(function (name) {
+                const li = document.createElement("li");
+                li.textContent = name;
+                if (name === selected) li.className = "sel";
+                li.addEventListener("click", function () { selected = name; render(); });
+                ul.appendChild(li);
+            });
+        }
+
+        function renderOut() {
+            const lines = Object.keys(areas).map(function (name) {
+                const a = areas[name].map(function (v) { return v.toFixed(5); });
+                return `    "${name}": [${a.join(", ")}],`;
+            });
+            document.getElementById("out").value =
+                "const MAG_MAP_AREAS = {\n" + lines.join("\n") + "\n}";
+        }
+
+        //pointer position as a fraction of the displayed image
+        function frac(e) {
+            const b = svg.getBoundingClientRect();
+            return [
+                Math.min(1, Math.max(0, (e.clientX - b.left) / b.width)),
+                Math.min(1, Math.max(0, (e.clientY - b.top) / b.height)),
+            ];
+        }
+
+        svg.addEventListener("mousedown", function (e) {
+            const [x, y] = frac(e);
+            drag = { x0: x, y0: y, x1: x, y1: y };
+            selected = null;
+        });
+
+        svg.addEventListener("mousemove", function (e) {
+            if (!drag) return;
+            const [x, y] = frac(e);
+            drag.x1 = x; drag.y1 = y;
+            render();
+            const [w, h] = sizeSvg();
+            const r = document.createElementNS(SVGNS, "rect");
+            r.setAttribute("x", Math.min(drag.x0, drag.x1) * w);
+            r.setAttribute("y", Math.min(drag.y0, drag.y1) * h);
+            r.setAttribute("width", Math.abs(drag.x1 - drag.x0) * w);
+            r.setAttribute("height", Math.abs(drag.y1 - drag.y0) * h);
+            r.setAttribute("class", "draft");
+            svg.appendChild(r);
+        });
+
+        window.addEventListener("mouseup", function () {
+            if (!drag) return;
+            const d = drag;
+            drag = null;
+            const w = Math.abs(d.x1 - d.x0);
+            const h = Math.abs(d.y1 - d.y0);
+            //ignore a stray click that was not really a drag
+            if (w < 0.004 || h < 0.004) { render(); return; }
+            const name = prompt("Name for this area (a scaffolding number, or a table name):");
+            if (name) {
+                areas[name.trim()] = [
+                    Math.min(d.x0, d.x1), Math.min(d.y0, d.y1), w, h,
+                ];
+                selected = name.trim();
+            }
+            render();
+        });
+
+        window.addEventListener("keydown", function (e) {
+            if ((e.key === "Delete" || e.key === "Backspace") && selected) {
+                //not while typing in the output box
+                if (document.activeElement.tagName === "TEXTAREA") return;
+                delete areas[selected];
+                selected = null;
+                render();
+            }
+        });
+
+        document.getElementById("delBtn").addEventListener("click", function () {
+            if (selected) { delete areas[selected]; selected = null; render(); }
+        });
+
+        document.getElementById("copyBtn").addEventListener("click", function () {
+            const ta = document.getElementById("out");
+            ta.select();
+            navigator.clipboard.writeText(ta.value);
+        });
+
+        document.getElementById("loadBtn").addEventListener("click", function () {
+            document.getElementById("file").click();
+        });
+
+        document.getElementById("file").addEventListener("change", function (e) {
+            const f = e.target.files[0];
+            if (f) img.src = URL.createObjectURL(f);
+        });
+
+        img.addEventListener("load", render);
+        if (img.complete) render();
+    </script>
+
+</body>
+
+</html>

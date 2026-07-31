@@ -13,7 +13,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/CalebUmass/static-web-showing">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="shared/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">static-web-showing</h3>
@@ -318,4 +318,4 @@ Project Link: [https://github.com/CalebUmass/static-web-showing](https://github.
 [license-url]: https://github.com/CalebUmass/static-web-showing/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/caleb-richards-aab742375
-[product-screenshot]: images/product-screenshot.png
+[product-screenshot]: shared/images/product-screenshot.png
