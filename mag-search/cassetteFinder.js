@@ -227,7 +227,7 @@ function renderHistory() {
             ? `<span class="history-time">${new Date(entry.at).toLocaleString()}</span>`
             : ""
         div.innerHTML =
-            `<span class="history-input">${escapeHtml(entry.display)}${when}</span>` +
+            `<span class="history-input"><span class="history-number">${escapeHtml(entry.display)}</span>${when}</span>` +
             `<span class="history-out">${outcome}${link}</span>`
         list.appendChild(div)
     })

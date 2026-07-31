@@ -283,11 +283,21 @@ html {
     border-bottom: none;
 }
 
+/*flex now. float moved the date to the right
+  visually but left it next to the catalog number in the text flow, so
+  double clicking "########" ran on into the "M" of "M/DD/YYY" and copied "########M"*/
 .history-input {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
     font-family: "DM Serif Display", serif;
     font-size: 16px;
     color: #166b53;
+}
+
+.history-number {
+    word-break: break-word;
 }
 
 .history-out {
@@ -305,7 +315,7 @@ html {
 
 /*timestamp beside the searched number*/
 .history-time {
-    float: right;
+    flex-shrink: 0; /*the date keeps its width, the number wraps instead*/
     font-family: "Cormorant Infant", serif;
     font-size: 13px;
     color: rgba(43, 43, 43, 0.65);
@@ -617,8 +627,8 @@ html {
     .magmap-hit { animation: none; }
 }
 
-/*heading above the map, explaining an empty or unusual highlight:
-  Shaped like the other card
+/*heading above the map, explaining an empty or unusual highlight: museum
+  objects and Scaff. 16 have no area drawn yet. Shaped like the other card
   titles so the map card reads the same as the result cards*/
 .magmap-note {
     font-family: "DM Serif Display", serif;
