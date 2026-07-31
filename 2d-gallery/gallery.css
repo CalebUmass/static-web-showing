@@ -1,0 +1,198 @@
+/*
+  gallery.css - styles specific to the drawing archive.
+
+  Shared tokens and components live in ../shared/theme.css. The only identity
+  change made here is the accent: burnt sienna, the pigment of the terracottas
+  most of these drawings record.
+*/
+
+:root {
+  --accent-light: #9e4a24;
+  --accent-dark: #d4794c;
+}
+
+/* --- viewer ------------------------------------------------------------ */
+
+/*
+  A note on how the image gets constrained, because the first version of this
+  got it wrong and rendered every drawing at its natural 2200px.
+
+  The panel is a flex column: bar, stage, caption. The stage is the only part
+  that flexes, and it carries `min-height: 0`. Without that, a flex item
+  refuses to shrink below its content size, the stage grows to fit a 2200px
+  image, and `max-height: 100%` on the image has nothing definite to resolve
+  against. With it, the stage is bounded by the viewport and the image scales
+  down to fit. Same reasoning for `min-width: 0` across the row.
+*/
+
+.viewer[hidden] {
+  display: none;
+}
+
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  background: color-mix(in srgb, var(--ink) 82%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.viewer__panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: var(--paper);
+}
+
+/* --- bar --- */
+
+.viewer__bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--step);
+  padding: calc(var(--step) * 1.25) calc(var(--step) * 2);
+  border-bottom: 1px solid var(--rule);
+}
+
+.viewer__bar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--step) * 0.75);
+  padding: calc(var(--step) * 0.75) calc(var(--step) * 1.5);
+  background: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color var(--speed), border-color var(--speed);
+}
+
+.viewer__bar-button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.viewer__bar-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* --- stage --- */
+
+.viewer__stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--step) * 2);
+  padding: calc(var(--step) * 3);
+}
+
+.viewer__stage img {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.viewer__step {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  background: var(--sheet);
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  color: var(--ink-soft);
+  transition: color var(--speed), border-color var(--speed),
+    background-color var(--speed);
+}
+
+.viewer__step:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+.viewer__step svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* --- caption --- */
+
+.viewer__caption {
+  flex: 0 0 auto;
+  max-height: 38vh;
+  overflow-y: auto;
+  padding: calc(var(--step) * 2.5) calc(var(--step) * 4)
+    calc(var(--step) * 3);
+  border-top: 1px solid var(--rule);
+  background: var(--sheet);
+}
+
+.viewer__caption-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(var(--step) * 3);
+}
+
+.viewer__caption h2 {
+  font-size: 1.3rem;
+  margin-bottom: calc(var(--step) * 0.5);
+}
+
+.viewer__description {
+  max-width: 68ch;
+  margin: calc(var(--step) * 2) 0 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.viewer__description[hidden] {
+  display: none;
+}
+
+.viewer__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--step) * 0.6);
+  margin-top: calc(var(--step) * 2);
+}
+
+/* --- narrow screens ---------------------------------------------------- */
+
+@media (max-width: 700px) {
+  .viewer__stage {
+    padding: calc(var(--step) * 1.5);
+    gap: var(--step);
+  }
+
+  .viewer__step {
+    width: 38px;
+    height: 38px;
+  }
+
+  .viewer__caption {
+    max-height: 44vh;
+    padding: calc(var(--step) * 2);
+  }
+
+  .viewer__caption-head {
+    flex-direction: column;
+    gap: calc(var(--step) * 1.5);
+  }
+}

@@ -18,14 +18,14 @@
 
 <body>
   <a class="skip-link" href="#gallery">Skip to the drawings</a>
-
+ 
   <header id="site-header"></header>
-
+ 
   <div class="layout">
     <!--filter rail. Contents are generated from the facets in data/artworks.js-->
     <aside class="rail" id="filter-rail" aria-label="Filters"></aside>
     <div class="rail-scrim" data-rail-close hidden></div>
-
+ 
     <main class="content">
       <div class="page-head">
         <h1>Drawing archive</h1>
@@ -34,18 +34,18 @@
           Civitate, tagged by year, subject and area.
         </p>
       </div>
-
+ 
       <div class="toolbar">
         <button class="button toolbar__rail-toggle" type="button" data-rail-open>
           Filters <span class="toolbar__badge" data-active-count hidden></span>
         </button>
-
+ 
         <div class="toolbar__search">
           <label class="visually-hidden" for="search">Search the archive</label>
           <input class="field" type="search" id="search" placeholder="Search titles and tags"
             autocomplete="off">
         </div>
-
+ 
         <div class="toolbar__sort">
           <label class="visually-hidden" for="sort">Sort by</label>
           <select class="field field--compact" id="sort">
@@ -57,58 +57,73 @@
           </select>
         </div>
       </div>
-
+ 
       <!--the register line: what is being asked for, and how many records answer-->
       <p class="register" id="register" role="status"></p>
-
+ 
       <div class="grid" id="gallery"></div>
-
+ 
       <p class="empty" id="empty" hidden>
         Nothing matches that. <button type="button" class="link-button" data-reset-all>Clear
           the filters</button> to see all records.
       </p>
     </main>
   </div>
-
-  <!--lightbox-->
-  <div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Drawing viewer">
-    <div class="viewer__bar">
-      <span class="reg" id="viewer-position"></span>
-      <div class="viewer__bar-actions">
-        <a class="button" id="viewer-original" href="#" download>Full resolution</a>
-        <button class="icon-button" type="button" data-viewer-close aria-label="Close viewer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+ 
+  <!--lightbox. Steps through whatever the filters currently show, not the whole archive-->
+  <div class="viewer" id="viewer" hidden role="dialog" aria-modal="true"
+    aria-labelledby="viewer-title">
+    <div class="viewer__panel">
+ 
+      <header class="viewer__bar">
+        <span class="reg" id="viewer-position"></span>
+        <button class="viewer__bar-button" type="button" data-viewer-close>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            aria-hidden="true">
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
+          Close
+        </button>
+      </header>
+ 
+      <div class="viewer__stage">
+        <button class="viewer__step" type="button" data-viewer-prev>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            aria-hidden="true">
+            <path d="M15 5l-7 7 7 7" />
+          </svg>
+          <span class="visually-hidden">Previous image</span>
+        </button>
+ 
+        <img id="viewer-image" alt="">
+ 
+        <button class="viewer__step" type="button" data-viewer-next>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            aria-hidden="true">
+            <path d="M9 5l7 7-7 7" />
+          </svg>
+          <span class="visually-hidden">Next image</span>
         </button>
       </div>
-    </div>
-
-    <button class="viewer__step viewer__step--prev" type="button" data-viewer-prev
-      aria-label="Previous drawing">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path d="M15 5l-7 7 7 7" />
-      </svg>
-    </button>
-
-    <figure class="viewer__figure">
-      <img id="viewer-image" alt="">
-      <figcaption class="viewer__caption">
-        <h2 id="viewer-title"></h2>
-        <p class="reg" id="viewer-meta"></p>
-        <p class="viewer__note" id="viewer-note"></p>
+ 
+      <div class="viewer__caption">
+        <div class="viewer__caption-head">
+          <div>
+            <h2 id="viewer-title"></h2>
+            <p class="reg" id="viewer-meta"></p>
+          </div>
+          <a class="button" id="viewer-original" href="#" target="_blank" rel="noopener">
+            View full size
+          </a>
+        </div>
+        <!--hidden entirely when the record has no caption, so a blank one leaves no gap-->
+        <p class="viewer__description" id="viewer-description" hidden></p>
         <div class="viewer__tags" id="viewer-tags"></div>
-      </figcaption>
-    </figure>
-
-    <button class="viewer__step viewer__step--next" type="button" data-viewer-next
-      aria-label="Next drawing">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
+      </div>
+ 
+    </div>
   </div>
-
+ 
   <!--help-->
   <div class="modal" id="help-modal" hidden>
     <div class="modal__panel">
@@ -139,11 +154,11 @@
       </dl>
     </div>
   </div>
-
+ 
   <script src="data/artworks.js"></script>
   <script src="../shared/site-header.js"></script>
   <script src="../shared/facets.js"></script>
   <script src="gallery.js"></script>
 </body>
-
+ 
 </html>

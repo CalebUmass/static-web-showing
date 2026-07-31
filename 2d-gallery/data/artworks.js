@@ -5,7 +5,7 @@
   the tag pills, the search index and the lightbox. Nothing about an artwork is
   stored in index.html or gallery.css any more.
 
-  See shared/docs/GALLERY_ADDING-IMAGES.md for the full walkthrough. Short version:
+  See shared/docs/GALLERY-ADDING-IMAGES.md for the full walkthrough. Short version:
 
     1. Drop the original file in media/<year>/  (or media/unknown/)
     2. Add a record to `items` below
@@ -28,12 +28,15 @@
   ITEMS
   -----
     id        stable, unique, lowercase-with-dashes. Never reuse or renumber.
-    title     shown on the card and in the lightbox
+    title     shown on the card and in the viewer
+    caption   a sentence or two explaining the drawing, shown in the viewer
+              under the title. Leave as "" when there is nothing to say: the
+              paragraph is hidden entirely rather than left blank, so an
+              uncaptioned record does not look like it lost its text.
     file      path under media/, exactly as it sits on disk
     year      number, or null when unknown
     <facet>   array of strings, one per tag. Omit or leave [] when unknown.
     credit    optional line of attribution or provenance
-    note      optional longer caption, shown in the lightbox only
 
   `width`, `height` and `derived` are filled in automatically by
   tools/build-derivatives.py. Leave them alone.
@@ -77,6 +80,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm-22-10",
       "title": "Alphabet",
+      "caption": "",
       "file": "2022/MM-22-10-1.png",
       "year": 2022,
       "subject": ["Alphabet", "Inscription"],
@@ -94,6 +98,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm-22-9",
       "title": "Misc Drawing",
+      "caption": "",
       "file": "2022/MM-22-9-1.png",
       "year": 2022,
       "subject": [],
@@ -111,6 +116,7 @@ window.GALLERY_DATA = {
     {
       "id": "floreak-cheese-making",
       "title": "Cheese Making Illustration",
+      "caption": "",
       "file": "2022/FloreakCheeseMakingIllustration-1.png",
       "year": 2022,
       "subject": ["Cheese making", "Daily life"],
@@ -128,6 +134,7 @@ window.GALLERY_DATA = {
     {
       "id": "alphabet-rough-sketch",
       "title": "Alphabet Rough Sketch",
+      "caption": "",
       "file": "2022/alphabetroughsketch-1.png",
       "year": 2022,
       "subject": ["Alphabet", "Inscription"],
@@ -145,6 +152,7 @@ window.GALLERY_DATA = {
     {
       "id": "roof-reconstruction-c",
       "title": "Roof Reconstruction",
+      "caption": "",
       "file": "2018/RoofReconstructionC.JPG",
       "year": 2018,
       "subject": ["Roof"],
@@ -162,6 +170,7 @@ window.GALLERY_DATA = {
     {
       "id": "pathway-illustration",
       "title": "Pathway",
+      "caption": "",
       "file": "2018/PathwayIllustration.jpg",
       "year": 2018,
       "subject": ["Pathway"],
@@ -179,6 +188,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm2018-weaving",
       "title": "Weaving",
+      "caption": "",
       "file": "2018/MM2018llustrationWeaving.jpg",
       "year": 2018,
       "subject": ["Weaving", "Textiles", "Daily life"],
@@ -196,6 +206,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm2018-women",
       "title": "Women",
+      "caption": "",
       "file": "2018/MM2018IllustrationWomen.jpg",
       "year": 2018,
       "subject": ["Figures", "Daily life"],
@@ -213,6 +224,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm2018-loom",
       "title": "Loom",
+      "caption": "",
       "file": "2018/MM2018IllustrationLoom.jpg",
       "year": 2018,
       "subject": ["Loom", "Weaving", "Textiles"],
@@ -230,6 +242,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm2018-kilns",
       "title": "Kilns",
+      "caption": "",
       "file": "2018/MM2018IllustrationKilns.jpg",
       "year": 2018,
       "subject": ["Kiln", "Production"],
@@ -247,6 +260,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm2018-infill-of-well",
       "title": "Infill of Well",
+      "caption": "",
       "file": "2018/MM2018IllustrationInfillofWell.jpg",
       "year": 2018,
       "subject": ["Well"],
@@ -264,6 +278,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm2018-epoc4-b",
       "title": "EPOC 4",
+      "caption": "",
       "file": "2018/MM2018IllustrationEPOC42.jpg",
       "year": 2018,
       "subject": ["EPOC 4"],
@@ -281,6 +296,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm2018-epoc4-a",
       "title": "EPOC 4",
+      "caption": "",
       "file": "2018/MM2018IllustrationEPOC4.jpg",
       "year": 2018,
       "subject": ["EPOC 4"],
@@ -298,6 +314,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm2018-domestic-architecture",
       "title": "Domestic Architecture",
+      "caption": "",
       "file": "2018/MM2018IllustrationDomesticArchitecture.jpg",
       "year": 2018,
       "subject": ["Architecture", "Daily life"],
@@ -315,6 +332,7 @@ window.GALLERY_DATA = {
     {
       "id": "kiln-reconstruction",
       "title": "Kiln Reconstruction",
+      "caption": "",
       "file": "2018/KilnReconstruction.JPG",
       "year": 2018,
       "subject": ["Kiln", "Production"],
@@ -332,6 +350,7 @@ window.GALLERY_DATA = {
     {
       "id": "wolf-drawing",
       "title": "Wolf",
+      "caption": "",
       "file": "2015/WolfDrawing.jpg",
       "year": 2015,
       "subject": ["Animals"],
@@ -349,13 +368,13 @@ window.GALLERY_DATA = {
     {
       "id": "section-orientalizing-archaic-1995",
       "title": "Orientalizing and Archaic Phases",
+      "caption": "Section through the Orientalizing and Archaic phases.",
       "file": "1995/Section-OrientalizingandArchaicPhases,1995.jpg",
       "year": 1995,
       "subject": ["Stratigraphy", "Architecture"],
       "drawingType": ["Section"],
       "area": [],
       "artist": [],
-      "note": "Section through the Orientalizing and Archaic phases.",
       "width": 10797,
       "height": 5419,
       "derived": {
@@ -367,6 +386,7 @@ window.GALLERY_DATA = {
     {
       "id": "reconstruction-upper-building-1995",
       "title": "Upper Building",
+      "caption": "",
       "file": "1995/ReconstructionUpperBuilding,1995.jpg",
       "year": 1995,
       "subject": ["Architecture"],
@@ -384,6 +404,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm94-06",
       "title": "Structure",
+      "caption": "",
       "file": "1994/MM94-06.jpg",
       "year": 1994,
       "subject": ["Architecture"],
@@ -401,6 +422,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm94-04",
       "title": "Structure Roof",
+      "caption": "",
       "file": "1994/MM94-04.jpg",
       "year": 1994,
       "subject": ["Roof", "Architecture"],
@@ -418,6 +440,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm94-02",
       "title": "Antefix",
+      "caption": "",
       "file": "1994/MM94-02.jpg",
       "year": 1994,
       "subject": ["Antefix", "Terracotta"],
@@ -435,6 +458,7 @@ window.GALLERY_DATA = {
     {
       "id": "mm94-01",
       "title": "Antefix",
+      "caption": "",
       "file": "1994/MM94-01.jpg",
       "year": 1994,
       "subject": ["Antefix", "Terracotta"],
@@ -452,6 +476,7 @@ window.GALLERY_DATA = {
     {
       "id": "se-building-section-1989",
       "title": "Southeast Building",
+      "caption": "",
       "file": "1989/ReconstructedSection1S.E.Building,1989.jpg",
       "year": 1989,
       "subject": ["Architecture"],
@@ -469,6 +494,7 @@ window.GALLERY_DATA = {
     {
       "id": "se-building-roof-1989-a",
       "title": "Southeast Building Roof",
+      "caption": "",
       "file": "1989/ReconstructedRoofElementsS.E.Building,Version2-1989.jpg",
       "year": 1989,
       "subject": ["Roof", "Terracotta"],
@@ -486,6 +512,7 @@ window.GALLERY_DATA = {
     {
       "id": "se-building-roof-1989-b",
       "title": "Southeast Building Roof",
+      "caption": "",
       "file": "1989/ReconstructedRoofElementsS.E.Building,Version2-1989-2.jpg",
       "year": 1989,
       "subject": ["Roof", "Terracotta"],
@@ -503,6 +530,7 @@ window.GALLERY_DATA = {
     {
       "id": "se-building-elevation-1989",
       "title": "Southeast Building",
+      "caption": "",
       "file": "1989/ReconstructedElevationS.E.Building,1989.jpg",
       "year": 1989,
       "subject": ["Architecture"],

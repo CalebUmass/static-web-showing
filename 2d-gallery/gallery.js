@@ -146,7 +146,7 @@
     mount: railElement,
     facets: data.facets,
     items: items,
-    searchFields: ['title', 'note', 'credit', 'id'],
+    searchFields: ['title', 'caption', 'credit', 'id'],
     onChange: function (visible, state, summary) {
       renderGrid(Facets.sortItems(visible, sortSelect.value));
       renderRegister(summary);
@@ -197,7 +197,7 @@
   var viewerImage = document.getElementById('viewer-image');
   var viewerTitle = document.getElementById('viewer-title');
   var viewerMeta = document.getElementById('viewer-meta');
-  var viewerNote = document.getElementById('viewer-note');
+  var viewerDescription = document.getElementById('viewer-description');
   var viewerTags = document.getElementById('viewer-tags');
   var viewerPosition = document.getElementById('viewer-position');
   var viewerOriginal = document.getElementById('viewer-original');
@@ -219,8 +219,12 @@
     if (item.credit) meta.push(item.credit);
     viewerMeta.textContent = meta.join('  \u00b7  ');
 
-    viewerNote.textContent = item.note || '';
-    viewerNote.hidden = !item.note;
+    /*A blank caption hides the paragraph rather than leaving an empty line,
+      so a record with nothing written yet does not look like it lost text.*/
+    var caption = (item.caption || '').trim();
+    viewerDescription.textContent = caption;
+    viewerDescription.hidden = caption === '';
+
     viewerTags.innerHTML = tagMarkup(item);
     viewerPosition.textContent =
       viewerIndex + 1 + ' / ' + visibleItems.length + '  \u00b7  ' + item.id;
