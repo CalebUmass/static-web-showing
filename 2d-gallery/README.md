@@ -1,25 +1,40 @@
-## READ ME
-*Created by Malie Geery*
+# Drawing archive
 
-### Navigating this project!
-This project consists of two main files, along with multiple files within media. The **index.html** file holds both the HTML code and the Javascript. Each section of the HTML, as well as each <script> tag is labelled in the code, with description of what each does. The major script tags include the following functions: 
-- Controlling sidebar movement
-- Searching the filter pills
-- Sorting functionality
-- A script to autogenerate pills
-- A script that controls all filters in the sidebar-- both the range slider and the pill filters
-The **style.css** file controls the display of the website. To add your own images to the site, look at the **Adding Images to Gallery.pdf** file.
+Searchable archive of excavation drawings, reconstructions and illustrations
+from Poggio Civitate.
 
-### About this project
-This project was created by Malie Geery in 2025 as a part of the Poggio Civitate Data Science program. The goal of this project was to make drawings done by students in the past that aren't associated with a specific find or trench viewable and searchable. I also hope that with this project, it is easier to find any relevant images. The search, sort, filter by pill, and filter by range functions all serve as ways for users to be able to use the website as seamlessly as possible. 
+Originally built by Malie Geery in 2025 as part of the Poggio Civitate CS Field
+School program. Audited and restructured by Cole Adam Reilly; see `shared/docs/AUDIT.md` for
+what changed and why.
 
-### Going Forward
-Going forward, a useful utility would be to add a feature to the website that would allow people to add files from the web, instead of having to manually code it in for each image. This way, non-data science students would be able to add files to this project as well.
+## Files
 
-### Acknowledgements
-I want to extend my gratitude to Cole Reilly, Anthony Tuck, and the rest of the staff at Poggio Civitate for their support on this project and for the opportunity to work with the team this summer. I also want to thank my fellow data science students for all their help on this project and other projects over the summer.
+| File | Holds |
+| --- | --- |
+| `index.html` | page structure only, no drawings |
+| `gallery.css` | the accent colour and the viewer |
+| `gallery.js` | grid rendering, the viewer, event wiring |
+| `data/artworks.js` | **every drawing and every tag** |
+| `media/` | originals, never modified |
+| `media/derived/` | generated WebP, safe to delete and rebuild |
 
-### References
-[Source code used as part of creating the sidebar](https://www.youtube.com/watch?v=LjsCyH_5ERs)<br />
-[Creating pills for filtering](https://www.youtube.com/watch?v=5kb_gvZJeoU)
+Shared tokens, components, the filter engine and the header live in
+`../shared/`, alongside the 3D viewer.
 
+## Adding a drawing
+
+Three steps, one of them a script. See `shared/docs/GALLERY-ADDING-IMAGES.md`.
+
+    1. put the original in media/<year>/
+    2. add a record to data/artworks.js
+    3. python3 ../tools/build-derivatives.py
+
+Adding a new kind of tag is one entry in the `facets` list in the same file.
+
+## Features
+
+- search across titles, notes and every tag
+- filters that combine rather than override each other
+- year range, sorting, light and dark
+- viewer with keyboard navigation and a full-resolution download
+- 0.3 MB to first paint, against 89.2 MB before

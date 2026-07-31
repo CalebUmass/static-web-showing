@@ -1,48 +1,48 @@
-# 3D Viewer
+# 3D viewer
 
-![Banner or Logo Image](imgs/readmecover.jpg) <!-- optional -->
+Interactive 3D scans of artefacts from Poggio Civitate, published to Sketchfab
+by specialists and presented here with a tag and filter system matching the
+drawing archive.
 
-> View 3D artifacts from Poggio Civitate
+Originally built by Caleb Richards in 2025 as part of the Poggio Civitate CS Field
+School program. Audited and restructured by Cole Adam Reilly; see `shared/docs/AUDIT.md` for
+what changed and why.
 
----
+## Files
 
-## Table of Contents
+| File | Holds |
+| --- | --- |
+| `index.html` | page structure only, no models |
+| `models.css` | the accent colour and the model plate |
+| `models.js` | grid rendering, embed loading, event wiring |
+| `data/models.js` | **every model and every tag** |
+| `imgs/` | optional poster stills |
 
-- [Built With](#build-with)
-- [About](#about)
-- [Features](#features)
-- [Demo](#demo)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
+Shared tokens, components, the filter engine and the header live in
+`../shared/`, alongside the drawing archive.
 
----
+## Adding a model
 
-### Built With
+Two steps, no script. See `shared/docs/GALLERY-ADDING-MODELS.md`.
 
-* ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-* ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-* ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+    1. copy the uid out of the Sketchfab share URL
+    2. add a record to data/models.js
 
----
+Adding a new kind of tag is one entry in the `facets` list in the same file.
+Two facets sit there declared and empty right now, `year` and `area`; both
+switch themselves on once the data exists, with no code change.
 
-## About
+## Loading
 
-Example:
-> This is an interactive 3D viewer for Etruscan archaeological artifacts -> specifically for the dig site of Poggio Civitate. It can be used to view current artifacts that have been uploaded to SketchFab. It provides a interactive and easy way to view artifacts without actually to have them physically
-
----
+A Sketchfab embed is a live WebGL scene, and this page used to start ten at
+once. Cards are now stills until picked, with thumbnails fetched once per model
+from Sketchfab's oEmbed endpoint and cached in the browser for 30 days. If that
+request fails the card falls back to a plain plate and the model still loads on
+demand.
 
 ## Features
 
-- dark/light theme toggle
-- Sketchfab embeds for real-time model interaction
-- Minimal JS and CSS footprint for fast load times
-
----
-
-## Demo
-
-You can try it live at:  
-**[https://poggiocivitate.net/static-web-showing/3d-viewer/index.html](https://poggiocivitate.net/static-web-showing/3d-viewer/index.html)**
-
----
+- search across titles, notes and every tag 
+- filters that combine rather than override each other
+- sorting, light and dark
+- zero iframes until a model is picked
