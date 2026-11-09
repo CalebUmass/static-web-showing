@@ -178,7 +178,7 @@ internet, and the Lightsail firewall opens only 22, 80, and 443.
 | systemd unit | `dig-map-api` |
 | listens on | `127.0.0.1:3001` (via `API_PORT`, fallback 3001) |
 | build | `npm run build` |
-| routes | `/trench-book/...`, `/photos`, `/cassetta/...` |
+| routes | `/trench-book/...`, `/photos`, `/photos/export.csv`, `/cassetta/...` |
 
 
 > The old separate reader process on port 3000 and its `trench-reader` unit are
@@ -231,8 +231,27 @@ Environment=NODE_ENV=production
 Environment=API_PORT=3001
 Environment=CASSETTA_SERVICE_ACCOUNT=/var/lib/magsearch/service_account.json
 Environment=CASSETTA_CACHE_FILE=/var/lib/magsearch/cassetta_index.json
-#Environment=PHOTO_DB=/var/lib/digmap/photos.db
-#Environment=PHOTO_EDIT_TOKEN=changeme
+Environment=PHOTO_DB=/var/lib/digmap/photos.db
+#the edit passphrase lives in a root-only file, not this world-readable
+#unit; the leading "-" keeps the whole api starting if the file is missing
+#(photo saves then return 503 until it exists)
+EnvironmentFile=-/etc/dig-map-api.env
+```
+
+Create the passphrase file once (one line, `PHOTO_EDIT_TOKEN=...`):
+
+```bash
+sudo install -m 600 -o root -g root /dev/null /etc/dig-map-api.env
+sudoedit /etc/dig-map-api.env
+sudo systemctl daemon-reload && sudo systemctl restart dig-map-api
+```
+
+Confirm both photo variables reached the service (prints `<set>`, never
+the passphrase):
+
+```bash
+systemctl show dig-map-api -p Environment | tr ' ' '\n' | grep PHOTO_DB
+sudo cat /proc/$(systemctl show -p MainPID --value dig-map-api)/environ | tr '\0' '\n' | grep -q '^PHOTO_EDIT_TOKEN=.' && echo "PHOTO_EDIT_TOKEN=<set>"
 ```
 
 > The trench-book endpoints read files from the reader's `public/` directory.
@@ -407,7 +426,8 @@ node scripts/import_photos.mjs photo_points.geojson /var/lib/digmap/photos.db
 sudo systemctl restart dig-map-api
 ```
 
-**Upload map tiles** (pmtiles are gitignored, so they travel by scp, not git):
+**Upload map tiles** (`map/tiles/` is gitignored, so pmtiles, the plan png, and
+`grid.geojson` travel by scp, not git; see `map/WORKFLOW.md`):
 
 ```bash
 scp local.pmtiles ubuntu@server:/var/www/html/map/tiles/

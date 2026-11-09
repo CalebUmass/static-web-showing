@@ -3,3 +3,5 @@ dist/
 .DS_Store
 settings.json
 __pycache__/
+#map tiles, plan images, and grid travel by scp, not git (see SERVER.md)
+map/tiles/

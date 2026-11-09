@@ -1,10 +1,10 @@
 //Photo point endpoints for the dig map.
-//Behind the Apache proxy (ProxyPass /api/photos -> 127.0.0.1:3001/photos)
-//these become:
-//  GET    /api/photos        public GeoJSON of all photo points
-//  POST   /api/photos        create a point           (passphrase required)
-//  PUT    /api/photos/:id    update a point           (passphrase required)
-//  DELETE /api/photos/:id    delete a point           (passphrase required)
+//Behind the Apache proxy (ProxyPass /api/ -> 127.0.0.1:3001/) these become:
+//  GET    /api/photos             public GeoJSON of all photo points
+//  GET    /api/photos/export.csv  public CSV export of the photo table
+//  POST   /api/photos             create a point        (passphrase required)
+//  PUT    /api/photos/:id         update a point        (passphrase required)
+//  DELETE /api/photos/:id         delete a point        (passphrase required)
 
 import {
   Body,
@@ -34,6 +34,14 @@ export class PhotosController {
   @Header('Cache-Control', 'public, max-age=60')
   list() {
     return this.photos.featureCollection();
+  }
+
+  @Get('export.csv')
+  @Header('Content-Type', 'text/csv; charset=utf-8')
+  @Header('Content-Disposition', 'attachment; filename="photo_points.csv"')
+  @Header('Cache-Control', 'no-cache')
+  exportCsv(): string {
+    return this.photos.toCsv();
   }
 
   @Post()

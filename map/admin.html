@@ -40,11 +40,12 @@
   input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
   .row { display: flex; gap: 8px; }
   .row > * { flex: 1; }
-  button {
+  button, a.btn {
     font: inherit; font-size: 13px; padding: 7px 12px; border-radius: 6px;
     border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer;
+    text-decoration: none; display: inline-block;
   }
-  button:hover { border-color: var(--accent); }
+  button:hover, a.btn:hover { border-color: var(--accent); }
   button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
   button.primary:hover { background: var(--accent-ink); }
   button.active { background: var(--accent-ink); border-color: var(--accent-ink); color: #fff; }
@@ -76,14 +77,16 @@
       <label for="editor">Your name</label>
       <input type="text" id="editor" placeholder="Shown in the edit history">
       <label for="token">Passphrase</label>
-      <input type="password" id="token" placeholder="Ask Cole (hint: pottery)">
+      <input type="password" id="token" placeholder="Ask the site admin">
       <div class="btnrow">
         <button id="btn-add">Add photo point</button>
+        <a class="btn" id="btn-csv" download>Download CSV</a>
       </div>
     </div>
 
     <div id="empty">No point selected. Click an arrow on the map, or use
-      "Add photo point" and click where a photo was taken.</div>
+      "Add photo point" and click where a photo was taken. The grid squares
+      match the lettering on the paper plans.</div>
 
     <form id="editform" class="section" style="display:none" autocomplete="off">
       <label>Point</label>
@@ -130,6 +133,15 @@ const apiBase = "https://poggiocivitate.net/api";
 const API = apiBase + "/photos";
 //starting view: set to the site
 const START = { center: [11.402414, 43.154166], z: 16 };
+//plan and grid drawn under the editable points, so digitising from the
+//paper sketches has the same reference on screen; same values as the
+//planImage and gridUrl entries in index.html
+const CONTEXT = {
+  //{url: "tiles/site_plan.png", coordinates: [[lonTL,latTL],[lonTR,latTR],[lonBR,latBR],[lonBL,latBL]]}
+  planImage: null,
+  //"tiles/grid.geojson" from map/tools/make_grid.py
+  gridUrl: null,
+};
 //----------------------------------------------------------------------
 
 const map = new maplibregl.Map({
@@ -138,6 +150,8 @@ const map = new maplibregl.Map({
   zoom: START.z,
   style: {
     version: 8,
+    //glyphs are required for the grid labels
+    glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
     sources: {
       osm: {
         type: "raster",
@@ -151,9 +165,6 @@ const map = new maplibregl.Map({
 });
 map.addControl(new maplibregl.NavigationControl());
 
-//to overlay the published trench/plan tiles for context, add the pmtiles
-//protocol here the same way the public map does (see public_map_photos.js)
-
 let data = { type: "FeatureCollection", features: [] };
 let original = new Map();
 let selectedId = null;
@@ -162,6 +173,7 @@ let dragging = false;
 
 const $ = id => document.getElementById(id);
 const statusEl = $("status");
+$("btn-csv").href = API + "/export.csv";
 
 //remember credentials between visits (this page lives on the project server)
 $("token").value = localStorage.getItem("photoToken") || "";
@@ -210,8 +222,64 @@ function makeArrowImage() {
   return ctx.getImageData(0, 0, s, s);
 }
 
+//plan image and labeled grid drawn under the editable points
+function addContextLayers() {
+  if (CONTEXT.planImage) {
+    map.addSource("plans-src", {
+      type: "image",
+      url: CONTEXT.planImage.url,
+      coordinates: CONTEXT.planImage.coordinates
+    });
+    map.addLayer({
+      id: "plans", type: "raster", source: "plans-src",
+      paint: { "raster-opacity": 0.75 }
+    });
+  }
+  if (CONTEXT.gridUrl) {
+    map.addSource("grid", { type: "geojson", data: CONTEXT.gridUrl });
+    map.addLayer({
+      id: "grid-lines",
+      type: "line",
+      source: "grid",
+      filter: ["==", ["geometry-type"], "LineString"],
+      paint: { "line-color": "#26221c", "line-opacity": 0.35, "line-width": 0.8 }
+    });
+    map.addLayer({
+      id: "grid-labels",
+      type: "symbol",
+      source: "grid",
+      minzoom: 16.5,
+      filter: ["==", ["geometry-type"], "Point"],
+      layout: {
+        "text-field": ["get", "label"],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 11
+      },
+      paint: {
+        "text-color": "#26221c",
+        "text-opacity": 0.55,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    });
+  }
+}
+
+//nest puts the useful text ("bad passphrase") in message; error only holds
+//the generic status name. a non-json body (apache 502 page while the api is
+//down) falls back to the status code instead of a parse error
+async function readError(r) {
+  try {
+    const body = await r.json();
+    return body.message || body.error || String(r.status);
+  } catch {
+    return String(r.status);
+  }
+}
+
 map.on("load", async () => {
   map.addImage("photo-arrow", makeArrowImage(), { sdf: true });
+  addContextLayers();
 
   try {
     data = await fetch(API).then(r => r.json());
@@ -370,7 +438,7 @@ async function addPointAt(lngLat) {
   const body = { lon: lngLat.lng, lat: lngLat.lat, rotation: 0 };
   try {
     const r = await fetch(API, { method: "POST", headers: authHeaders(), body: JSON.stringify(body) });
-    if (!r.ok) throw new Error((await r.json()).error || r.status);
+    if (!r.ok) throw new Error(await readError(r));
     const feature = await r.json();
     data.features.push(feature);
     original.set(feature.properties.id, JSON.parse(JSON.stringify(feature)));
@@ -399,7 +467,7 @@ $("btn-save").addEventListener("click", async () => {
     const r = await fetch(`${API}/${selectedId}`, {
       method: "PUT", headers: authHeaders(), body: JSON.stringify(body)
     });
-    if (!r.ok) throw new Error((await r.json()).error || r.status);
+    if (!r.ok) throw new Error(await readError(r));
     const updated = await r.json();
     Object.assign(f, updated);
     original.set(selectedId, JSON.parse(JSON.stringify(updated)));
@@ -425,7 +493,7 @@ $("btn-delete").addEventListener("click", async () => {
   if (!confirm("Delete this photo point? This cannot be undone.")) return;
   try {
     const r = await fetch(`${API}/${selectedId}`, { method: "DELETE", headers: authHeaders() });
-    if (!r.ok) throw new Error((await r.json()).error || r.status);
+    if (!r.ok) throw new Error(await readError(r));
     data.features = data.features.filter(f => f.properties.id !== selectedId);
     original.delete(selectedId);
     selectedId = null;

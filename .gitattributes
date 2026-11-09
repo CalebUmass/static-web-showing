@@ -1,0 +1,10 @@
+#normalize line endings to LF in the repo regardless of the editing
+#machine; Windows checkouts still get CRLF in the working copy
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.JPG binary
+*.PNG binary
+*.pdf binary
+*.glb binary
+*.pmtiles binary

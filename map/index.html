@@ -57,6 +57,8 @@
       <span class="swatch" style="background:#3b5b78;border-radius:50%"></span> Finds</label>
     <label class="check"><input type="checkbox" data-layers="photo-points" checked>
       <span class="swatch" style="background:#26221c;clip-path:polygon(50% 0,100% 100%,0 100%)"></span> Archival photos</label>
+    <label class="check" id="grid-toggle" style="display:none"><input type="checkbox" data-layers="grid-lines,grid-labels" checked>
+      <span class="swatch" style="background:repeating-linear-gradient(90deg,#26221c 0 1px,transparent 1px 4px)"></span> Site grid</label>
     <label class="check" id="plans-toggle" style="display:none"><input type="checkbox" data-layers="plans" checked>
       <span class="swatch" style="background:#8a8a8a"></span> Site plans</label>
     <div id="plans-opacity" style="display:none">
@@ -89,14 +91,21 @@
 const CONFIG = {
   center: [11.402414, 43.154166],
   zoom: 16,
-  //vector tile archive produced by tippecanoe (see publish script);
-  //the path is relative to this page, served straight by Apache
+  //vector tile archive produced by tippecanoe (see publish script), relative
+  //to this page and served straight by Apache; null while only the plan,
+  //grid, and photo layers are published
   vectorTiles: "pmtiles://tiles/site.pmtiles",
   //layer names given to tippecanoe with -L; must match exactly
   trenchLayer: "trenches",
   findsLayer: "finds",
-  //raster site plan archive, or null if plans are not published yet
+  //single georeferenced plan image: url plus the four corner coordinates
+  //(lon, lat) in order top-left, top-right, bottom-right, bottom-left.
+  //map/tools/plan_corners.py prints this block; see map/WORKFLOW.md
+  planImage: null,
+  //tiled plan archive for when the plans outgrow a single image, or null
   planTiles: null, //"pmtiles://tiles/plans.pmtiles"
+  //labeled site grid from map/tools/make_grid.py, or null
+  gridUrl: null, //"tiles/grid.geojson"
   //seasons available in the year filter; must match the year attribute
   years: [1966, 1967, 1968, 1969, 1970, 1971, 1972],
   //attribute names on trench features
@@ -118,6 +127,8 @@ const map = new maplibregl.Map({
   zoom: CONFIG.zoom,
   style: {
     version: 8,
+    //glyphs are required for the grid labels
+    glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
     sources: {
       //placeholder basemap; swap for a protomaps/openfreemap style, or
       //remove entirely for a mapgenie-style plan-only look
@@ -151,64 +162,113 @@ function applyYearFilter() {
   setPhotoYearFilter(map, f ? [...selectedYears] : null);
 }
 
-map.on("load", async () => {
-  map.addSource("site", { type: "vector", url: CONFIG.vectorTiles });
-
-  if (CONFIG.planTiles) {
-    map.addSource("plans-src", { type: "raster", url: CONFIG.planTiles, tileSize: 256 });
-    map.addLayer({
+//plan and grid context layers; admin.html draws the same pair so the
+//on-screen grid matches the lettering on the paper plans
+function addContextLayers(m, cfg) {
+  if (cfg.planImage) {
+    m.addSource("plans-src", {
+      type: "image",
+      url: cfg.planImage.url,
+      coordinates: cfg.planImage.coordinates
+    });
+  } else if (cfg.planTiles) {
+    m.addSource("plans-src", { type: "raster", url: cfg.planTiles, tileSize: 256 });
+  }
+  if (m.getSource("plans-src")) {
+    m.addLayer({
       id: "plans", type: "raster", source: "plans-src",
       paint: { "raster-opacity": 0.75 }
     });
+  }
+  if (cfg.gridUrl) {
+    m.addSource("grid", { type: "geojson", data: cfg.gridUrl });
+    m.addLayer({
+      id: "grid-lines",
+      type: "line",
+      source: "grid",
+      filter: ["==", ["geometry-type"], "LineString"],
+      paint: { "line-color": "#26221c", "line-opacity": 0.35, "line-width": 0.8 }
+    });
+    m.addLayer({
+      id: "grid-labels",
+      type: "symbol",
+      source: "grid",
+      minzoom: 17,
+      filter: ["==", ["geometry-type"], "Point"],
+      layout: {
+        "text-field": ["get", "label"],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 11
+      },
+      paint: {
+        "text-color": "#26221c",
+        "text-opacity": 0.55,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    });
+  }
+}
+
+map.on("load", async () => {
+  addContextLayers(map, CONFIG);
+  if (map.getLayer("plans")) {
     document.getElementById("plans-toggle").style.display = "flex";
     document.getElementById("plans-opacity").style.display = "block";
   }
+  if (map.getLayer("grid-lines")) {
+    document.getElementById("grid-toggle").style.display = "flex";
+  }
 
-  map.addLayer({
-    id: "trenches-fill",
-    type: "fill",
-    source: "site",
-    "source-layer": CONFIG.trenchLayer,
-    paint: { "fill-color": "#b0531c", "fill-opacity": 0.22 }
-  });
-  map.addLayer({
-    id: "trenches-line",
-    type: "line",
-    source: "site",
-    "source-layer": CONFIG.trenchLayer,
-    paint: { "line-color": "#b0531c", "line-width": 1.4 }
-  });
-  map.addLayer({
-    id: "finds",
-    type: "circle",
-    source: "site",
-    "source-layer": CONFIG.findsLayer,
-    minzoom: 15,
-    paint: {
-      "circle-radius": ["interpolate", ["linear"], ["zoom"], 15, 2, 19, 5],
-      "circle-color": "#3b5b78",
-      "circle-stroke-color": "#ffffff",
-      "circle-stroke-width": 0.5
-    }
-  });
+  //trench and find layers only once the vector archive is published
+  if (CONFIG.vectorTiles) {
+    map.addSource("site", { type: "vector", url: CONFIG.vectorTiles });
+    map.addLayer({
+      id: "trenches-fill",
+      type: "fill",
+      source: "site",
+      "source-layer": CONFIG.trenchLayer,
+      paint: { "fill-color": "#b0531c", "fill-opacity": 0.22 }
+    });
+    map.addLayer({
+      id: "trenches-line",
+      type: "line",
+      source: "site",
+      "source-layer": CONFIG.trenchLayer,
+      paint: { "line-color": "#b0531c", "line-width": 1.4 }
+    });
+    map.addLayer({
+      id: "finds",
+      type: "circle",
+      source: "site",
+      "source-layer": CONFIG.findsLayer,
+      minzoom: 15,
+      paint: {
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], 15, 2, 19, 5],
+        "circle-color": "#3b5b78",
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 0.5
+      }
+    });
+
+    //trench popups with a link into the database
+    map.on("click", "trenches-fill", (e) => {
+      const p = e.features[0].properties;
+      const url = CONFIG.trenchDbUrl(p);
+      const html = `
+        <div class="popup">
+          <strong>${escapePopup(p[CONFIG.trenchName] || "Trench")}</strong><br>
+          ${p[CONFIG.trenchYear] ? `Excavated ${escapePopup(p[CONFIG.trenchYear])}<br>` : ""}
+          ${url ? `<a href="${escapePopup(url)}" target="_blank" rel="noopener">View in database</a>` : ""}
+        </div>`;
+      new maplibregl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
+    });
+    map.on("mouseenter", "trenches-fill", () => map.getCanvas().style.cursor = "pointer");
+    map.on("mouseleave", "trenches-fill", () => map.getCanvas().style.cursor = "");
+  }
 
   //live photo layer from the api (defined in public_map_photos.js)
   await addPhotoLayer(map, CONFIG.photoApi);
-
-  //trench popups with a link into the database
-  map.on("click", "trenches-fill", (e) => {
-    const p = e.features[0].properties;
-    const url = CONFIG.trenchDbUrl(p);
-    const html = `
-      <div class="popup">
-        <strong>${escapePopup(p[CONFIG.trenchName] || "Trench")}</strong><br>
-        ${p[CONFIG.trenchYear] ? `Excavated ${escapePopup(p[CONFIG.trenchYear])}<br>` : ""}
-        ${url ? `<a href="${escapePopup(url)}" target="_blank" rel="noopener">View in database</a>` : ""}
-      </div>`;
-    new maplibregl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
-  });
-  map.on("mouseenter", "trenches-fill", () => map.getCanvas().style.cursor = "pointer");
-  map.on("mouseleave", "trenches-fill", () => map.getCanvas().style.cursor = "");
 
   buildYearCheckboxes();
   wireLayerToggles();

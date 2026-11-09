@@ -66,6 +66,12 @@ interface PhotoRow {
   updated_by: string | null;
 }
 
+//quote a value for csv output when it contains a delimiter, quote, or newline
+function csvField(v: unknown): string {
+  const s = v === null || v === undefined ? '' : String(v);
+  return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
 @Injectable()
 export class PhotosService implements OnModuleDestroy {
   private db: Database.Database;
@@ -171,14 +177,55 @@ export class PhotosService implements OnModuleDestroy {
     };
   }
 
-  featureCollection() {
-    const rows = this.db
+  private allRows(): PhotoRow[] {
+    return this.db
       .prepare('SELECT * FROM photos ORDER BY id')
       .all() as PhotoRow[];
+  }
+
+  featureCollection() {
     return {
       type: 'FeatureCollection',
-      features: rows.map((r) => this.rowToFeature(r)),
+      features: this.allRows().map((r) => this.rowToFeature(r)),
     };
+  }
+
+  //spreadsheet export of the whole photo table, for linking the digitised
+  //points back to the physical photo archive. Starts with a UTF-8 BOM so
+  //Excel opens it correctly.
+  toCsv(): string {
+    const header = [
+      'id',
+      'lon',
+      'lat',
+      'rotation_deg',
+      'year',
+      'tags',
+      'description',
+      'image_url',
+      'updated_at',
+      'updated_by',
+    ];
+    const lines = [header.join(',')];
+    for (const r of this.allRows()) {
+      lines.push(
+        [
+          r.id,
+          r.lon,
+          r.lat,
+          r.rotation,
+          r.year ?? '',
+          r.tags,
+          r.description,
+          r.image_url,
+          r.updated_at ?? '',
+          r.updated_by ?? '',
+        ]
+          .map(csvField)
+          .join(','),
+      );
+    }
+    return '﻿' + lines.join('\r\n') + '\r\n';
   }
 
   private getRow(id: string): PhotoRow {
