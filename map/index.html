@@ -101,7 +101,12 @@ const CONFIG = {
   //tiled site plan from gdal2tiles: url template, zoom range, and bounds
   //[west, south, east, north]. map/tools/plan_tiles.py prints this block;
   //see map/WORKFLOW.md. Takes precedence over planImage and planTiles
-  planXyz: null,
+  planXyz: {
+    url: "tiles/plan/{z}/{x}/{y}.png",
+    minzoom: 16,
+    maxzoom: 23,
+    bounds: [11.3987446, 43.1520371, 11.4028645, 43.1539782]
+  },
   //single georeferenced plan image: url plus the four corner coordinates
   //(lon, lat) in order top-left, top-right, bottom-right, bottom-left.
   //map/tools/plan_corners.py prints this block. Only for small plans; a

@@ -138,7 +138,12 @@ const START = { center: [11.402414, 43.154166], z: 16 };
 //planXyz, planImage, and gridUrl entries in index.html
 const CONTEXT = {
   //tiled plan block printed by map/tools/plan_tiles.py; takes precedence
-  planXyz: null,
+  planXyz: {
+    url: "tiles/plan/{z}/{x}/{y}.png",
+    minzoom: 16,
+    maxzoom: 23,
+    bounds: [11.3987446, 43.1520371, 11.4028645, 43.1539782]
+  },
   //{url: "tiles/site_plan.png", coordinates: [[lonTL,latTL],[lonTR,latTR],[lonBR,latBR],[lonBL,latBL]]}
   planImage: null,
   //"tiles/grid.geojson" from map/tools/make_grid.py
