@@ -28,6 +28,8 @@
   header { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
   header h1 { font-size: 15px; margin: 0 0 2px; font-weight: 600; letter-spacing: 0.02em; }
   header p { margin: 0; font-size: 12px; color: var(--muted); }
+  header a { color: var(--muted); text-decoration: none; }
+  header a:hover { color: var(--ink); text-decoration: underline; }
   .section { padding: 12px 16px; border-bottom: 1px solid var(--line); }
   label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
           color: var(--muted); margin: 10px 0 4px; }
@@ -70,7 +72,8 @@
   <div id="panel">
     <header>
       <h1>Photo point editor</h1>
-      <p>Click a point to edit it. Changes go live when you save.</p>
+      <p>Click a point to edit it. Changes go live when you save.
+        <a href="index.html">Public map</a></p>
     </header>
 
     <div class="section">
@@ -82,6 +85,11 @@
         <button id="btn-add">Add photo point</button>
         <a class="btn" id="btn-csv" download>Download CSV</a>
       </div>
+    </div>
+
+    <div class="section" id="plan-opacity" style="display:none">
+      <label for="plan-opacity-range">Plan opacity</label>
+      <input type="range" id="plan-opacity-range" min="0" max="100" value="100">
     </div>
 
     <div id="empty">No point selected. Click an arrow on the map, or use
@@ -266,7 +274,7 @@ function addContextLayers() {
   if (map.getSource("plans-src")) {
     map.addLayer({
       id: "plans", type: "raster", source: "plans-src",
-      paint: { "raster-opacity": 0.75 }
+      paint: { "raster-opacity": 1 }
     });
   }
   if (CONTEXT.gridUrl) {
@@ -314,6 +322,12 @@ async function readError(r) {
 map.on("load", async () => {
   map.addImage("photo-arrow", makeArrowImage(), { sdf: true });
   addContextLayers();
+  if (map.getLayer("plans")) {
+    $("plan-opacity").style.display = "block";
+    $("plan-opacity-range").addEventListener("input", (e) => {
+      map.setPaintProperty("plans", "raster-opacity", e.target.value / 100);
+    });
+  }
 
   try {
     data = await fetch(API).then(r => r.json());

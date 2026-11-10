@@ -41,6 +41,10 @@
   .popup { font: 13px/1.45 system-ui, sans-serif; max-width: 240px; }
   .popup a { color: var(--accent); }
   footer { margin-top: 24px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+  /*low-key entry point for project staff; admin.html sits behind basic auth*/
+  .editor-link { display: inline-block; margin-top: 10px; color: var(--muted);
+                 text-decoration: none; opacity: 0.7; }
+  .editor-link:hover { opacity: 1; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -63,7 +67,7 @@
       <span class="swatch" style="background:#8a8a8a"></span> Site plans</label>
     <div id="plans-opacity" style="display:none">
       <h2>Plan opacity</h2>
-      <input type="range" min="0" max="100" value="75">
+      <input type="range" min="0" max="100" value="100">
     </div>
 
     <h2>Excavation years</h2>
@@ -77,6 +81,7 @@
       Trenches and finds link to full records in Open Context.
       Photo arrows show where archival photographs were taken and the
       direction the camera faced.
+      <br><a class="editor-link" href="admin.html" rel="nofollow">Editor</a>
     </footer>
   </div>
   <div id="map"></div>
@@ -210,7 +215,7 @@ function addContextLayers(m, cfg) {
   if (m.getSource("plans-src")) {
     m.addLayer({
       id: "plans", type: "raster", source: "plans-src",
-      paint: { "raster-opacity": 0.75 }
+      paint: { "raster-opacity": 1 }
     });
   }
   if (cfg.gridUrl) {
