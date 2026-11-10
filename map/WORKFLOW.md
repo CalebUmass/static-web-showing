@@ -33,30 +33,56 @@ sudo cat /proc/$P/environ | tr '\0' '\n' | grep -q '^PHOTO_EDIT_TOKEN=.' && echo
 Both lines must print. If either is missing, follow SERVER.md, "systemd
 unit" (the token goes in `/etc/dig-map-api.env`).
 
-## 1. One time: the georeferenced site plan image
+## 1. One time: the georeferenced site plan tiles
 
-A single image source is the right first version; tiled PMTiles only pays
-off with many plans or one very large one. From the GeoTIFF the QGIS
-georeferencer saved, in the OSGeo4W shell (or any terminal with QGIS's GDAL
-on PATH):
+The plan is cut into map tiles so only the visible area loads, at full
+resolution. A single image (`planImage`) only suits a small plan: a large
+drawing loses its fine lines when shrunk, and browsers cap one image at
+about 8192 to 16384 px.
 
-```bash
-#north-up in EPSG:4326, then a web-sized png (3000 px wide, height auto)
-gdalwarp -t_srs EPSG:4326 -r bilinear site_plan.tif site_plan_4326.tif
-gdal_translate -of PNG -outsize 3000 0 site_plan_4326.tif site_plan.png
+All commands run in the OSGeo4W shell (Start menu, "OSGeo4W Shell"), from
+the folder holding the GeoTIFF the QGIS georeferencer saved. gdal2tiles
+reprojects on its own, so the GeoTIFF goes in as is, in any CRS:
 
-#prints the planImage block to paste into both pages
-python3 map/tools/plan_corners.py site_plan_4326.tif
+```bat
+gdal2tiles --xyz -r average --processes=4 site_plan.tif plan_tiles
+python map\tools\plan_tiles.py plan_tiles
 ```
 
-Upload the png (tiles are gitignored and travel by scp):
+- `--xyz` is required; without it the tiles land in the southern
+  hemisphere (plan_tiles.py warns about this).
+- `-r average` keeps 1 px lines visible as gray at the zoomed-out levels
+  instead of dropping them.
+- The zoom range is picked from the drawing's resolution: the deepest level
+  matches the scan's detail. To check the cost first, `gdalinfo
+  site_plan.tif` shows the pixel size; at 2 to 3 cm pixels the deepest
+  level is 22, and a 300 m by 200 m plan comes to about 2,000 tiles.
+- On older OSGeo4W installs the command is `gdal2tiles.py`.
+- A paletted tif fails with a color table error; expand it first with
+  `gdal_translate -expand rgb site_plan.tif site_plan_rgb.tif`.
 
-```bash
-scp site_plan.png ubuntu@server:/var/www/html/map/tiles/
+`plan_tiles.py` prints the center (it should read about 11.40, 43.15) and
+the `planXyz` block. Paste that block as `planXyz` in the CONFIG of
+`index.html` and the CONTEXT of `admin.html`.
+
+Upload as one archive, since thousands of small files over scp are slow.
+`tar` ships with Windows 10 and later:
+
+```bat
+tar -czf plan_tiles.tgz plan_tiles
+scp -i C:\path\to\LightsailKey.pem plan_tiles.tgz ubuntu@SERVER:/tmp/
 ```
 
-Paste the printed block as `planImage` in the CONFIG of `index.html` and
-the CONTEXT of `admin.html`.
+On the server:
+
+```bash
+cd /var/www/html/map/tiles
+rm -rf plan && tar -xzf /tmp/plan_tiles.tgz && mv plan_tiles plan
+rm plan/*.html plan/*.mapml /tmp/plan_tiles.tgz
+```
+
+The html and mapml files are gdal2tiles preview pages and are not needed.
+Redrawing the plan later is the same steps; the folder is replaced whole.
 
 ## 2. One time: the labeled site grid
 

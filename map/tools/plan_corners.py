@@ -3,10 +3,11 @@
 
 Reads the corner coordinates of a north-up EPSG:4326 GeoTIFF via gdalinfo
 (ships with QGIS) and prints the block to paste into index.html and
-admin.html. Prepare the tif first:
+admin.html. Only for small plans; large drawings go through gdal2tiles and
+plan_tiles.py instead (see map/WORKFLOW.md). Prepare the tif first:
 
-    gdalwarp -t_srs EPSG:4326 -r bilinear site_plan.tif site_plan_4326.tif
-    gdal_translate -of PNG -outsize 3000 0 site_plan_4326.tif site_plan.png
+    gdalwarp -t_srs EPSG:4326 -r cubic -dstalpha site_plan.tif site_plan_4326.tif
+    gdal_translate -of PNG -r average -outsize 8192 0 site_plan_4326.tif site_plan.png
     python3 plan_corners.py site_plan_4326.tif
 
 Then upload site_plan.png to map/tiles/ and paste the printed block.

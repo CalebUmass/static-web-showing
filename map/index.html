@@ -98,9 +98,14 @@ const CONFIG = {
   //layer names given to tippecanoe with -L; must match exactly
   trenchLayer: "trenches",
   findsLayer: "finds",
+  //tiled site plan from gdal2tiles: url template, zoom range, and bounds
+  //[west, south, east, north]. map/tools/plan_tiles.py prints this block;
+  //see map/WORKFLOW.md. Takes precedence over planImage and planTiles
+  planXyz: null,
   //single georeferenced plan image: url plus the four corner coordinates
   //(lon, lat) in order top-left, top-right, bottom-right, bottom-left.
-  //map/tools/plan_corners.py prints this block; see map/WORKFLOW.md
+  //map/tools/plan_corners.py prints this block. Only for small plans; a
+  //large drawing loses detail and hits the browser texture size limit
   planImage: null,
   //tiled plan archive for when the plans outgrow a single image, or null
   planTiles: null, //"pmtiles://tiles/plans.pmtiles"
@@ -125,6 +130,8 @@ const map = new maplibregl.Map({
   container: "map",
   center: CONFIG.center,
   zoom: CONFIG.zoom,
+  //past the default 22 so plan tiles at excavation detail are reachable
+  maxZoom: 24,
   style: {
     version: 8,
     //glyphs are required for the grid labels
@@ -162,10 +169,25 @@ function applyYearFilter() {
   setPhotoYearFilter(map, f ? [...selectedYears] : null);
 }
 
-//plan and grid context layers; admin.html draws the same pair so the
-//on-screen grid matches the lettering on the paper plans
-function addContextLayers(m, cfg) {
-  if (cfg.planImage) {
+//tile url templates must be absolute; MapLibre does not resolve relative
+//ones, and URL() would encode the {z}/{x}/{y} braces
+function absTileUrl(u) {
+  if (/^https?:\/\//.test(u)) return u;
+  return location.origin + location.pathname.replace(/[^/]*$/, "") + u;
+}
+
+//plan source from whichever of planXyz, planImage, planTiles is set
+function addPlanSource(m, cfg) {
+  if (cfg.planXyz) {
+    m.addSource("plans-src", {
+      type: "raster",
+      tiles: [absTileUrl(cfg.planXyz.url)],
+      tileSize: 256,
+      minzoom: cfg.planXyz.minzoom,
+      maxzoom: cfg.planXyz.maxzoom,
+      bounds: cfg.planXyz.bounds
+    });
+  } else if (cfg.planImage) {
     m.addSource("plans-src", {
       type: "image",
       url: cfg.planImage.url,
@@ -174,6 +196,12 @@ function addContextLayers(m, cfg) {
   } else if (cfg.planTiles) {
     m.addSource("plans-src", { type: "raster", url: cfg.planTiles, tileSize: 256 });
   }
+}
+
+//plan and grid context layers; admin.html draws the same pair so the
+//on-screen grid matches the lettering on the paper plans
+function addContextLayers(m, cfg) {
+  addPlanSource(m, cfg);
   if (m.getSource("plans-src")) {
     m.addLayer({
       id: "plans", type: "raster", source: "plans-src",

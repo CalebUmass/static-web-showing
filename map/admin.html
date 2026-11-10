@@ -135,8 +135,10 @@ const API = apiBase + "/photos";
 const START = { center: [11.402414, 43.154166], z: 16 };
 //plan and grid drawn under the editable points, so digitising from the
 //paper sketches has the same reference on screen; same values as the
-//planImage and gridUrl entries in index.html
+//planXyz, planImage, and gridUrl entries in index.html
 const CONTEXT = {
+  //tiled plan block printed by map/tools/plan_tiles.py; takes precedence
+  planXyz: null,
   //{url: "tiles/site_plan.png", coordinates: [[lonTL,latTL],[lonTR,latTR],[lonBR,latBR],[lonBL,latBL]]}
   planImage: null,
   //"tiles/grid.geojson" from map/tools/make_grid.py
@@ -148,6 +150,8 @@ const map = new maplibregl.Map({
   container: "map",
   center: START.center,
   zoom: START.z,
+  //past the default 22 so plan tiles at excavation detail are reachable
+  maxZoom: 24,
   style: {
     version: 8,
     //glyphs are required for the grid labels
@@ -222,14 +226,39 @@ function makeArrowImage() {
   return ctx.getImageData(0, 0, s, s);
 }
 
-//plan image and labeled grid drawn under the editable points
-function addContextLayers() {
-  if (CONTEXT.planImage) {
-    map.addSource("plans-src", {
-      type: "image",
-      url: CONTEXT.planImage.url,
-      coordinates: CONTEXT.planImage.coordinates
+//tile url templates must be absolute; MapLibre does not resolve relative
+//ones, and URL() would encode the {z}/{x}/{y} braces
+function absTileUrl(u) {
+  if (/^https?:\/\//.test(u)) return u;
+  return location.origin + location.pathname.replace(/[^/]*$/, "") + u;
+}
+
+//plan source from whichever of planXyz, planImage, planTiles is set
+function addPlanSource(m, cfg) {
+  if (cfg.planXyz) {
+    m.addSource("plans-src", {
+      type: "raster",
+      tiles: [absTileUrl(cfg.planXyz.url)],
+      tileSize: 256,
+      minzoom: cfg.planXyz.minzoom,
+      maxzoom: cfg.planXyz.maxzoom,
+      bounds: cfg.planXyz.bounds
     });
+  } else if (cfg.planImage) {
+    m.addSource("plans-src", {
+      type: "image",
+      url: cfg.planImage.url,
+      coordinates: cfg.planImage.coordinates
+    });
+  } else if (cfg.planTiles) {
+    m.addSource("plans-src", { type: "raster", url: cfg.planTiles, tileSize: 256 });
+  }
+}
+
+//plan and labeled grid drawn under the editable points
+function addContextLayers() {
+  addPlanSource(map, CONTEXT);
+  if (map.getSource("plans-src")) {
     map.addLayer({
       id: "plans", type: "raster", source: "plans-src",
       paint: { "raster-opacity": 0.75 }
