@@ -31,7 +31,10 @@ CREATE TABLE IF NOT EXISTS photos (
     image_url   TEXT NOT NULL DEFAULT '',
     year        INTEGER,
     updated_at  TEXT,
-    updated_by  TEXT
+    updated_by  TEXT,
+    kind        TEXT NOT NULL DEFAULT 'ground',
+    created_at  TEXT,
+    created_by  TEXT
 );
 CREATE TABLE IF NOT EXISTS edit_log (
     log_id   INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,6 +54,7 @@ export interface PhotoFields {
   tags?: string;
   image_url?: string;
   year?: number | null;
+  kind?: string;
 }
 
 interface PhotoRow {
@@ -64,6 +68,45 @@ interface PhotoRow {
   year: number | null;
   updated_at: string | null;
   updated_by: string | null;
+  kind: string;
+  created_at: string | null;
+  created_by: string | null;
+}
+
+//photo kinds are short lowercase slugs (ground, aerial, artifact, ...); the
+//frontend owns the icon for each, so a new kind needs no server change
+const KIND_PATTERN = /^[a-z][a-z0-9-]{0,31}$/;
+
+//brings a database created before kind/created_by existed up to date.
+//created_by is the original submitter, recovered from the create entry in
+//edit_log; points without one (imports) fall back to updated_by
+function migrate(db: Database.Database) {
+  const cols = new Set(
+    (db.prepare('PRAGMA table_info(photos)').all() as { name: string }[]).map(
+      (c) => c.name,
+    ),
+  );
+  const add = (name: string, ddl: string) => {
+    if (!cols.has(name)) db.exec(`ALTER TABLE photos ADD COLUMN ${ddl}`);
+  };
+  db.transaction(() => {
+    add('kind', "kind TEXT NOT NULL DEFAULT 'ground'");
+    add('created_at', 'created_at TEXT');
+    add('created_by', 'created_by TEXT');
+    db.exec(`
+      UPDATE photos SET
+        created_by = COALESCE(
+          (SELECT editor FROM edit_log
+            WHERE photo_id = photos.id AND action = 'create'
+            ORDER BY log_id LIMIT 1),
+          updated_by),
+        created_at = COALESCE(
+          (SELECT at FROM edit_log
+            WHERE photo_id = photos.id AND action = 'create'
+            ORDER BY log_id LIMIT 1),
+          updated_at)
+      WHERE created_by IS NULL`);
+  })();
 }
 
 //quote a value for csv output when it contains a delimiter, quote, or newline
@@ -83,6 +126,7 @@ export class PhotosService implements OnModuleDestroy {
     this.db = new Database(dbPath);
     this.db.pragma('journal_mode = WAL');
     this.db.exec(SCHEMA);
+    migrate(this.db);
   }
 
   onModuleDestroy() {
@@ -155,6 +199,14 @@ export class PhotosService implements OnModuleDestroy {
     }
     if ('description' in raw) fields.description = String(raw.description ?? '');
     if ('image_url' in raw) fields.image_url = String(raw.image_url ?? '');
+    if ('kind' in raw) {
+      const kind = String(raw.kind ?? '').trim().toLowerCase() || 'ground';
+      if (!KIND_PATTERN.test(kind))
+        throw new BadRequestException(
+          'kind must be a short lowercase name like ground, aerial, or artifact',
+        );
+      fields.kind = kind;
+    }
 
     return fields;
   }
@@ -173,6 +225,9 @@ export class PhotosService implements OnModuleDestroy {
         year: r.year,
         updated_at: r.updated_at,
         updated_by: r.updated_by,
+        kind: r.kind || 'ground',
+        created_at: r.created_at,
+        created_by: r.created_by,
       },
     };
   }
@@ -205,6 +260,9 @@ export class PhotosService implements OnModuleDestroy {
       'image_url',
       'updated_at',
       'updated_by',
+      'kind',
+      'created_at',
+      'created_by',
     ];
     const lines = [header.join(',')];
     for (const r of this.allRows()) {
@@ -220,6 +278,9 @@ export class PhotosService implements OnModuleDestroy {
           r.image_url,
           r.updated_at ?? '',
           r.updated_by ?? '',
+          r.kind || 'ground',
+          r.created_at ?? '',
+          r.created_by ?? '',
         ]
           .map(csvField)
           .join(','),
@@ -239,11 +300,12 @@ export class PhotosService implements OnModuleDestroy {
   create(body: unknown, editor: string) {
     const f = this.cleanFields(body, true);
     const id = randomUUID().slice(0, 8);
+    const at = this.now();
     this.db
       .prepare(
         `INSERT INTO photos (id, lon, lat, rotation, description, tags,
-         image_url, year, updated_at, updated_by)
-         VALUES (?,?,?,?,?,?,?,?,?,?)`,
+         image_url, year, updated_at, updated_by, kind, created_at, created_by)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       )
       .run(
         id,
@@ -254,7 +316,10 @@ export class PhotosService implements OnModuleDestroy {
         f.tags ?? '',
         f.image_url ?? '',
         f.year ?? null,
-        this.now(),
+        at,
+        editor,
+        f.kind ?? 'ground',
+        at,
         editor,
       );
     this.logEdit(id, 'create', editor, f);

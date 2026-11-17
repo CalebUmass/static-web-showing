@@ -70,6 +70,12 @@
       <input type="range" min="0" max="100" value="100">
     </div>
 
+    <h2>Photo types</h2>
+    <div id="photo-kinds"></div>
+
+    <h2>Photo tags</h2>
+    <div id="photo-tags"></div>
+
     <h2>Excavation years</h2>
     <div id="years"></div>
     <div class="yearbtns">
@@ -79,8 +85,10 @@
 
     <footer>
       Trenches and finds link to full records in Open Context.
-      Photo arrows show where archival photographs were taken and the
-      direction the camera faced.
+      Arrows show where archival photographs were taken and the direction
+      the camera faced; framed squares mark aerial and drone photographs,
+      with the notch at the top edge of the image; vessels mark artifact
+      photographs. A photo shows while any of its tags is checked.
       <br><a class="editor-link" href="admin.html" rel="nofollow">Editor</a>
     </footer>
   </div>
@@ -306,7 +314,8 @@ map.on("load", async () => {
   }
 
   //live photo layer from the api (defined in public_map_photos.js)
-  await addPhotoLayer(map, CONFIG.photoApi);
+  const photoData = await addPhotoLayer(map, CONFIG.photoApi);
+  buildPhotoToggles(photoData.features);
 
   buildYearCheckboxes();
   wireLayerToggles();
@@ -315,6 +324,16 @@ map.on("load", async () => {
 function escapePopup(s) {
   return String(s ?? "").replace(/[&<>"']/g,
     ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+
+//photo type and tag toggles, built from the photos actually published
+function buildPhotoToggles(features) {
+  const apply = () => applyPhotoFilter(map);
+  renderPhotoToggles(document.getElementById("photo-kinds"),
+    collectPhotoKinds(features), photoFilters.hiddenKinds, apply);
+  renderPhotoToggles(document.getElementById("photo-tags"),
+    collectPhotoTags(features), photoFilters.hiddenTags, apply,
+    { chips: true, emptyText: "No tagged photos yet" });
 }
 
 function buildYearCheckboxes() {

@@ -34,7 +34,7 @@
   label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
           color: var(--muted); margin: 10px 0 4px; }
   label:first-child { margin-top: 0; }
-  input[type=text], input[type=password], input[type=number], input[type=url], textarea {
+  input[type=text], input[type=password], input[type=number], input[type=url], textarea, select {
     width: 100%; padding: 7px 8px; font: inherit; font-size: 13px;
     border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink);
   }
@@ -64,6 +64,10 @@
   .danger { color: #a3271f; border-color: #d8b6b2; }
   .danger:hover { border-color: #a3271f; }
   .maplibregl-canvas-container.crosshair .maplibregl-canvas { cursor: crosshair; }
+  details.section > summary { cursor: pointer; font-size: 13px; font-weight: 600; }
+  details.section[open] > summary { margin-bottom: 4px; }
+  .flt-head { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+              color: var(--muted); margin: 12px 0 4px; }
 </style>
 </head>
 <body>
@@ -87,6 +91,17 @@
       </div>
     </div>
 
+    <details class="section" id="filters" open>
+      <summary>Show points</summary>
+      <div class="flt-head">Submitted by</div>
+      <div id="flt-users"></div>
+      <p class="hint" id="flt-hint"></p>
+      <div class="flt-head">Photo type</div>
+      <div id="flt-kinds"></div>
+      <div class="flt-head">Tags</div>
+      <div id="flt-tags"></div>
+    </details>
+
     <div class="section" id="plan-opacity" style="display:none">
       <label for="plan-opacity-range">Plan opacity</label>
       <input type="range" id="plan-opacity-range" min="0" max="100" value="100">
@@ -100,6 +115,9 @@
       <label>Point</label>
       <div class="coords" id="meta"></div>
 
+      <label for="f-kind">Photo type</label>
+      <select id="f-kind"></select>
+
       <label for="f-desc">Description</label>
       <textarea id="f-desc" placeholder="What does the photograph show?"></textarea>
 
@@ -112,10 +130,12 @@
       <label for="f-year">Year</label>
       <input type="number" id="f-year" min="1800" max="2100" step="1">
 
-      <label for="f-rot">Camera direction (degrees from north)</label>
-      <div class="row">
-        <input type="range" id="f-rot" min="0" max="359" step="1" value="0">
-        <input type="number" id="rotval" min="0" max="359" step="1" value="0">
+      <div id="dir-block">
+        <label for="f-rot" id="f-rot-label">Camera direction (degrees from north)</label>
+        <div class="row">
+          <input type="range" id="f-rot" min="0" max="359" step="1" value="0">
+          <input type="number" id="rotval" min="0" max="359" step="1" value="0">
+        </div>
       </div>
       <div class="btnrow">
         <button type="button" id="btn-aim">Aim at a map click</button>
@@ -134,6 +154,7 @@
 </div>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="public_map_photos.js"></script>
 <script>
 //----------------------------------------------------------------------
 //configuration
@@ -220,24 +241,142 @@ function refresh() {
   if (src) src.setData(data);
 }
 
-//a simple sdf arrow so maplibre can recolor it per feature
-function makeArrowImage() {
-  const s = 64, c = document.createElement("canvas");
-  c.width = c.height = s;
-  const ctx = c.getContext("2d");
-  ctx.fillStyle = "#fff";
-  ctx.beginPath();
-  //shaft
-  ctx.moveTo(s * 0.44, s * 0.86); ctx.lineTo(s * 0.56, s * 0.86);
-  ctx.lineTo(s * 0.56, s * 0.38); ctx.lineTo(s * 0.44, s * 0.38);
-  ctx.closePath(); ctx.fill();
-  //head, pointing up which is north at rotation 0
-  ctx.beginPath();
-  ctx.moveTo(s * 0.5, s * 0.10); ctx.lineTo(s * 0.76, s * 0.42);
-  ctx.lineTo(s * 0.24, s * 0.42);
-  ctx.closePath(); ctx.fill();
-  return ctx.getImageData(0, 0, s, s);
+//----------------------------------------------------------------------
+//submitter colors. Each person who submits points gets the next color in
+//order of their first submission, so colors stay put as new students join.
+//Imported points and unnamed edits share a neutral gray
+const USER_COLORS = [
+  "#d55e00", "#0072b2", "#009e73", "#cc79a7", "#e69f00", "#56b4e9",
+  "#7b3294", "#a6761d", "#1b7837", "#c51b7d", "#4d4d4d", "#b2182b",
+];
+const FIXED_USER_COLORS = { import: "#8a8a8a", unknown: "#8a8a8a" };
+let userColors = new Map();
+
+function submitterOf(f) {
+  return f.properties.created_by || "unknown";
 }
+
+function rebuildUserColors() {
+  const first = new Map();
+  for (const f of data.features) {
+    const u = submitterOf(f);
+    const at = f.properties.created_at || "9999";
+    if (!first.has(u) || at < first.get(u)) first.set(u, at);
+  }
+  const ordered = [...first.keys()]
+    .filter(u => !FIXED_USER_COLORS[u])
+    .sort((a, b) => first.get(a).localeCompare(first.get(b)) || a.localeCompare(b));
+  userColors = new Map(ordered.map((u, i) => [u, USER_COLORS[i % USER_COLORS.length]]));
+  for (const u of first.keys()) {
+    if (FIXED_USER_COLORS[u]) userColors.set(u, FIXED_USER_COLORS[u]);
+  }
+}
+
+function userColorExpr() {
+  const pairs = [];
+  for (const [u, c] of userColors) pairs.push(u, c);
+  return pairs.length ? ["match", photoUserExpr(), ...pairs, "#26221c"] : "#26221c";
+}
+
+//halo follows the selection but disappears with a filtered-out point
+function setSelectedHalo() {
+  if (!map.getLayer("photo-selected")) return;
+  const idClause = ["==", ["get", "id"], selectedId || "___none___"];
+  const base = buildPhotoFilter();
+  map.setFilter("photo-selected", base ? ["all", idClause, base] : idClause);
+}
+
+function applyFilters() {
+  applyPhotoFilter(map);
+  setSelectedHalo();
+}
+
+//submitter, type, and tag lists rebuilt from the current points
+function renderFilterPanels() {
+  const counts = new Map();
+  for (const f of data.features) {
+    const u = submitterOf(f);
+    counts.set(u, (counts.get(u) || 0) + 1);
+  }
+  const users = [...userColors.keys()].filter(u => counts.has(u)).map(u => {
+    const dot = document.createElement("span");
+    dot.className = "ptog-dot";
+    dot.style.background = userColors.get(u);
+    return { key: u, label: u, count: counts.get(u), swatch: dot };
+  });
+  renderPhotoToggles($("flt-users"), users, photoFilters.hiddenUsers, () => {
+    $("flt-hint").textContent = "";
+    applyFilters();
+  }, { buttons: [{ label: "Only mine", onClick: showOnlyMine }] });
+  renderPhotoToggles($("flt-kinds"), collectPhotoKinds(data.features),
+    photoFilters.hiddenKinds, applyFilters);
+  renderPhotoToggles($("flt-tags"), collectPhotoTags(data.features),
+    photoFilters.hiddenTags, applyFilters, { chips: true, emptyText: "No tags yet" });
+}
+
+//names are free text, so match them without regard to case or spacing
+function showOnlyMine() {
+  const me = $("editor").value.trim().toLowerCase();
+  if (!me) {
+    $("flt-hint").textContent = "Enter your name above first.";
+    return;
+  }
+  const users = [...new Set(data.features.map(submitterOf))];
+  const mine = users.filter(u => u.trim().toLowerCase() === me);
+  if (!mine.length) {
+    $("flt-hint").textContent = `No points submitted as "${$("editor").value.trim()}" yet.`;
+    return;
+  }
+  photoFilters.hiddenUsers.clear();
+  users.filter(u => !mine.includes(u)).forEach(u => photoFilters.hiddenUsers.add(u));
+  renderFilterPanels();
+  applyFilters();
+  const n = data.features.filter(f => mine.includes(submitterOf(f))).length;
+  $("flt-hint").textContent = `Showing only your ${n} point${n === 1 ? "" : "s"}.`;
+}
+
+//every change to the points (load, add, save, delete, revert, preview)
+//refreshes the source, the colors, and the filter lists together
+function onDataChanged() {
+  refresh();
+  rebuildUserColors();
+  if (map.getLayer("photo-arrows")) {
+    map.setPaintProperty("photo-arrows", "icon-color", userColorExpr());
+  }
+  renderFilterPanels();
+  applyFilters();
+}
+
+//new points take the first photo type still shown, so a student working
+//through only drone photos does not create points that vanish on creation
+function defaultNewKind() {
+  return Object.keys(PHOTO_KINDS).find(k => !photoFilters.hiddenKinds.has(k)) || PHOTO_DEFAULT_KIND;
+}
+
+//photo type dropdown; an unknown kind already on a point gets an option so
+//saving never silently rewrites it
+function fillKindOptions(current) {
+  const sel = $("f-kind");
+  sel.replaceChildren();
+  const kinds = Object.keys(PHOTO_KINDS);
+  if (current && !kinds.includes(current)) kinds.push(current);
+  for (const k of kinds) {
+    const opt = document.createElement("option");
+    opt.value = k;
+    opt.textContent = PHOTO_KINDS[k] ? PHOTO_KINDS[k].single : k;
+    sel.append(opt);
+  }
+  sel.value = current || PHOTO_DEFAULT_KIND;
+}
+
+//direction controls only for kinds that have a direction
+function updateKindUi(kind) {
+  const def = photoKindDef(kind);
+  $("dir-block").style.display = def.rotates ? "" : "none";
+  $("btn-aim").style.display = def.rotates ? "" : "none";
+  if (def.rotates) $("f-rot-label").textContent = def.directionLabel;
+}
+//----------------------------------------------------------------------
 
 //tile url templates must be absolute; MapLibre does not resolve relative
 //ones, and URL() would encode the {z}/{x}/{y} braces
@@ -320,7 +459,7 @@ async function readError(r) {
 }
 
 map.on("load", async () => {
-  map.addImage("photo-arrow", makeArrowImage(), { sdf: true });
+  registerPhotoIcons(map);
   addContextLayers();
   if (map.getLayer("plans")) {
     $("plan-opacity").style.display = "block";
@@ -345,9 +484,9 @@ map.on("load", async () => {
     source: "photos",
     paint: {
       "circle-radius": 18,
-      "circle-color": "#b0531c",
-      "circle-opacity": 0.18,
-      "circle-stroke-color": "#b0531c",
+      "circle-color": "#26221c",
+      "circle-opacity": 0.12,
+      "circle-stroke-color": "#26221c",
       "circle-stroke-width": 2
     },
     filter: ["==", ["get", "id"], "___none___"]
@@ -358,9 +497,9 @@ map.on("load", async () => {
     type: "symbol",
     source: "photos",
     layout: {
-      "icon-image": "photo-arrow",
+      "icon-image": photoIconImageExpr(),
       "icon-size": 0.5,
-      "icon-rotate": ["get", "rotation"],
+      "icon-rotate": photoIconRotateExpr(),
       "icon-rotation-alignment": "map",
       "icon-allow-overlap": true
     },
@@ -368,6 +507,7 @@ map.on("load", async () => {
       "icon-color": "#26221c"
     }
   });
+  onDataChanged();
 
   map.on("click", "photo-arrows", e => {
     if (mode === "add") return;
@@ -410,7 +550,7 @@ map.on("load", async () => {
 function selectPoint(id) {
   selectedId = id;
   setMode(null);
-  map.setFilter("photo-selected", ["==", ["get", "id"], id]);
+  setSelectedHalo();
   const f = findFeature(id);
   $("empty").style.display = "none";
   $("editform").style.display = "block";
@@ -420,6 +560,8 @@ function selectPoint(id) {
 
 function fillForm(f) {
   const p = f.properties;
+  fillKindOptions(p.kind || PHOTO_DEFAULT_KIND);
+  updateKindUi(p.kind);
   $("f-desc").value = p.description || "";
   $("f-tags").value = (p.tags || []).join(", ");
   $("f-url").value = p.image_url || "";
@@ -432,8 +574,9 @@ function fillForm(f) {
 function showMeta(f) {
   const [lon, lat] = f.geometry.coordinates;
   const p = f.properties;
+  const added = p.created_by ? `added by ${p.created_by}` : "";
   const edited = p.updated_at ? `last edit ${p.updated_at.slice(0, 10)} by ${p.updated_by || "?"}` : "new point";
-  $("meta").textContent = `${p.id}  |  ${lat.toFixed(6)}, ${lon.toFixed(6)}  |  ${edited}`;
+  $("meta").textContent = `${p.id}  |  ${lat.toFixed(6)}, ${lon.toFixed(6)}  |  ${[added, edited].filter(Boolean).join(", ")}`;
 }
 
 //rotation slider and number box stay in sync and preview live on the map
@@ -448,6 +591,14 @@ function setRotation(v) {
   setStatus("Unsaved changes", "err");
 }
 $("f-rot").addEventListener("input", e => setRotation(e.target.value));
+$("f-kind").addEventListener("change", e => {
+  const f = findFeature(selectedId);
+  if (!f) return;
+  f.properties.kind = e.target.value;
+  updateKindUi(e.target.value);
+  onDataChanged();
+  setStatus("Unsaved changes", "err");
+});
 $("rotval").addEventListener("input", e => setRotation(e.target.value));
 
 function bearing(from, to) {
@@ -473,7 +624,7 @@ function setMode(m) {
   map.getCanvasContainer().classList.toggle("crosshair", mode === "add" || mode === "aim");
   $("modehint").textContent =
     mode === "move" ? "Drag the highlighted arrow to its new position." :
-    mode === "aim" ? "Click the spot on the map the camera was looking at." :
+    mode === "aim" ? photoKindDef($("f-kind").value).aimHint :
     mode === "add" ? "Click the map where the photograph was taken." : "";
 }
 $("btn-move").addEventListener("click", () => setMode("move"));
@@ -483,14 +634,14 @@ $("btn-add").addEventListener("click", () => setMode("add"));
 async function addPointAt(lngLat) {
   setMode(null);
   setStatus("Creating point...");
-  const body = { lon: lngLat.lng, lat: lngLat.lat, rotation: 0 };
+  const body = { lon: lngLat.lng, lat: lngLat.lat, rotation: 0, kind: defaultNewKind() };
   try {
     const r = await fetch(API, { method: "POST", headers: authHeaders(), body: JSON.stringify(body) });
     if (!r.ok) throw new Error(await readError(r));
     const feature = await r.json();
     data.features.push(feature);
     original.set(feature.properties.id, JSON.parse(JSON.stringify(feature)));
-    refresh();
+    onDataChanged();
     selectPoint(feature.properties.id);
     setStatus("Point created. Fill in the details and save.", "ok");
   } catch (e) {
@@ -505,6 +656,7 @@ $("btn-save").addEventListener("click", async () => {
     lon: f.geometry.coordinates[0],
     lat: f.geometry.coordinates[1],
     rotation: parseFloat($("f-rot").value) || 0,
+    kind: $("f-kind").value,
     description: $("f-desc").value,
     tags: $("f-tags").value,
     image_url: $("f-url").value,
@@ -519,7 +671,7 @@ $("btn-save").addEventListener("click", async () => {
     const updated = await r.json();
     Object.assign(f, updated);
     original.set(selectedId, JSON.parse(JSON.stringify(updated)));
-    refresh();
+    onDataChanged();
     fillForm(f);
     setStatus("Saved", "ok");
   } catch (e) {
@@ -532,7 +684,7 @@ $("btn-revert").addEventListener("click", () => {
   if (!orig) return;
   const i = data.features.findIndex(f => f.properties.id === selectedId);
   data.features[i] = JSON.parse(JSON.stringify(orig));
-  refresh();
+  onDataChanged();
   fillForm(data.features[i]);
   setStatus("Reverted to last saved version", "ok");
 });
@@ -545,8 +697,7 @@ $("btn-delete").addEventListener("click", async () => {
     data.features = data.features.filter(f => f.properties.id !== selectedId);
     original.delete(selectedId);
     selectedId = null;
-    refresh();
-    map.setFilter("photo-selected", ["==", ["get", "id"], "___none___"]);
+    onDataChanged();
     $("editform").style.display = "none";
     $("empty").style.display = "block";
   } catch (e) {

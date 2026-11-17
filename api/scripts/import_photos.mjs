@@ -10,7 +10,9 @@
 //    node scripts/import_photos.mjs photo_points.geojson /home/ubuntu/digmap/photos.db
 //
 //Adjust FIELD_MAP below to match the QGIS column names. Running the
-//import twice upserts by id, so it is safe to re-run.
+//import twice upserts by id, so it is safe to re-run. Imported points are
+//credited to "import" as their submitter. A layer without a kind column
+//leaves each existing point's kind (set on the website) untouched.
 
 import Database from 'better-sqlite3';
 import { readFileSync, mkdirSync } from 'fs';
@@ -26,6 +28,8 @@ const FIELD_MAP = {
   tags: ['tags', 'keywords'],
   image_url: ['image_url', 'link', 'url', 'image'],
   year: ['year', 'season'],
+  //ground, aerial, or artifact; any other value must be a short lowercase name
+  kind: ['kind', 'photo_type', 'type'],
 };
 
 const SCHEMA = `
@@ -39,7 +43,10 @@ CREATE TABLE IF NOT EXISTS photos (
     image_url   TEXT NOT NULL DEFAULT '',
     year        INTEGER,
     updated_at  TEXT,
-    updated_by  TEXT
+    updated_by  TEXT,
+    kind        TEXT NOT NULL DEFAULT 'ground',
+    created_at  TEXT,
+    created_by  TEXT
 );
 CREATE TABLE IF NOT EXISTS edit_log (
     log_id   INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -69,16 +76,26 @@ const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
 db.exec(SCHEMA);
 
+//same columns the api adds on startup, for a database created before them
+const cols = new Set(db.prepare('PRAGMA table_info(photos)').all().map((c) => c.name));
+if (!cols.has('kind')) db.exec("ALTER TABLE photos ADD COLUMN kind TEXT NOT NULL DEFAULT 'ground'");
+if (!cols.has('created_at')) db.exec('ALTER TABLE photos ADD COLUMN created_at TEXT');
+if (!cols.has('created_by')) db.exec('ALTER TABLE photos ADD COLUMN created_by TEXT');
+
+const KIND_PATTERN = /^[a-z][a-z0-9-]{0,31}$/;
+
 const upsert = db.prepare(`
   INSERT INTO photos (id, lon, lat, rotation, description, tags,
-    image_url, year, updated_at, updated_by)
+    image_url, year, updated_at, updated_by, kind, created_at, created_by)
   VALUES (@id, @lon, @lat, @rotation, @description, @tags,
-    @image_url, @year, @updated_at, 'import')
+    @image_url, @year, @updated_at, 'import', COALESCE(@kind, 'ground'),
+    @updated_at, 'import')
   ON CONFLICT(id) DO UPDATE SET
     lon=excluded.lon, lat=excluded.lat, rotation=excluded.rotation,
     description=excluded.description, tags=excluded.tags,
     image_url=excluded.image_url, year=excluded.year,
-    updated_at=excluded.updated_at, updated_by=excluded.updated_by`);
+    updated_at=excluded.updated_at, updated_by=excluded.updated_by,
+    kind=COALESCE(@kind, photos.kind)`);
 
 const now = new Date().toISOString().slice(0, 19) + 'Z';
 let count = 0;
@@ -97,6 +114,11 @@ const run = db.transaction(() => {
       .join(',');
     const rawYear = pick(props, FIELD_MAP.year);
     const year = rawYear === null ? null : parseInt(rawYear, 10);
+    const rawKind = pick(props, FIELD_MAP.kind);
+    const kind = rawKind === null ? null : String(rawKind).trim().toLowerCase();
+    if (kind !== null && !KIND_PATTERN.test(kind)) {
+      throw new Error(`feature ${JSON.stringify(props)}: kind "${rawKind}" is not a short lowercase name`);
+    }
 
     //stable fallback id derived from the feature itself, so re-running
     //the import updates rather than duplicates unlabeled points
@@ -114,6 +136,7 @@ const run = db.transaction(() => {
       tags,
       image_url: String(pick(props, FIELD_MAP.image_url, '')),
       year: Number.isInteger(year) ? year : null,
+      kind,
       updated_at: now,
     });
     count += 1;

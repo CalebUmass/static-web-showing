@@ -121,11 +121,17 @@ and these steps:
 2. Find the grid square written on the paper sketch; on-screen labels match
    the paper lettering.
 3. Add photo point, then click the spot the photograph was taken from.
-4. Aim at a map click, then click what the camera was looking at. Fine-tune
-   with the slider if the sketch gives a precise bearing.
-5. Fill in description, tags, year, and the image link if the scan is
+4. Set the photo type: ground photo, aerial photo (drone, kite, or tower),
+   or artifact photo. New points start as the first type still checked
+   under "Show points", so hiding the other types before a batch of drone
+   photos makes every new point an aerial one.
+5. For ground photos, Aim at a map click, then click what the camera was
+   looking at. For aerial photos, aim at a spot the top edge of the image
+   faces. Fine-tune with the slider if the sketch gives a precise bearing.
+   Artifact photos have no direction, so those controls are hidden.
+6. Fill in description, tags, year, and the image link if the scan is
    online. Save.
-6. Write the point id shown in the panel (e.g. `7ee2b791`) back onto the
+7. Write the point id shown in the panel (e.g. `7ee2b791`) back onto the
    paper sketch. That id is the join key between the physical archive, the
    CSV, and the website.
 
@@ -133,12 +139,42 @@ Mistakes are cheap: Revert restores the last saved version, every change is
 recorded in edit_log with the editor's name, and the daily backup covers
 anything worse.
 
+### Filtering and submitter colors in the editor
+
+The "Show points" panel in admin.html has three toggle lists:
+
+- Submitted by: each point is colored by the person who first added it,
+  with the matching color dot in this list. Later edits (for example the
+  boss correcting a description) do not change the color or the credit.
+  "Only mine" shows just the points submitted under the name in "Your
+  name", matched without regard to case or extra spaces. Colors are handed
+  out in order of each person's first submission, so they stay put as new
+  students join; past twelve people the colors repeat. Imported points and
+  points with no name are gray.
+- Photo type: ground, aerial, artifact.
+- Tags: a point shows while any of its tags is checked; "no tags" covers
+  untagged points.
+
+The name field is free text, so "Malie" and "Malie G." count as two people.
+Agreeing on one spelling per student at onboarding keeps the colors and
+"Only mine" meaningful.
+
+### Tags on the public map
+
+index.html lists every tag in use, most frequent first, as toggle chips,
+plus the photo type list. Tags match exactly, so "North wall" and "north
+wall" appear as separate chips; the chip list doubles as a quick way to
+spot inconsistent tagging. Agreeing on a short tag vocabulary up front
+(trench codes like `CA 24`, features like `north wall`, `overview`) keeps
+the public filter useful.
+
 ## 4. Getting the data out
 
 - CSV: `https://poggiocivitate.net/api/photos/export.csv`, also the
   "Download CSV" button in admin.html. Columns: id, lon, lat, rotation_deg,
-  year, tags, description, image_url, updated_at, updated_by. Opens directly
-  in Excel (UTF-8 BOM included).
+  year, tags, description, image_url, updated_at, updated_by, kind,
+  created_at, created_by. The last three were appended so existing column
+  positions did not move. Opens directly in Excel (UTF-8 BOM included).
 - GeoJSON: `https://poggiocivitate.net/api/photos`, what the public map
   renders.
 - GeoPackage for QGIS: `./map/sync_to_qgis.sh https://poggiocivitate.net`.
@@ -147,15 +183,36 @@ The CSV is a live export of the SQLite table, not a second copy to keep in
 sync. SQLite stays the store because several students save at once; a CSV
 edited concurrently is a corruption risk.
 
-## 5. Deploying this change
+## 5. Deploying an update
 
-No Apache change (`/api/` already proxies wholesale to 3001) and no schema
-change:
+No Apache change (`/api/` already proxies wholesale to 3001). The api
+updates the database schema itself on startup: adding `kind`,
+`created_at`, and `created_by` to an older database, crediting each
+existing point to whoever created it in edit_log (imported points to
+`import`). The step is idempotent, but back up first anyway:
 
 ```bash
+sudo -u www-data sqlite3 /var/lib/digmap/photos.db ".backup /var/lib/digmap/before-update.db"
 cd /var/www/html && git pull
 cd api
 NODE_OPTIONS="--max-old-space-size=1024" npm run build
 sudo systemctl restart dig-map-api
 curl -s http://127.0.0.1:3001/photos/export.csv | head -2
 ```
+
+The header line printed by the last command ends in `kind,created_at,
+created_by` once the update is live.
+
+### Importing with photo types
+
+`api/scripts/import_photos.mjs` reads a `kind` (or `photo_type`/`type`)
+column if the QGIS layer has one, with values `ground`, `aerial`, or
+`artifact`. A layer without that column leaves each existing point's type,
+as set on the website, untouched. One invalid value stops the whole import
+without changing anything.
+
+### Adding a photo type later
+
+Add an entry to `PHOTO_KINDS` and a drawing to `drawPhotoIcon` in
+`map/public_map_photos.js`. The api accepts any short lowercase name, so no
+server change is needed.
